@@ -1,0 +1,30 @@
+name: Validate CivicCal registry
+
+on:
+  push:
+    paths:
+      - "data/sources.json"
+      - "scripts/validate_registry.py"
+      - ".github/workflows/validate-registry.yml"
+  pull_request:
+    paths:
+      - "data/sources.json"
+      - "scripts/validate_registry.py"
+      - ".github/workflows/validate-registry.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Validate source registry
+        run: python scripts/validate_registry.py

@@ -1,0 +1,23 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//CivicCal//Sample Fixture//EN
+BEGIN:VEVENT
+UID:sample-001@example.org
+DTSTAMP:20261103T120000Z
+DTSTART;TZID=America/Chicago:20261105T180000
+DTEND;TZID=America/Chicago:20261105T190000
+SUMMARY:Community volunteer night
+DESCRIPTION:Bring gloves\, water and a willingness to help.
+LOCATION:Community Center\, Mokena
+CATEGORIES:Community,Volunteer
+URL:https://example.org/events/volunteer-night
+STATUS:CONFIRMED
+SEQUENCE:1
+END:VEVENT
+BEGIN:VEVENT
+UID:sample-002@example.org
+DTSTART;VALUE=DATE:20261107
+SUMMARY:Cancelled sample event
+STATUS:CANCELLED
+END:VEVENT
+END:VCALENDAR

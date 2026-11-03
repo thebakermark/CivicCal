@@ -49,7 +49,7 @@
         "type": { "type": "string", "minLength": 1 },
         "website": { "type": "string", "format": "uri" },
         "verification_status": {
-          "enum": ["candidate", "organization_verification_required", "official_site_identified", "feed_verification_required", "verified"]
+          "enum": ["candidate", "organization_verification_required", "official_site_identified", "feed_verification_required", "research_required", "verified"]
         },
         "notes": { "type": "string" }
       },

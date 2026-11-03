@@ -19,6 +19,7 @@ ORG_STATES = {
     "organization_verification_required",
     "official_site_identified",
     "feed_verification_required",
+    "research_required",
     "verified",
 }
 

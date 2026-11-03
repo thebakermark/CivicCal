@@ -16,7 +16,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
-from parse_ics import parse_ics
+try:  # Support both direct script execution and package-based tests.\n    from .parse_ics import parse_ics\nexcept ImportError:  # pragma: no cover - exercised by the CLI entry point\n    from parse_ics import parse_ics
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_REGISTRY = ROOT / "data" / "sources.json"

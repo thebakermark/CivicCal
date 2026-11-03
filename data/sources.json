@@ -28,15 +28,15 @@
       "name": "Mokena Community Park District",
       "type": "parks_recreation",
       "website": "https://www.mokenapark.com/",
-      "verification_status": "research_required",
-      "notes": "Verify the current official website and event/calendar endpoints before ingestion."
+      "verification_status": "official_site_identified",
+      "notes": "Official website and Upcoming Events page identified; source endpoint recorded for review."
     },
     {
       "id": "mokena-school-district-159",
       "name": "Mokena School District 159",
       "type": "school",
-      "verification_status": "feed_verification_required",
-      "notes": "Candidate source; verify official calendar URL and public access."
+      "verification_status": "official_site_identified",
+      "notes": "Official district Events page and calendar download endpoint identified; calendar export is an iCalendar response, pending review."
     },
     {
       "id": "lincoln-way-community-high-school-district-210",
@@ -172,7 +172,56 @@
       "notes": "Candidate community service organization; verify local presence and public event channels."
     }
   ],
-  "source_records": [],
+  "source_records": [
+    {
+      "id": "village-of-mokena-events",
+      "organization_id": "village-of-mokena",
+      "source_type": "html",
+      "url": "https://www.mokena.org/calendar.aspx?categoryid=0&id=20697&catid=550",
+      "access_status": "review_required",
+      "polling_enabled": false,
+      "terms_reviewed": false,
+      "robots_reviewed": false,
+      "event_access": "mixed",
+      "notes": "Official Calendar of Events page linked from village website. HTML listing; terms/robots review and extraction method still required. Discovered 2026-11-03."
+    },
+    {
+      "id": "mokena-library-events",
+      "organization_id": "mokena-community-public-library",
+      "source_type": "html",
+      "url": "https://mokena.librarycalendar.com/events/upcoming",
+      "access_status": "review_required",
+      "polling_enabled": false,
+      "terms_reviewed": false,
+      "robots_reviewed": false,
+      "event_access": "mixed",
+      "notes": "Public Upcoming Events page on library calendar platform, linked from official library website. Shows registration-required and no-registration filters. Review platform terms/robots and extraction method before polling. Discovered 2026-11-03."
+    },
+    {
+      "id": "mokena-park-district-events",
+      "organization_id": "mokena-community-park-district",
+      "source_type": "html",
+      "url": "https://www.mokenapark.com/upcoming-events-2/",
+      "access_status": "review_required",
+      "polling_enabled": false,
+      "terms_reviewed": false,
+      "robots_reviewed": false,
+      "event_access": "mixed",
+      "notes": "Official Upcoming Events page. Includes preregistration, fees, eligibility and public event details. Review terms/robots and extraction method before polling. Discovered 2026-11-03."
+    },
+    {
+      "id": "mokena-sd159-events-ical",
+      "organization_id": "mokena-school-district-159",
+      "source_type": "ics",
+      "url": "https://thrillshare-cmsv2.services.thrillshare.com/api/v4/o/9768/cms/events/generate_ical?filter_ids=&section_ids=",
+      "access_status": "review_required",
+      "polling_enabled": false,
+      "terms_reviewed": false,
+      "robots_reviewed": false,
+      "event_access": "unknown",
+      "notes": "iCalendar export URL exposed by the district's official Events page ('Click to Download Calendar'). Endpoint returned text/calendar but automated preview could not parse it. Review terms, robots, scope, and calendar contents before polling. Discovered 2026-11-03."
+    }
+  ],
   "verification_policy": {
     "candidate_records_are_not_verified": true,
     "required_before_polling": [

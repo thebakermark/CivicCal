@@ -54,7 +54,7 @@ class ParseICSTests(unittest.TestCase):
 
     def test_unfolding(self):
         self.assertEqual(unfold_lines("SUMMARY:Long\r\n text"), ["SUMMARY:Longtext"])
-        self.assertEqual(unescape_text(r"a\\b\\,c"), "a\\b,c")
+        self.assertEqual(unescape_text(r"a\\b\,c"), "a\\b,c")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "region": {
+    "name": "Mokena",
+    "state": "IL",
+    "country": "US",
+    "initial_scope": "Mokena, Illinois; nearby communities may be added after the initial source set is established"
+  },
+  "organizations": [
+    {
+      "id": "village-of-mokena",
+      "name": "Village of Mokena",
+      "type": "local_government",
+      "website": "https://www.mokena.org/",
+      "verification_status": "official_site_identified",
+      "notes": "Municipal meetings, public notices, community events, boards, and commissions."
+    },
+    {
+      "id": "mokena-community-public-library",
+      "name": "Mokena Community Public Library District",
+      "type": "library",
+      "website": "https://www.mokenalibrary.org/",
+      "verification_status": "official_site_identified",
+      "notes": "Library programs, public events, and community activities."
+    },
+    {
+      "id": "mokena-community-park-district",
+      "name": "Mokena Community Park District",
+      "type": "parks_recreation",
+      "website": "https://www.mokenapark.com/",
+      "verification_status": "research_required",
+      "notes": "Verify the current official website and event/calendar endpoints before ingestion."
+    },
+    {
+      "id": "mokena-school-district-159",
+      "name": "Mokena School District 159",
+      "type": "school",
+      "verification_status": "feed_verification_required",
+      "notes": "Candidate source; verify official calendar URL and public access."
+    },
+    {
+      "id": "lincoln-way-community-high-school-district-210",
+      "name": "Lincoln-Way Community High School District 210",
+      "type": "school",
+      "verification_status": "feed_verification_required",
+      "notes": "Candidate source; verify official calendar URL and public access."
+    },
+    {
+      "id": "grace-fellowship-church",
+      "name": "Grace Fellowship Church",
+      "type": "church",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate organization. Verify local congregation identity, official website, and publicly accessible events."
+    },
+    {
+      "id": "immanuel-lutheran-church",
+      "name": "Immanuel Lutheran Church",
+      "type": "church",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate organization. Verify local congregation identity, official website, and publicly accessible events."
+    },
+    {
+      "id": "marley-community-church",
+      "name": "Marley Community Church",
+      "type": "church",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate organization. Verify local congregation identity, official website, and publicly accessible events."
+    },
+    {
+      "id": "parker-road-bible-church",
+      "name": "Parker Road Bible Church",
+      "type": "church",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate organization. Verify local congregation identity, official website, and publicly accessible events."
+    },
+    {
+      "id": "st-johns-ucc-mokena",
+      "name": "St. John's United Church of Christ",
+      "type": "church",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate organization. Verify local congregation identity, official website, and publicly accessible events."
+    },
+    {
+      "id": "st-mary-catholic-church-mokena",
+      "name": "St. Mary Catholic Church",
+      "type": "church",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate organization. Verify local congregation identity, official website, and publicly accessible events."
+    },
+    {
+      "id": "mokena-united-methodist-church",
+      "name": "Mokena United Methodist Church",
+      "type": "church",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate organization. Verify local congregation identity, official website, and publicly accessible events."
+    },
+    {
+      "id": "mokena-lions-club",
+      "name": "Mokena Lions Club",
+      "type": "service_club",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate organization. Verify active local chapter and public event channels."
+    },
+    {
+      "id": "mokena-womans-club",
+      "name": "Mokena Woman's Club",
+      "type": "civic_club",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate organization. Verify current activity and public event channels."
+    },
+    {
+      "id": "mokena-historical-society",
+      "name": "Mokena Historical Society",
+      "type": "historical_organization",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate organization. Verify current official identity and public event channels."
+    },
+    {
+      "id": "mokena-knights-of-columbus",
+      "name": "Knights of Columbus (Mokena area)",
+      "type": "fraternal_organization",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate organization. Verify local council and which activities are open to the public."
+    },
+    {
+      "id": "vfw-post-725",
+      "name": "William Martin VFW Post 725",
+      "type": "veterans_organization",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate organization. Verify current post details and public event channels."
+    },
+    {
+      "id": "mokena-friends-of-the-library",
+      "name": "Mokena Friends of the Library",
+      "type": "nonprofit",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate organization. Verify current group status and public event channels."
+    },
+    {
+      "id": "mokena-pta",
+      "name": "Mokena-area PTA organizations",
+      "type": "parent_teacher_organization",
+      "verification_status": "organization_verification_required",
+      "notes": "Track individual school PTAs separately after confirming active chapters and public events."
+    },
+    {
+      "id": "mokena-boy-scout-troop-725",
+      "name": "Scouting America Troop 725 (Mokena area)",
+      "type": "youth_organization",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate organization. Verify current unit identity; include only public events."
+    },
+    {
+      "id": "mokena-scout-pack-39",
+      "name": "Scouting America Pack 39 (Mokena area)",
+      "type": "youth_organization",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate organization. Verify current unit identity; include only public events."
+    },
+    {
+      "id": "frankfort-township-food-pantry",
+      "name": "Frankfort Township Food Pantry",
+      "type": "nonprofit",
+      "verification_status": "organization_verification_required",
+      "notes": "Nearby regional service organization; verify current public event and volunteer information."
+    },
+    {
+      "id": "mission-meals",
+      "name": "Mission Meals",
+      "type": "nonprofit",
+      "verification_status": "organization_verification_required",
+      "notes": "Candidate community service organization; verify local presence and public event channels."
+    }
+  ],
+  "source_records": [],
+  "verification_policy": {
+    "candidate_records_are_not_verified": true,
+    "required_before_polling": [
+      "Confirm the organization is active and correctly identified.",
+      "Find an official website or an explicitly authorized public calendar/feed.",
+      "Record the exact event endpoint and source type.",
+      "Review applicable terms, robots rules, and rate limits.",
+      "Record whether events are public, registration-required, or members-only."
+    ]
+  }
+}

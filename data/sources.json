@@ -214,12 +214,12 @@
       "organization_id": "mokena-school-district-159",
       "source_type": "ics",
       "url": "https://thrillshare-cmsv2.services.thrillshare.com/api/v4/o/9768/cms/events/generate_ical?filter_ids=&section_ids=",
-      "access_status": "review_required",
+      "access_status": "blocked",
       "polling_enabled": false,
-      "terms_reviewed": false,
+      "terms_reviewed": true,
       "robots_reviewed": false,
       "event_access": "unknown",
-      "notes": "iCalendar export URL exposed by the district's official Events page ('Click to Download Calendar'). Endpoint returned text/calendar but automated preview could not parse it. Review terms, robots, scope, and calendar contents before polling. Discovered 2026-11-03."
+      "notes": "Official district Events page exposes a 'Click to Download Calendar' iCalendar export. Apptegy Terms of Use (last updated 2026-09-01, section 3) prohibit automated access using bots, scrapers, or spiders without Apptegy's prior written consent. The feed host robots.txt could not be retrieved during review. Do not automate or use the network importer unless written consent is obtained and robots/access rules are rechecked. User-provided local ICS files may still be processed offline. Reviewed 2026-11-03."
     }
   ],
   "verification_policy": {

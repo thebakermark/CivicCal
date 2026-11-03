@@ -1,19 +1,19 @@
 # ICS normalization
 
 CivicCal's first calendar reader is a dependency-free Python implementation in
-\`scripts/parse_ics.py\`. It reads an ICS file and emits normalized JSON.
+`scripts/parse_ics.py`. It reads an ICS file and emits normalized JSON.
 
 ## Run locally
 
-\`\`\`bash
-python scripts/parse_ics.py data/fixtures/sample-community.ics \\
-  --source-id example-community-calendar \\
-  --source-url https://example.org/calendar.ics \\
+```bash
+python scripts/parse_ics.py data/fixtures/sample-community.ics \
+  --source-id example-community-calendar \
+  --source-url https://example.org/calendar.ics \
   --output /tmp/civiccal-events.json
 python -m unittest discover -s tests -v
-\`\`\`
+```
 
-Use \`-\` as the input path to read ICS from standard input. The parser does not
+Use `-` as the input path to read ICS from standard input. The parser does not
 make network requests and does not write to the event store.
 
 ## Semantics and deliberate limits
@@ -31,7 +31,27 @@ make network requests and does not write to the event store.
 - Unknown properties are ignored. Malformed date-time values are retained as
   unparsed values with a warning rather than silently discarded.
 
-This is an ingestion primitive, not source approval. Do not enable polling until
-the source's access rules and polling policy have been reviewed. The parser
-does not determine whether an event is public, registration-required, or
-members-only; that classification belongs to source/event review.
+## Duplicate-candidate review
+
+After parsing, run the separate review tool against the normalized JSON:
+
+```bash
+python scripts/find_duplicate_candidates.py /tmp/civiccal-events.json \
+  --output /tmp/civiccal-duplicate-candidates.json
+```
+
+The tool groups exact matches on normalized title, description, location,
+start, end, and status. It ignores UID and source metadata so that the same
+event published by multiple sources can be surfaced for review. It normalizes
+case and whitespace, but does not use fuzzy matching.
+
+**A candidate is not proof of a duplicate.** The report preserves each event's
+array index, UID, source ID, and basic details. It never merges, deletes, or
+rewrites events. Holiday entries and recurring calendar items remain
+independent source records unless a later reconciliation process confirms
+that they represent the same occurrence.
+
+This is an ingestion and review primitive, not source approval. Do not enable
+polling until the source's access rules and polling policy have been reviewed.
+The parser does not determine whether an event is public, registration-required,
+or members-only; that classification belongs to source/event review.

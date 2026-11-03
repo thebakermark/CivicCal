@@ -1,15 +1,21 @@
-name: Validate CivicCal registry
+name: Validate CivicCal registry and parser
 
 on:
   push:
     paths:
       - "data/sources.json"
-      - "scripts/validate_registry.py"
+      - "scripts/**"
+      - "tests/**"
+      - "data/fixtures/**"
+      - "docs/ics-normalization.md"
       - ".github/workflows/validate-registry.yml"
   pull_request:
     paths:
       - "data/sources.json"
-      - "scripts/validate_registry.py"
+      - "scripts/**"
+      - "tests/**"
+      - "data/fixtures/**"
+      - "docs/ics-normalization.md"
       - ".github/workflows/validate-registry.yml"
   workflow_dispatch:
 
@@ -28,3 +34,7 @@ jobs:
           python-version: "3.x"
       - name: Validate source registry
         run: python scripts/validate_registry.py
+      - name: Run ICS parser tests
+        run: python -m unittest discover -s tests -v
+      - name: Parse sample calendar
+        run: python scripts/parse_ics.py data/fixtures/sample-community.ics --source-id fixture

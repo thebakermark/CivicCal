@@ -55,3 +55,46 @@ This is an ingestion and review primitive, not source approval. Do not enable
 polling until the source's access rules and polling policy have been reviewed.
 The parser does not determine whether an event is public, registration-required,
 or members-only; that classification belongs to source/event review.
+
+
+## One-shot source import and change reports
+
+The manual importer can fetch a registry-listed ICS source only after the source
+has `access_status: "approved"`, `terms_reviewed: true`, and
+`robots_reviewed: true`. It does not require `polling_enabled: true`; that
+flag remains reserved for a separately authorized scheduled-ingestion phase.
+
+Run a one-time baseline import:
+
+```bash
+python scripts/import_ics_source.py \
+  --source-id approved-calendar-id \
+  --output-dir ./work/approved-calendar
+```
+
+Compare a later manual fetch with the saved baseline:
+
+```bash
+python scripts/import_ics_source.py \
+  --source-id approved-calendar-id \
+  --previous-snapshot ./work/approved-calendar/snapshot.json \
+  --output-dir ./work/approved-calendar-latest
+```
+
+Each run writes a complete `snapshot.json` and a `change-report.json`.
+The importer sends a descriptive CivicCal User-Agent, accepts calendar content,
+uses a request timeout and response-size limit, and refuses non-HTTPS source
+URLs or redirects. It does not follow a schedule, modify the registry, publish
+events, or write to a database.
+
+Change reports compare events by UID and report added, changed, and missing
+UIDs. The first run is a baseline, so its events are not described as new
+announcements. A missing UID means only that it was absent from this successful
+fetch; it is not a cancellation. Review changes before any canonical event is
+updated. Repeated or missing UIDs stop the comparison rather than creating an
+ambiguous report.
+
+The current Mokena SD 159 calendar source is still marked
+`review_required`. The importer intentionally refuses to fetch it until the
+source review is completed and the registry is updated accordingly. No live
+fetch or scheduled polling is performed by the tests or CI.

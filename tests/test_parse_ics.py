@@ -53,7 +53,7 @@ class ParseICSTests(unittest.TestCase):
         self.assertEqual(event["location"], "Village Hall, Mokena")
 
     def test_unfolding(self):
-        self.assertEqual(unfold_lines("SUMMARY:Long\\r\\n text"), ["SUMMARY:Longtext"])
+        self.assertEqual(unfold_lines("SUMMARY:Long\r\n text"), ["SUMMARY:Longtext"])
         self.assertEqual(unescape_text(r"a\\b\\,c"), "a\\b,c")
 
 

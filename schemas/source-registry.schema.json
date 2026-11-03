@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://civiccal.org/schemas/source-registry.schema.json",
+  "title": "CivicCal Source Registry",
+  "type": "object",
+  "required": ["schema_version", "region", "organizations", "source_records", "verification_policy"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "region": {
+      "type": "object",
+      "required": ["name", "state", "country", "initial_scope"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "state": { "type": "string", "minLength": 2, "maxLength": 2 },
+        "country": { "type": "string", "minLength": 2, "maxLength": 2 },
+        "initial_scope": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "organizations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/organization" }
+    },
+    "source_records": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/source" }
+    },
+    "verification_policy": {
+      "type": "object",
+      "required": ["candidate_records_are_not_verified", "required_before_polling"],
+      "properties": {
+        "candidate_records_are_not_verified": { "const": true },
+        "required_before_polling": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "organization": {
+      "type": "object",
+      "required": ["id", "name", "type", "verification_status", "notes"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+        "name": { "type": "string", "minLength": 1 },
+        "type": { "type": "string", "minLength": 1 },
+        "website": { "type": "string", "format": "uri" },
+        "verification_status": {
+          "enum": ["candidate", "organization_verification_required", "official_site_identified", "feed_verification_required", "verified"]
+        },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "source": {
+      "type": "object",
+      "required": ["id", "organization_id", "source_type", "url", "access_status", "polling_enabled"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+        "organization_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+        "source_type": { "enum": ["ics", "rss", "atom", "json_api", "html", "email"] },
+        "url": { "type": "string", "format": "uri" },
+        "access_status": {
+          "enum": ["discovered", "review_required", "approved", "blocked", "retired"]
+        },
+        "polling_enabled": { "type": "boolean" },
+        "poll_interval_minutes": { "type": "integer", "minimum": 5 },
+        "last_verified_at": { "type": "string", "format": "date-time" },
+        "terms_reviewed": { "type": "boolean" },
+        "robots_reviewed": { "type": "boolean" },
+        "event_access": {
+          "enum": ["public", "registration_required", "members_only", "mixed", "unknown"]
+        },
+        "notes": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "polling_enabled": { "const": true } }, "required": ["polling_enabled"] },
+          "then": {
+            "properties": {
+              "access_status": { "const": "approved" },
+              "terms_reviewed": { "const": true },
+              "robots_reviewed": { "const": true }
+            },
+            "required": ["terms_reviewed", "robots_reviewed", "poll_interval_minutes", "last_verified_at"]
+          }
+        }
+      ],
+      "additionalProperties": true
+    }
+  }
+}

@@ -63,7 +63,7 @@ def _material_projection(event: dict) -> dict:
 def _valid_state(state: Any) -> dict:
     if state is None:
         return {"format": STATE_FORMAT, "events": {}, "observations": [],
-                "unkeyed_observations": [], "processed_captures": []}
+                "unkeyed_observations": [], "processed_captures": [], "presence_observations": []}
     if not isinstance(state, dict) or state.get("format") != STATE_FORMAT:
         raise IdentityError("State file must use civiccal.identity-state.v1.")
     if not isinstance(state.get("events"), dict):
@@ -75,6 +75,9 @@ def _valid_state(state: Any) -> dict:
         raise IdentityError("State unkeyed_observations must be an array.")
     if not isinstance(state.get("processed_captures"), list):
         raise IdentityError("State processed_captures must be an array.")
+    state.setdefault("presence_observations", [])
+    if not isinstance(state.get("presence_observations"), list):
+        raise IdentityError("State presence_observations must be an array.")
     return copy.deepcopy(state)
 
 
@@ -118,7 +121,7 @@ def process_normalized(document: dict, prior_state: dict | None = None,
             "format": RESULT_FORMAT, "source_id": source_id,
             "capture_key": capture_key, "already_processed": True,
             "new_events": 0, "new_revisions": 0, "unchanged_events": 0,
-            "unkeyed_count": 0, "identity_conflicts": [],
+            "unkeyed_count": 0, "identity_conflicts": [], "missing_events": 0,
             "events": [], "unkeyed_observations": [],
             "note": "This source capture was already processed; state is unchanged.",
         }, state)
@@ -201,6 +204,8 @@ def process_normalized(document: dict, prior_state: dict | None = None,
                 "first_seen_at": timestamp, "last_seen_at": timestamp,
                 "observation_ids": [observation_id],
                 "revisions": [revision],
+                "presence_status": "present", "missing_snapshot_count": 0,
+                "missing_observation_history": [],
                 "lifecycle_status": event.get("status") or "unknown",
                 "lifecycle_history": [{
                     "observed_at": timestamp,
@@ -221,6 +226,19 @@ def process_normalized(document: dict, prior_state: dict | None = None,
             if observation_id not in observation_ids:
                 observation_ids.append(observation_id)
             existing["last_seen_at"] = timestamp
+            if existing.get("presence_status") == "missing":
+                existing.setdefault("missing_observation_history", []).append({
+                    "observed_at": timestamp, "capture_key": capture_key,
+                    "transition": "reappeared",
+                })
+                existing["presence_status"] = "present"
+                existing["missing_snapshot_count"] = 0
+                state["presence_observations"].append({
+                    "source_id": source_id, "identity_key": key,
+                    "source_event_id": str(event.get("source_event_id")),
+                    "capture_key": capture_key, "observed_at": timestamp,
+                    "presence": "present", "reason": "event_seen_again",
+                })
             previous_status = existing.get("lifecycle_status") or "unknown"
             current_status = event.get("status") or "unknown"
             if current_status != previous_status:
@@ -257,6 +275,39 @@ def process_normalized(document: dict, prior_state: dict | None = None,
                     "change_type": "updated", "observation_id": observation_id,
                 })
 
+    # Absence requires an explicit adapter completeness assertion and evidence.
+    snapshot = document.get("snapshot") or {}
+    completeness = snapshot.get("completeness") if isinstance(snapshot, dict) else None
+    evidence = snapshot.get("evidence") if isinstance(snapshot, dict) else None
+    complete_snapshot = (
+        completeness == "complete" and isinstance(evidence, str) and bool(evidence.strip())
+        and (bool(events) or snapshot.get("empty_snapshot_confirmed") is True)
+    )
+    missing_count = 0
+    if complete_snapshot:
+        seen_keys = set(keyed)
+        seen_keys.update(item["identity_key"] for item in conflicts)
+        for key, existing in state["events"].items():
+            if existing.get("source_id") != source_id or key in seen_keys:
+                continue
+            if existing.get("presence_status") == "missing":
+                existing["missing_snapshot_count"] = existing.get("missing_snapshot_count", 0) + 1
+            else:
+                existing["presence_status"] = "missing"
+                existing["missing_snapshot_count"] = 1
+                existing["first_missing_at"] = timestamp
+            existing["last_missing_at"] = timestamp
+            missing_record = {
+                "source_id": source_id, "source_event_id": existing.get("source_event_id"),
+                "identity_key": key, "capture_key": capture_key,
+                "observed_at": timestamp, "presence": "missing",
+                "missing_snapshot_count": existing["missing_snapshot_count"],
+                "completeness_evidence": evidence,
+            }
+            existing.setdefault("missing_observation_history", []).append(missing_record)
+            state["presence_observations"].append(copy.deepcopy(missing_record))
+            missing_count += 1
+
     state["unkeyed_observations"].extend(unkeyed)
     state["processed_captures"].append(capture_token)
     result = {
@@ -269,10 +320,13 @@ def process_normalized(document: dict, prior_state: dict | None = None,
         "new_revisions": new_revisions,
         "unchanged_events": unchanged,
         "unkeyed_count": len(unkeyed),
+        "missing_events": missing_count,
+        "snapshot_completeness": completeness if completeness in {"complete", "partial", "unknown"} else "unknown",
+        "absence_detection_applied": complete_snapshot,
         "identity_conflicts": conflicts,
         "events": processed_events,
         "unkeyed_observations": unkeyed,
-        "missing_events_policy": "No missing or absent events are marked cancelled or deleted.",
+        "missing_events_policy": "Complete snapshots create presence-only missing observations; events are never cancelled or deleted due to absence.",
         "cross_source_policy": "Identities are source-scoped; no cross-source merge is attempted.",
     }
     return result, state

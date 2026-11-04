@@ -1,6 +1,6 @@
 # iCalendar feed generation
 
-**Status:** deterministic offline feed projection implemented; a loopback-only development HTTP route serves the approved community feed. No public service or subscriber delivery is deployed.
+**Status:** deterministic offline feed projection implemented; a loopback-only development HTTP route serves the approved feed. No public service or subscriber delivery is deployed.
 
 ## Inputs
 
@@ -14,7 +14,7 @@ Example publication manifest:
 ```json
 {
   "format": "civiccal.publication-manifest.v1",
-  "calendar_name": "Mokena Community Events",
+  "calendar_name": "Summit Hill District Events",
   "approved_event_ids": [
     "evt_0123456789abcdef01234567"
   ]
@@ -28,8 +28,8 @@ Only event IDs named in `approved_event_ids` are included. An event's presence i
 ```sh
 python scripts/publish_ics.py \
   data/state/identity.json \
-  data/publication/community.json \
-  --output data/published/community.ics
+  data/publication/summit-hill.json \
+  --output data/published/summit-hill.ics
 ```
 
 The output is UTF-8 `text/calendar` with CRLF line endings, RFC 5545 text escaping, UTF-8-aware 75-octet line folding, stable event UIDs (`event_id@civiccal`), and `SEQUENCE` from the current identity revision. The revision observation timestamp supplies deterministic `DTSTAMP` and `LAST-MODIFIED` values.
@@ -51,7 +51,7 @@ The output is UTF-8 `text/calendar` with CRLF line endings, RFC 5545 text escapi
 
 The publisher fails closed for approved records with unresolved temporal values, zoned local times lacking both an explicit UTC offset and a valid IANA timezone, or recurrence metadata. Recurrence rules, exceptions, and detached overrides are not yet emitted. Ambiguous repeated wall times and nonexistent spring-forward wall times fail closed unless the source supplies an explicit UTC offset. The generated `VTIMEZONE` covers a bounded window around each event year; this is appropriate for the currently supported non-recurring events, not a promise of indefinite recurring-series support.
 
-The publisher script remains a file-based projection. The loopback-only HTTP service exposes one community feed route with ETag and Last-Modified headers; it is not a public endpoint. Organization/source routes, access controls, subscription management, remote hosting, and automatic refresh remain future work and are independent of the database decision.
+The publisher script remains a file-based projection. The loopback-only HTTP service exposes source-specific feed routes with ETag and Last-Modified headers; it is not a public endpoint. Source-specific relay routes, access controls, subscription management, remote hosting, and automatic refresh remain future work and are independent of the database decision.
 
 ## Validation
 

@@ -8,6 +8,7 @@ from scripts.parse_capture import (
     HandoffError,
     capture_summary,
     load_capture,
+    load_registry_source,
     parse_payload,
     select_adapter,
 )
@@ -32,6 +33,23 @@ class ParseCaptureTests(unittest.TestCase):
         }
         path = write_capture(source_id, payload if status == 200 else None, metadata, Path(folder))
         return path
+
+    def test_registry_source_lookup_rejects_invalid_registry_shapes(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "sources.json"
+            for content in ["[]", '{"organizations": []}', '{"source_records": [null]}']:
+                path.write_text(content, encoding="utf-8")
+                with self.assertRaises(HandoffError):
+                    load_registry_source(path, "source-a")
+
+    def test_registry_source_lookup_requires_exactly_one_id(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "sources.json"
+            path.write_text(json.dumps({"source_records": [
+                {"id": "source-a"}, {"id": "source-a"}
+            ]}), encoding="utf-8")
+            with self.assertRaisesRegex(HandoffError, "found 2"):
+                load_registry_source(path, "source-a")
 
     def test_capture_summary_preserves_outcome_and_page_provenance(self):
         metadata = {

@@ -107,7 +107,7 @@ def parse_html(html: str, page_url: str = SOURCE_URL) -> dict:
         # MunicipalCMS renders the event title as plain content immediately
         # before Event Date:, not as a heading. The breadcrumb boundary above
         # separates it from the repeated site navigation.
-        before_date = re.split(r"Event Date\\s*:", text, maxsplit=1, flags=re.IGNORECASE)[0]
+        before_date = re.split(r"Event Date\s*:", text, maxsplit=1, flags=re.IGNORECASE)[0]
         title = clean(before_date) or None
         event = {
             "source_id": SOURCE_ID,

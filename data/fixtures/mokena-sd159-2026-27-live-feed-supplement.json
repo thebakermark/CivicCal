@@ -138,12 +138,6 @@
   ],
   "excluded_or_unresolved": [
     {
-      "date_range": "2026-08-17 to 2026-08-18",
-      "claim": "Teacher Institute Days",
-      "status": "not included",
-      "reason": "Third-party calendar index lists these dates, but no readable official district source confirming student attendance status was found in this review."
-    },
-    {
       "date": "2026-09-04",
       "claim": "Exact dismissal times by school",
       "status": "not included",
@@ -152,8 +146,8 @@
     {
       "date_range": "2026-08-17 to 2026-08-18",
       "claim": "Chalk the Walk activity at MES",
-      "status": "source context added; school attendance unresolved",
-      "reason": "District live-feed post invites students, parents, and staff to visit school on these dates, but an on-campus activity does not establish that these were student attendance days or teacher institute days."
+      "status": "context only; attendance resolved by approved calendar",
+      "reason": "The live-feed post itself does not establish attendance status. The district-approved calendar independently confirms August 17-18 as Teacher Institute Days; see data/fixtures/mokena-sd159-2026-27-approved-calendar.json."
     }
   ]
 }

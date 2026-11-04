@@ -314,6 +314,18 @@
       "robots_reviewed": false,
       "event_access": "public",
       "notes": "Official Board Information page for the Mokena Community Park District. Lists the 2026 Board of Commissioners meeting schedule, including November 24 and December 15 at 6:00 PM at The Oaks Recreation & Fitness Center. The page also states the normal fourth-Tuesday cadence but shows January and December exceptions in the published 2025 notice; do not extrapolate a 2027 schedule from cadence alone. No live raw capture or parser fixture has been created. Terms/robots review and capture verification remain outstanding; polling disabled."
+    },
+    {
+      "id": "mokena-library-board-meetings",
+      "organization_id": "mokena-community-public-library-district",
+      "source_type": "html",
+      "url": "https://mokenalibrary.org/library-board",
+      "access_status": "review_required",
+      "polling_enabled": false,
+      "terms_reviewed": false,
+      "robots_reviewed": false,
+      "event_access": "public",
+      "notes": "Official Board of Library Trustees page lists public meeting dates through June 2027, normal meeting time 7:30 PM and location Program Room, lower level of library, with exceptions marked by an asterisk. There is an internal date conflict for December 2026: the Board Meetings schedule lists December 15, while both the Board Agendas and Board Minutes sections list December 22. Do not publish a December date until reconciled. The asterisk's meaning and exact exception times are not fully specified. No raw capture/parser fixture exists; terms/robots review outstanding; polling disabled."
     }
   ],
   "verification_policy": {

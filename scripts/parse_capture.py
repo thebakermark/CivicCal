@@ -64,6 +64,21 @@ def load_capture(metadata_path: Path, expected_source_id: str) -> tuple[dict, by
     return metadata, payload
 
 
+def capture_summary(metadata: dict, metadata_path: Path) -> dict:
+    """Preserve the capture outcome and page provenance through parsing."""
+    return {
+        "metadata_file": str(metadata_path),
+        "captured_at": metadata.get("captured_at"),
+        "content_sha256": metadata.get("content_sha256"),
+        "final_url": metadata.get("final_url"),
+        "requested_url": metadata.get("requested_url"),
+        "source_url": metadata.get("source_url"),
+        "http_status": metadata.get("http_status"),
+        "outcome": metadata.get("outcome"),
+        "page_role": metadata.get("page_role"),
+    }
+
+
 def select_adapter(requested: str, source_type: str) -> str:
     if requested not in ADAPTERS:
         raise HandoffError(f"Unsupported adapter {requested!r}.")
@@ -138,12 +153,7 @@ def main() -> int:
             "format": "civiccal.parse-result.v1",
             "source_id": args.source_id,
             "adapter": adapter,
-            "capture": {
-                "metadata_file": str(args.capture_metadata),
-                "captured_at": metadata.get("captured_at"),
-                "content_sha256": metadata.get("content_sha256"),
-                "final_url": page_url,
-            },
+            "capture": capture_summary(metadata, args.capture_metadata) | {"final_url": page_url},
             "parser_output": parsed,
         }
         args.output.parent.mkdir(parents=True, exist_ok=True)

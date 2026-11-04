@@ -75,6 +75,8 @@ It is not limited to a consumer-facing calendar website. Its primary product is 
 
 ### 5. Storage
 - Start with SQLite behind a repository/storage interface.
+- Design references: [logical schema and JSON migration](database-schema-and-migration.md) and [backend-independent storage contracts](storage-contracts.md).
+- Keep the current JSON adapter in place until the database implementation, migration, parity checks, and rollback are approved.
 - Store organizations, sources, captures, raw payload references, source events, canonical events, event-source links, revisions, duplicate candidates, and audit records.
 - Plan migrations and a documented PostgreSQL path without requiring it for the initial core.
 - Define retention and backup policies.
@@ -134,7 +136,7 @@ A user must be able to:
 
 **MVP acceptance test:** Starting from a clean installation, an operator can register an organization/source, ingest a representative source fixture (and later a permitted live capture), persist its events in the database, query them, and generate a valid `.ics` subscription feed from the same stored records. A calendar client can subscribe to that feed and receive subsequent approved updates without duplicate churn.
 
-The current JSON/file-based pipeline and loopback API are development foundations. They are not the final storage layer or a substitute for the database-backed end-to-end MVP. Database implementation is intentionally sequenced for the user's laptop session; meanwhile, keep interfaces and data contracts storage-independent. Do not deploy, enable unattended polling, install software, or incur costs without explicit approval. Source-specific consent and access controls remain mandatory.
+The current JSON/file-based pipeline and loopback API are development foundations. They are not the final storage layer or a substitute for the database-backed end-to-end MVP. Database schema and storage contracts can be designed and documented remotely; actual database implementation and migration remain deferred until the user is ready to review and run them in the target environment. Meanwhile, keep interfaces and data contracts storage-independent. Do not deploy, enable unattended polling, install software, or incur costs without explicit approval. Source-specific consent and access controls remain mandatory.
 ## First practical release (MVP)
 
 Prioritize:

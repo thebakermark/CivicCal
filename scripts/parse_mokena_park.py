@@ -118,7 +118,7 @@ def normalize_records(records: list[dict]) -> list[dict]:
                 record["registration_deadline_text"].append(line)
             elif re.search(r"\bfee\b|\$\s*\d", line, re.IGNORECASE):
                 record["fee_text"].append(line)
-            elif DATE_HINT.search(line) and record["date_text"] is None and not re.search(r"\\b(?:judging|deadline)\\b", line, re.IGNORECASE):
+            elif DATE_HINT.search(line) and record["date_text"] is None and not re.search(r"\b(?:judging|deadline)\b", line, re.IGNORECASE):
                 record["date_text"] = line
                 record["event_date_year_known"] = bool(re.search(r"\b20\d{2}\b", line))
             elif re.search(r"\b(?:The Oaks|Yunker Farm|Park|Recreation & Fitness Center)\b", line, re.IGNORECASE):

@@ -1,6 +1,6 @@
 # iCalendar feed generation
 
-**Status:** deterministic offline feed projection implemented; no HTTP service or subscriber delivery is deployed.
+**Status:** deterministic offline feed projection implemented; a loopback-only development HTTP route serves the approved community feed. No public service or subscriber delivery is deployed.
 
 ## Inputs
 
@@ -51,7 +51,7 @@ The output is UTF-8 `text/calendar` with CRLF line endings, RFC 5545 text escapi
 
 The publisher fails closed for approved records with unresolved temporal values, zoned local times lacking both an explicit UTC offset and a valid IANA timezone, or recurrence metadata. Recurrence rules, exceptions, and detached overrides are not yet emitted. Ambiguous repeated wall times and nonexistent spring-forward wall times fail closed unless the source supplies an explicit UTC offset. The generated `VTIMEZONE` covers a bounded window around each event year; this is appropriate for the currently supported non-recurring events, not a promise of indefinite recurring-series support.
 
-The current script is a file-based projection, not a public endpoint. It does not provide combined/organization/source routes, HTTP caching, ETags, access controls, subscription management, or automatic refresh. Those belong to a later service layer and remain independent of the database decision.
+The publisher script remains a file-based projection. The loopback-only HTTP service exposes one community feed route with ETag and Last-Modified headers; it is not a public endpoint. Organization/source routes, access controls, subscription management, remote hosting, and automatic refresh remain future work and are independent of the database decision.
 
 ## Validation
 

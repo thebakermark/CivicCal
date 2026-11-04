@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 
 from scripts.capture_source import write_capture
-from scripts.ingest_capture import ingest_capture
+from scripts.ingest_capture import IngestError, ingest_capture
 from scripts.storage import JsonFileIdentityStateStore
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -73,7 +73,7 @@ class IngestCaptureTests(unittest.TestCase):
     def test_unapproved_or_missing_capture_fails_without_creating_state(self):
         with tempfile.TemporaryDirectory() as directory:
             state_path = Path(directory) / "state.json"
-            with self.assertRaises(Exception):
+            with self.assertRaises(IngestError):
                 ingest_capture(
                     SOURCE_ID, Path(directory) / "missing.json",
                     ROOT / "data/sources.json", state_path, adapter="village",

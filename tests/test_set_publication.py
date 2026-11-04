@@ -119,6 +119,16 @@ class SetPublicationTests(unittest.TestCase):
             self.assertEqual(json.loads(registry_path.read_text(encoding="utf-8")), registry)
             self.assertEqual(json.loads(state_path.read_text(encoding="utf-8")), identity)
 
+    def test_rejects_manifest_approvals_missing_from_identity_state(self):
+        with self.assertRaisesRegex(PublicationApprovalError, "missing from identity state"):
+            update_publication(source_registry("village"), state(event()), manifest("evt-missing"),
+                               "village", "evt-a", "approve")
+
+    def test_rejects_existing_approval_with_unregistered_source(self):
+        with self.assertRaisesRegex(PublicationApprovalError, "exactly one registered source"):
+            update_publication(source_registry("village"), state(event(), event("evt-b", "retired-source")),
+                               manifest("evt-b"), "village", "evt-a", "approve")
+
     def test_atomic_writer_preserves_complete_json(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "publication.json"

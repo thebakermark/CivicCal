@@ -20,7 +20,7 @@ A record without a stable publisher ID is retained as an unkeyed observation and
 
 ## Revision rules
 
-The material revision fingerprint includes normalized title, description, start/end, all-day/time semantics, timezone, location, event and registration links, registration deadline, cost/free status, event status, attendance mode, audience, organizer, image, categories, and recurrence metadata.
+The material revision fingerprint includes normalized title, description, start/end, all-day/time semantics, timezone, location, event and registration links, registration deadline, cost/free status, event status, attendance mode, audience, registration-required state, registration availability status, organizer, image, categories, and recurrence metadata.
 
 Capture metadata and unmapped source-record details are excluded from the material fingerprint. They remain preserved in the current event record and can be reviewed without creating a false material revision.
 

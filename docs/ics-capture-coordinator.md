@@ -30,6 +30,10 @@ python scripts/capture_ics_source.py \
 
 That flag does not override `allow_complete_snapshot: false` in the source policy.
 
+## Summit Hill SD 161 request URL
+
+The official Download .ICS link for District Events resolves to `https://www.summithill.org/apps/events/ical/?id=0`. Keep this stable URL in the source registry. A separately shared URL included a `cb` query parameter that resembles a cache-buster, but the official link does not include it and its necessity has not been demonstrated. Do not store timestamped cache-busters in source identity. See [the request-contract research note](research/summit-hill-ical-request.md).
+
 ## Workflow
 
 1. The command loads the source through the existing registry eligibility and consent gates.

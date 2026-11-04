@@ -28,7 +28,12 @@ def load_registry_source(registry_path: Path, source_id: str) -> dict:
         registry = json.loads(registry_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise HandoffError(f"Cannot read source registry: {exc}") from exc
-    matches = [row for row in registry.get("source_records", []) if row.get("id") == source_id]
+    if not isinstance(registry, dict) or not isinstance(registry.get("source_records"), list):
+        raise HandoffError("Source registry must contain a source_records array.")
+    for index, row in enumerate(registry["source_records"]):
+        if not isinstance(row, dict) or not isinstance(row.get("id"), str) or not row["id"].strip():
+            raise HandoffError(f"Source registry record {index} has no valid string id.")
+    matches = [row for row in registry["source_records"] if row["id"] == source_id]
     if len(matches) != 1:
         raise HandoffError(f"Expected exactly one registry source named {source_id!r}; found {len(matches)}.")
     return matches[0]

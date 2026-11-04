@@ -24,10 +24,16 @@ This is discovery evidence, not an access approval. No automated fetch, polling,
 
 **Finding:** No public iCal/RSS feed was identified on the official upcoming-events page. This is not proof that no feed or supported API exists; raw response headers/source and vendor documentation were not available in this review.
 
+## Additional Park District source channels
+
+- Official Board Information page: https://www.mokenapark.com/board-information/ publishes a dated 2026 Board of Commissioners meeting schedule and meeting location/time. It is registered separately as `mokena-park-district-board-meetings`; the 2027 schedule is not yet published in the inspected page.
+- The Park District homepage links to a seasonal Fall 2026 brochure PDF at https://www.mokenapark.com/wp-content/uploads/2026/07/Fall-2026-Brochure.pdf. This is not an HTML calendar feed. The current registry/parser does not support PDF as a source type, and the browser retrieval route rejected the full file due to response size. Do not register it as HTML or claim its contents have been inspected.
+- The Rec1 registration catalog and TeamSideline calendar/schedules pages are additional discovery leads, not demonstrated public calendar feeds. TeamSideline's accessible schedules page currently renders a loading placeholder.
+
 ## Implementation consequences
 
 1. Keep both existing source records in `review_required`; do not enable polling.
-2. Continue treating the Village and Park District HTML adapters as offline parsers until a permitted, reproducible capture method is established.
+2. Continue treating the Village and Park District HTML adapters as offline parsers until a permitted, reproducible capture method is established. Keep the Park District Upcoming Events and Board Information pages as separate sources.
 3. Do not infer that a page's public visibility grants permission for automated retrieval.
 4. Before live ingestion, obtain genuine saved page responses through an authorized route and use them as regression fixtures. Do not substitute hand-reconstructed HTML for captured source pages.
 5. Keep the current deterministic extraction rules: no inferred years/time zones; registration deadlines and judging dates must not become event dates; retain undated source entries for review.
@@ -37,5 +43,7 @@ This is discovery evidence, not an access approval. No automated fetch, polling,
 - Village calendar: https://www.mokena.gov/calendar.aspx
 - Village notifications: https://www.mokena.gov/notify.aspx?catid=0&id=20802
 - Park District upcoming events: https://www.mokenapark.com/upcoming-events-2/
+- Park District board information: https://www.mokenapark.com/board-information/
+- Park District seasonal brochure: https://www.mokenapark.com/wp-content/uploads/2026/07/Fall-2026-Brochure.pdf
 
 The pages were inspected through rendered web views. Those views are useful for confirming visible content and link patterns, but they are not complete raw HTML captures and do not establish robots.txt or terms-of-use status.

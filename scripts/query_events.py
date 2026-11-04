@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from copy import deepcopy
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -12,6 +13,15 @@ from typing import Any
 
 class QueryError(Exception):
     """Invalid API query or input document."""
+
+
+PUBLIC_EVENT_FIELDS = (
+    "title", "description", "start", "end", "all_day", "time_status", "timezone",
+    "location", "event_url", "registration_url", "registration_deadline",
+    "cost_text", "is_free", "status", "attendance_mode", "audience",
+    "registration_required", "registration_status", "organizer", "image_url",
+    "categories",
+)
 
 
 def _parse_date(value: str | None, field: str) -> date | None:
@@ -41,10 +51,9 @@ def _projection(record: dict) -> dict:
         "event_id": record.get("event_id"),
         "revision": len(record.get("revisions") or []),
         "source_id": record.get("source_id"),
-        "first_seen_at": record.get("first_seen_at"),
-        "last_seen_at": record.get("last_seen_at"),
         "lifecycle_status": record.get("lifecycle_status") or current.get("status") or "unknown",
-        "event": current,
+        "event": {field: deepcopy(current.get(field)) for field in PUBLIC_EVENT_FIELDS
+                  if field in current},
     }
 
 

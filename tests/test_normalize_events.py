@@ -19,6 +19,18 @@ class NormalizeEventsTests(unittest.TestCase):
         self.assertTrue(result["all_day"])
         self.assertEqual(result["time_status"], "date_only")
 
+
+    def test_ics_exclusive_all_day_end_is_preserved(self):
+        event = {
+            "uid": "multi",
+            "title": "Multi-day program",
+            "start": {"value": "2026-11-03", "kind": "date", "timezone": None, "utc": False},
+            "end": {"value": "2026-11-06", "kind": "date", "timezone": None, "utc": False},
+            "end_exclusive": True,
+        }
+        result = normalize_event(event, "demo")
+        self.assertTrue(result["end_exclusive"])
+
     def test_ics_tzid_is_preserved(self):
         value, status = normalize_temporal(
             {"value": "2026-11-04T18:30:00", "kind": "date-time",

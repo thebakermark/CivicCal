@@ -62,12 +62,15 @@ def _material_projection(event: dict) -> dict:
 
 def _valid_state(state: Any) -> dict:
     if state is None:
-        return {"format": STATE_FORMAT, "events": {}, "unkeyed_observations": [],
-                "processed_captures": []}
+        return {"format": STATE_FORMAT, "events": {}, "observations": [],
+                "unkeyed_observations": [], "processed_captures": []}
     if not isinstance(state, dict) or state.get("format") != STATE_FORMAT:
         raise IdentityError("State file must use civiccal.identity-state.v1.")
     if not isinstance(state.get("events"), dict):
         raise IdentityError("State events must be an object.")
+    state.setdefault("observations", [])
+    if not isinstance(state.get("observations"), list):
+        raise IdentityError("State observations must be an array.")
     if not isinstance(state.get("unkeyed_observations"), list):
         raise IdentityError("State unkeyed_observations must be an array.")
     if not isinstance(state.get("processed_captures"), list):
@@ -167,6 +170,18 @@ def process_normalized(document: dict, prior_state: dict | None = None,
             "source_id": source_id, "capture_key": capture_key,
             "identity_key": key, "fingerprint": fingerprint,
         })[:24]
+        # Retain every keyed source observation, including unchanged copies.
+        # Observation history is separate from material revision history.
+        state["observations"].append({
+            "observation_id": observation_id,
+            "source_id": source_id,
+            "source_event_id": str(event.get("source_event_id")),
+            "identity_key": key,
+            "capture_key": capture_key,
+            "observed_at": timestamp,
+            "material_fingerprint": fingerprint,
+            "event": copy.deepcopy(event),
+        })
         existing = state["events"].get(key)
         if existing is None:
             event_id = "evt_" + key[:24]
@@ -186,6 +201,14 @@ def process_normalized(document: dict, prior_state: dict | None = None,
                 "first_seen_at": timestamp, "last_seen_at": timestamp,
                 "observation_ids": [observation_id],
                 "revisions": [revision],
+                "lifecycle_status": event.get("status") or "unknown",
+                "lifecycle_history": [{
+                    "observed_at": timestamp,
+                    "observation_id": observation_id,
+                    "transition": "created",
+                    "from_status": None,
+                    "to_status": event.get("status") or "unknown",
+                }],
             }
             state["events"][key] = current
             new_events += 1
@@ -198,6 +221,17 @@ def process_normalized(document: dict, prior_state: dict | None = None,
             if observation_id not in observation_ids:
                 observation_ids.append(observation_id)
             existing["last_seen_at"] = timestamp
+            previous_status = existing.get("lifecycle_status") or "unknown"
+            current_status = event.get("status") or "unknown"
+            if current_status != previous_status:
+                existing.setdefault("lifecycle_history", []).append({
+                    "observed_at": timestamp,
+                    "observation_id": observation_id,
+                    "transition": "explicit_source_status_change",
+                    "from_status": previous_status,
+                    "to_status": current_status,
+                })
+                existing["lifecycle_status"] = current_status
             if fingerprint == existing.get("current_fingerprint"):
                 unchanged += 1
                 processed_events.append({

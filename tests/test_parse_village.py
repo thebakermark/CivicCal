@@ -54,7 +54,7 @@ class VillageParserTests(unittest.TestCase):
                             "https://www.mokena.gov/calendar.aspx")
         self.assertEqual(result["pagination"]["next_page_urls"], [])
         self.assertFalse(result["pagination"]["terminal_page_confirmed"])
-        self.assertIn("does not prove", result["pagination"]["evidence"])
+        self.assertIn("No explicit rel=last", result["pagination"]["evidence"])
 
     def test_rel_last_confirms_terminal_page_only_when_current_url_matches(self):
         html = """<html><body>

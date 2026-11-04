@@ -129,7 +129,7 @@ class SourceFixtureIntegrationTests(unittest.TestCase):
                     relay_text = response.read().decode("utf-8")
                     self.assertEqual(response.headers.get_content_type(), "text/calendar")
                 self.assertIn(f"UID:{event_id}@civiccal", relay_text)
-                self.assertIn("SUMMARY:Village of Mokena's Food Trucks on Front", relay_text)
+                self.assertIn("SUMMARY:Chamber of Commerce Parade of Lights & Village Tree Lighting Ceremony", relay_text.replace("\r\n ", ""))
                 with urlopen(base + f"/api/v1/events?source_id={source_id}") as response:
                     relay_json = json.loads(response.read())
                 self.assertEqual(

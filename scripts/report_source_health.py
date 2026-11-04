@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -35,6 +36,8 @@ def _read_registry(path: Path) -> list[dict]:
 
 
 def _capture_history(source_id: str, archive: Path) -> tuple[list[dict], list[str]]:
+    if not re.fullmatch(r"[a-z0-9][a-z0-9-]*", source_id):
+        return [], [f"Source ID {source_id!r} is unsafe for archive lookup."]
     folder = archive / source_id
     if not folder.exists():
         return [], []

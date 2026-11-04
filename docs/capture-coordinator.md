@@ -31,7 +31,7 @@ Optional bounds:
 2. Validate the initial listing URL against the profile's host/path allowlist.
 3. Capture the listing page using the existing HTTPS-only capture utility and content-addressed archive.
 4. Parse the listing with `scripts/parse_village.py`.
-5. Queue only explicit `rel="next"` links and extracted `calendarView.aspx?cid=...` detail links.
+5. Queue only explicit `rel="next"` links and extracted `calendarView.aspx?cid=...` detail links. A terminal page is confirmed only when an explicit `rel="last"` link points to the page currently being parsed; an empty next-link list is not enough.
 6. Validate every queued URL against the same source allowlist before requesting it.
 7. Follow pagination with cycle detection and a page limit.
 8. Capture and parse each unique detail ID, checking that the returned event ID matches the linked ID.

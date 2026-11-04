@@ -30,6 +30,10 @@ Do not assume there is only one identity-state file or one publication manifest 
 - Do not infer source records from organization records or vice versa.
 - Do not enable, unblock, consent, or schedule any source during migration.
 
+### Authorization preservation
+
+Source authorization flags are manually edited by a human and are read-and-enforce only for application code. Migration must preserve `access_status`, `terms_reviewed`, `robots_reviewed`, `consent_required`, `consent_granted`, and `polling_enabled` exactly. It must not default, infer, promote, grant, revoke, or enable any of them. See [Source Authorization Control Boundary](source-authorization-boundary.md).
+
 ## 3. Identity-state events
 
 The current `events` value is an object whose keys are identity hashes. Each value includes:

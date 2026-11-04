@@ -41,7 +41,7 @@ Current source authorization state: 11 sources are review_required and 1 source 
 | Identity/history | Implemented in JSON | Stable IDs, observations, revisions, presence/lifecycle; DB pending |
 | Publication approval | Implemented in JSON | Manual source-scoped approval/revocation; persistent audit history pending |
 | Database | Not implemented | JSON state remains current backend; DB required for MVP |
-| Read-only API | Local foundation | Query engine and loopback service; not database-backed/public |
+| Read-only API | Local foundation | Query engine and loopback service; not database-backed/public; organization/source directory endpoints still missing |
 | Source-specific ICS | Offline/local foundation | Generator and loopback route; external stable URL not deployed |
 | Calendar-client subscription | Not proven | No verified external endpoint/client end-to-end test |
 | Webhooks | Spec only/deferred | Not needed for first useful calendar release |

@@ -209,11 +209,11 @@ Initial indexes:
 - `source_events(source_id, source_event_id)`
 - `source_events(source_id, presence_status)`
 - `event_observations(event_id, event_sequence)`
-- `event_observations(event_id, observed_at)
+- `event_observations(event_id, observed_at)`
 - `event_observations(source_id, capture_key)`
 - `event_revisions(event_id, revision_number)`
 - `presence_observations(source_id, presence_sequence)`
-- `presence_observations(source_id, observed_at)
+- `presence_observations(source_id, observed_at)`
 - `publication_approvals(source_id, event_id)`
 - query indexes for event start date and source ID after actual query patterns are measured.
 

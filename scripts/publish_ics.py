@@ -22,13 +22,21 @@ class FeedError(Exception):
 
 def _escape(value: Any) -> str:
     text = str(value or "")
-    return (text.replace("\\", "\\\\")
-                .replace(";", "\\;")
-                .replace(",", "\\,")
-                .replace("\r\n", "\\n")
-                .replace("\n", "\\n")
-                .replace("\r", "\\n"))
-
+    escaped: list[str] = []
+    for char in text:
+        if char == "\\":
+            escaped.append("\\\\")
+        elif char == ";":
+            escaped.append("\\;")
+        elif char == ",":
+            escaped.append("\\,")
+        elif char in "\r\n":
+            if char == "\r":
+                continue
+            escaped.append("\\n")
+        else:
+            escaped.append(char)
+    return "".join(escaped)
 
 def _fold(line: str) -> str:
     """Fold a content line at 75 UTF-8 octets, including continuation space."""

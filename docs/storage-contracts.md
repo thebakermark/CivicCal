@@ -20,12 +20,14 @@ Responsibilities:
 - Retrieve a source by stable `source_id`.
 - List sources for one organization.
 - Validate that each source belongs to exactly one organization.
-- Update source configuration and permission/consent flags through an explicit administrative operation.
+- Read source configuration and permission/consent flags for validation and enforcement.
 
 Rules:
 - IDs remain stable and are not regenerated from names or URLs.
 - Organization membership does not aggregate event feeds.
 - A source remains an independent capture and subscription unit.
+- Authorization flags are manually edited by a human in the source registry/configuration process. The application has no operation, API, CLI, worker, or migration path to change them.
+- The application may read and enforce authorization flags, but cannot grant consent, mark reviews complete, approve access, or enable polling.
 - Changing a source flag does not start capture, polling, or a background job.
 
 ### Capture archive catalog
@@ -94,7 +96,11 @@ Rules:
 - The serializer receives already source-scoped records; it must not infer ownership from event titles, organizers, or locations.
 - Stable source-specific endpoints remain independent of storage backend.
 
-## 3. Transaction boundary: one ingestion batch
+## 3. Authorization boundary
+
+Source authorization is human-controlled configuration, not an application-managed domain command. Protected fields include `access_status`, `terms_reviewed`, `robots_reviewed`, `consent_required`, `consent_granted`, and `polling_enabled`. The application may read and enforce these values, and must fail closed when required values are absent or invalid. It must not expose an application write operation for them. Database ingestion, ordinary metadata updates, migration, normalization, repair, and cutover must preserve them exactly and must not change them. The source registry remains manually edited; moving the values into database storage does not change who has authority to edit them. See [Source Authorization Control Boundary](source-authorization-boundary.md).
+
+## 4. Transaction boundary: one ingestion batch
 
 The application should expose one atomic ingestion operation (or unit-of-work boundary) that persists the result of processing one verified capture.
 
@@ -113,7 +119,7 @@ If any write fails, none of the batch's writes commit. A retry with the same tok
 
 The parser and normalizer remain outside the database adapter. They produce normalized input and provenance. The deterministic identity processor decides what changed. The storage adapter enforces persistence constraints and transactionality; it does not invent identity or lifecycle decisions.
 
-## 4. Transaction boundary: one publication action
+## 5. Transaction boundary: one publication action
 
 Approval/revocation is a separate transaction:
 1. Resolve the source and event.
@@ -124,7 +130,7 @@ Approval/revocation is a separate transaction:
 
 Publication must never be an implicit side effect of ingestion.
 
-## 5. Compatibility transition
+## 6. Compatibility transition
 
 A safe staged transition is:
 
@@ -138,7 +144,7 @@ A safe staged transition is:
 
 Do not attempt to make a database adapter emulate whole-file replacement by loading the entire database into a dictionary. That would preserve the current bottleneck and weaken transaction boundaries.
 
-## 6. Error contract
+## 7. Error contract
 
 The application should distinguish:
 - Not found: requested organization/source/event does not exist.
@@ -150,7 +156,7 @@ The application should distinguish:
 
 Errors should be stable domain-level outcomes. Database-specific exception text must not leak into API responses. The API layer maps these outcomes to appropriate HTTP responses.
 
-## 7. Not in scope yet
+## 8. Not in scope yet
 
 - Concrete Python Protocol definitions or DTO implementations.
 - SQL DDL, ORM, query builder, or migration framework.
@@ -160,3 +166,6 @@ Errors should be stable domain-level outcomes. Database-specific exception text 
 - Background workers, polling, scheduling, or network capture.
 
 Those are implementation decisions for a later approved step.
+
+
+Related design: [Relational Event-History Model](event-history-relational-model.md) defines the lossless expansion of nested event histories and the presence-mirror reconciliation rules.

@@ -91,6 +91,8 @@ def _temporal(value: Any, time_status: str, field: str, tzid: str | None = None)
     if time_status in {"utc", "zoned"}:
         if parsed.tzinfo is not None and parsed.utcoffset() is not None:
             return "", parsed.astimezone(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        if time_status == "utc":
+            return "", parsed.replace(tzinfo=timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         if time_status == "zoned" and tzid:
             try:
                 zone = ZoneInfo(tzid)

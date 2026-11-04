@@ -187,7 +187,7 @@ def main() -> int:
             print(f"Unchanged: {source['id']} (HTTP 304). Metadata: {path}")
         else:
             print(f"Captured {len(body)} bytes from {source['id']}. SHA-256: {metadata['content_sha256']}")
-            print(f"Raw payload: {path.with_suffix('.bin')}")
+            print(f"Raw payload: {path.parent / metadata['raw_payload_file']}")
             print(f"Metadata: {path}")
         return 0
     except CaptureError as exc:

@@ -25,7 +25,7 @@ Design baseline. This document defines the intended contract; it is not a claim 
 - `GET /api/v1/changes` — incremental changes after a cursor or timestamp.
 - `GET /api/v1/openapi.json` — machine-readable API description.
 
-The current loopback implementation provides `/health`, `/api/v1/events`, `/calendars/community.ics`, and `/api/v1/openapi.json`. Source-specific relay routes, event detail, categories, incremental changes, geography filters, and remote deployment remain future work. The community route is a development artifact and is not part of the intended product.
+The current loopback implementation provides `/health`, `/api/v1/events`, `/calendars/sources/{source_id}.ics`, and `/api/v1/openapi.json`. Event detail, categories, incremental changes, geography filters, and remote deployment remain future work. The `source_id` event filter and source relay route preserve source boundaries; there is no combined community calendar.
 
 ## Event query parameters
 

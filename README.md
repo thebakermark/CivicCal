@@ -69,6 +69,7 @@ The project blueprint is documented before expanding the implementation:
 - [Roadmap and milestones](docs/roadmap.md)
 - [Source lifecycle and capture contract](docs/source-lifecycle.md)
 - [Source completeness and pagination](docs/source-completeness.md)
+- [One-shot capture coordinator](docs/capture-coordinator.md)
 - [Capture-to-parser handoff](docs/capture-to-parser.md)
 - [Canonical event data model](docs/event-data-model.md)
 - [Event identity and revision tracking](docs/event-identity-revisions.md)

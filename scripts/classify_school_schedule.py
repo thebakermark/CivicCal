@@ -14,6 +14,8 @@ from pathlib import Path
 from typing import Any
 
 RULES = (
+    ("e_learning", re.compile(r"\\b(e[- ]learning|remote learning|virtual learning day)\\b", re.I),
+     "remote_learning", "Explicit e-learning/remote-learning wording"),
     ("school_break", re.compile(r"\b(thanksgiving (?:break|holiday)|(?:winter|spring|summer|fall|holiday) break)\b", re.I),
      "no_school", "Named school break"),
     ("no_school", re.compile(

@@ -55,7 +55,7 @@ class IngestCaptureTests(unittest.TestCase):
             self.assertEqual(len(persisted["events"]), 1)
             record = next(iter(persisted["events"].values()))
             self.assertEqual(record["source_event_id"], "30642")
-            self.assertEqual(record["current"]["title"], "Village of Mokena's Food Trucks on Front")
+            self.assertEqual(record["current"]["title"], "Chamber of Commerce Parade of Lights & Village Tree Lighting Ceremony")
             self.assertEqual(record["current"]["time_status"], "floating")
             self.assertEqual(record["revisions"][0]["revision"], 1)
 

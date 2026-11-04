@@ -118,6 +118,23 @@ It is not limited to a consumer-facing calendar website. Its primary product is 
 
 **Complete when:** residents can subscribe to stable feeds and developers can use the documented API.
 
+## MVP outcome (the product we are building)
+
+The MVP is a working end-to-end public event discovery and calendar subscription service—not merely an API prototype or a set of feed generators.
+
+A user must be able to:
+
+1. Discover registered local organizations and their official public event sources.
+2. Capture events and their available details from those sources (title, dates/times, location, description, links, categories, registration details, and source attribution where published).
+3. Parse and normalize those records into a consistent CivicCal event model while preserving source provenance and uncertainty.
+4. Store organizations, sources, events, source observations, and update history in a persistent database.
+5. Retrieve the stored events through a read-only API.
+6. Subscribe to a stable community-wide iCalendar URL and organization-specific iCalendar URLs in Apple Calendar, Google Calendar, Outlook, and other compatible calendar apps.
+7. Refresh event data from sources through a controlled capture process, recording changes without treating a missing event as automatically cancelled.
+
+**MVP acceptance test:** Starting from a clean installation, an operator can register an organization/source, ingest a representative source fixture (and later a permitted live capture), persist its events in the database, query them, and generate a valid `.ics` subscription feed from the same stored records. A calendar client can subscribe to that feed and receive subsequent approved updates without duplicate churn.
+
+The current JSON/file-based pipeline and loopback API are development foundations. They are not the final storage layer or a substitute for the database-backed end-to-end MVP. Database implementation is intentionally sequenced for the user's laptop session; meanwhile, keep interfaces and data contracts storage-independent. Do not deploy, enable unattended polling, install software, or incur costs without explicit approval. Source-specific consent and access controls remain mandatory.
 ## First practical release (MVP)
 
 Prioritize:

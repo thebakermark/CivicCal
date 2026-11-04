@@ -98,6 +98,17 @@ class PublishICSTests(unittest.TestCase):
         text, _ = build_calendar(state_with(record), manifest("evt_123"))
         self.assertIn("DTEND;VALUE=DATE:20261106\r\n", text)
 
+
+    def test_ambiguous_all_day_end_is_rejected(self):
+        record = identity_record()
+        record["current"].update({
+            "start": {"value": "2026-11-04", "kind": "date"},
+            "end": {"value": "2026-11-06", "kind": "date"},
+            "time_status": "date_only",
+        })
+        with self.assertRaises(FeedError):
+            build_calendar(state_with(record), manifest("evt_123"))
+
     def test_unknown_timezone_semantics_rejected(self):
         record = identity_record()
         record["current"]["start"] = {"value": "2026-11-04T18:00:00", "kind": "date-time"}

@@ -30,7 +30,7 @@
 }
 ```
 
-`observed_at` must be the actual observation timestamp in ISO 8601 form; do not copy the illustrative timestamp above. `source_url` must be the HTTPS listing or detail page from which the snapshot was prepared. Every event should include its own `event_url` whenever the publisher provides one. Preserve exact publisher wording and use `null` or omit a field when it is not known.
+`observed_at` must be the actual observation date or timestamp in ISO 8601 form; use a full timestamp when the time is known, and a date-only value when it was not recorded. Do not copy the illustrative timestamp above. `source_url` must be the HTTPS listing or detail page from which the snapshot was prepared. Every event should include its own `event_url` whenever the publisher provides one. Preserve exact publisher wording and use `null` or omit a field when it is not known.
 
 ## Field handling
 
@@ -60,6 +60,10 @@ The normalizer performs no network requests, database writes, identity merges, d
 5. Keep duplicate observations and flag candidates for review.
 6. Mark the capture method as `manual-public-page-review`; do not label manual transcription as an HTML capture or automated fetch.
 7. Do not treat this format as authorization for network capture or polling.
+
+## Checked-in Mokena example
+
+`data/fixtures/mokena-library-manual-snapshot-2026-11-04.json` contains two manually reviewed event records from the public Mokena Library calendar. It is a small regression fixture, not a complete calendar snapshot and not an archived raw HTML response. It records the observation date, listing URL, individual detail URLs, event fields, and the fact that the content was manually reviewed.
 
 ## Library-specific source
 

@@ -1,4 +1,6 @@
+import json
 import unittest
+from pathlib import Path
 
 from scripts.classify_school_schedule import classify_event, classify_document
 

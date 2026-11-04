@@ -2,7 +2,7 @@
 
 Community event discovery and independent calendar subscription infrastructure for Mokena, Illinois and nearby communities.
 
-CivicCal reads free, publicly available event information published by public entities—such as the Village, library, park district, and school districts—normalizes it, stores it locally, and provides iCalendar subscription feeds for the user's own calendar apps. It does not access private accounts, nonpublic information, or restricted systems.
+CivicCal reads free, publicly available event information published by public entities—such as the Village, library, park district, and school districts—normalizes it, stores it locally, and provides independent iCalendar subscription feeds for residents' calendar apps. It does not access private accounts, nonpublic information, or restricted systems.
 
 ## Project goals
 
@@ -12,7 +12,7 @@ CivicCal reads free, publicly available event information published by public en
 - Provide a separate iCalendar (ICS) subscription feed for each source.
 - Preserve the original event link and source attribution.
 - Use only public information; never log in, access private data, or bypass access controls.
-- Keep the project free and suitable for personal use.
+- Keep the core free, portable, and self-hostable; no paid services without explicit approval.
 
 ## Initial geography
 

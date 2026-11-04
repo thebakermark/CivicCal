@@ -148,13 +148,13 @@ def _timezone_component(tzid: str, years: set[int]) -> list[str]:
             low, high = cursor, next_cursor
             old_offset, old_name = previous.utcoffset(), previous.tzname()
             while (high - low).total_seconds() > 1:
-                mid = low + (high - low) / 2
+                mid = low + timedelta(seconds=int((high - low).total_seconds() // 2))
                 probe = mid.astimezone(zone)
                 if (probe.utcoffset(), probe.tzname()) == (old_offset, old_name):
                     low = mid
                 else:
                     high = mid
-            instant = high.replace(microsecond=0)
+            instant = high
             before = (instant - timedelta(seconds=1)).astimezone(zone)
             after = instant.astimezone(zone)
             old, new = before.utcoffset(), after.utcoffset()

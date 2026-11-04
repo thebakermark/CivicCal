@@ -6,12 +6,13 @@ import argparse
 import hashlib
 import ipaddress
 import json
+import re
 import sys
 from datetime import datetime, timezone
 from email.utils import format_datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import parse_qs, urlsplit
+from urllib.parse import parse_qs, unquote, urlsplit
 
 try:
     from .publish_ics import FeedError, build_calendar
@@ -45,8 +46,8 @@ OPENAPI = {
                 "responses": {"200": {"description": "Paginated approved event results"}},
             }
         },
-        "/calendars/community.ics": {
-            "get": {"summary": "Subscribe to the explicitly approved community calendar"}
+        "/calendars/sources/{source_id}.ics": {
+            "get": {"summary": "Subscribe to one registered source's approved events"}
         },
     },
 }
@@ -69,7 +70,25 @@ def _load_documents(state_path: Path, manifest_path: Path) -> tuple[dict, dict]:
     return state, manifest
 
 
-def _last_modified(state: dict, manifest: dict) -> str | None:
+def _load_registry(registry_path: Path) -> dict:
+    try:
+        registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise DataUnavailable("CivicCal source registry is unavailable or invalid.") from exc
+    if not isinstance(registry, dict) or not isinstance(registry.get("source_records"), list):
+        raise DataUnavailable("CivicCal source registry has no valid source_records array.")
+    seen = set()
+    for record in registry["source_records"]:
+        if not isinstance(record, dict) or not isinstance(record.get("id"), str) or not record["id"].strip():
+            raise DataUnavailable("CivicCal source registry contains an invalid source record.")
+        source_id = record["id"]
+        if source_id in seen:
+            raise DataUnavailable("CivicCal source registry contains duplicate source IDs.")
+        seen.add(source_id)
+    return registry
+
+
+def _last_modified(state: dict, manifest: dict, source_id: str | None = None) -> str | None:
     approved = manifest.get("approved_event_ids", [])
     approved_set = {item for item in approved if isinstance(item, str)} if isinstance(approved, list) else set()
     timestamps = []
@@ -78,6 +97,8 @@ def _last_modified(state: dict, manifest: dict) -> str | None:
         return None
     for record in events.values():
         if not isinstance(record, dict) or record.get("event_id") not in approved_set:
+            continue
+        if source_id is not None and record.get("source_id") != source_id:
             continue
         revisions = record.get("revisions")
         if not isinstance(revisions, list) or not revisions or not isinstance(revisions[-1], dict):
@@ -94,7 +115,7 @@ def _last_modified(state: dict, manifest: dict) -> str | None:
     return format_datetime(max(timestamps), usegmt=True) if timestamps else None
 
 
-def make_handler(state_path: Path, manifest_path: Path):
+def make_handler(state_path: Path, manifest_path: Path, registry_path: Path | None = None):
     class CivicCalHandler(BaseHTTPRequestHandler):
         server_version = "CivicCal/0.1"
         sys_version = ""
@@ -144,16 +165,46 @@ def make_handler(state_path: Path, manifest_path: Path):
             if parsed.path in {"/openapi.json", "/api/v1/openapi.json"}:
                 self._json(200, OPENAPI)
                 return
-            if parsed.path not in {"/api/v1/events", "/calendars/community.ics"}:
+            source_match = re.fullmatch(r"/calendars/sources/([^/]+)\.ics", parsed.path)
+            if parsed.path != "/api/v1/events" and source_match is None:
                 self._json(404, {"error": "not_found"})
                 return
             try:
                 state, manifest = _load_documents(state_path, manifest_path)
-                last_modified = _last_modified(state, manifest)
-                if parsed.path == "/calendars/community.ics":
-                    body_text, _ = build_calendar(state, manifest)
+                if source_match is not None:
+                    if registry_path is None:
+                        raise DataUnavailable("Source-specific relays require a source registry.")
+                    registry = _load_registry(registry_path)
+                    source_id = unquote(source_match.group(1))
+                    sources = {record["id"]: record for record in registry["source_records"]}
+                    if source_id not in sources:
+                        self._json(404, {"error": "source_not_found"})
+                        return
+                    approved = manifest.get("approved_event_ids")
+                    if not isinstance(approved, list):
+                        raise FeedError("approved_event_ids must be an array.")
+                    records = state.get("events", {}) if isinstance(state, dict) else {}
+                    records_by_id = {
+                        record.get("event_id"): record for record in records.values()
+                        if isinstance(record, dict) and isinstance(record.get("event_id"), str)
+                    }
+                    approved_for_source = [
+                        event_id for event_id in approved
+                        if event_id in records_by_id and records_by_id[event_id].get("source_id") == source_id
+                    ]
+                    source_manifest = dict(manifest)
+                    source_manifest["approved_event_ids"] = approved_for_source
+                    source_manifest["calendar_name"] = sources[source_id].get("name") or source_id
+                    source_state = dict(state)
+                    approved_set = set(approved_for_source)
+                    source_state["events"] = {
+                        key: record for key, record in records.items()
+                        if isinstance(record, dict) and record.get("event_id") in approved_set
+                    }
+                    body_text, _ = build_calendar(source_state, source_manifest)
                     body = body_text.encode("utf-8")
                     etag = '"' + hashlib.sha256(body).hexdigest() + '"'
+                    last_modified = _last_modified(state, manifest, source_id)
                     self._send(200, body, "text/calendar; charset=utf-8", etag, last_modified)
                     return
 
@@ -180,7 +231,7 @@ def make_handler(state_path: Path, manifest_path: Path):
                     limit=limit,
                     offset=offset,
                 )
-                self._json(200, result, last_modified=last_modified)
+                self._json(200, result, last_modified=_last_modified(state, manifest, values.get("source_id")))
             except (FeedError, QueryError, ServiceInputError) as exc:
                 self._json(400, {"error": "invalid_request", "message": str(exc)})
             except DataUnavailable:
@@ -204,6 +255,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--state", required=True, help="Identity-state JSON path")
     parser.add_argument("--manifest", required=True, help="Publication approval manifest JSON path")
+    parser.add_argument("--registry", required=True, help="Source registry JSON path")
     parser.add_argument("--host", default="127.0.0.1", help="Loopback address only")
     parser.add_argument("--port", type=int, default=8765)
     args = parser.parse_args()
@@ -213,9 +265,10 @@ def main() -> int:
             raise ValueError("CivicCal API binds to loopback only; remote hosting is not enabled.")
         if not 1 <= args.port <= 65535:
             raise ValueError("port must be between 1 and 65535.")
-        state_path, manifest_path = Path(args.state), Path(args.manifest)
+        state_path, manifest_path, registry_path = Path(args.state), Path(args.manifest), Path(args.registry)
         _load_documents(state_path, manifest_path)
-        server = ThreadingHTTPServer((args.host, args.port), make_handler(state_path, manifest_path))
+        _load_registry(registry_path)
+        server = ThreadingHTTPServer((args.host, args.port), make_handler(state_path, manifest_path, registry_path))
         print(f"CivicCal read-only API listening on http://{args.host}:{args.port}")
         server.serve_forever()
         return 0

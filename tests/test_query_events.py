@@ -66,6 +66,17 @@ class QueryEventsTests(unittest.TestCase):
         with self.assertRaises(QueryError):
             query_events(self.state, manifest("not-present"))
 
+    def test_duplicate_identity_event_ids_are_rejected(self):
+        duplicate = record("evt-a", "other-source", "2026-11-10", "Collision")
+        with self.assertRaisesRegex(QueryError, "duplicate event ID"):
+            query_events(state(self.state["events"]["key-0"], duplicate), manifest("evt-a"))
+
+    def test_identity_record_requires_source_id(self):
+        invalid = record("evt-z", "library", "2026-11-10", "Missing source")
+        invalid.pop("source_id")
+        with self.assertRaisesRegex(QueryError, "source_id"):
+            query_events(state(invalid), manifest("evt-z"))
+
     def test_invalid_date_range_is_an_error(self):
         with self.assertRaises(QueryError):
             query_events(self.state, self.manifest, start_date="2026-11-20", end_date="2026-11-01")

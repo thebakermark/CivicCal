@@ -168,7 +168,10 @@ class TrackEventIdentityTests(unittest.TestCase):
             doc["snapshot"] = snapshot
             result, state = process_normalized(doc, state)
             self.assertEqual(result["missing_events"], 0)
-            self.assertNotIn("presence_status", next(iter(state["events"].values())))
+            current = next(iter(state["events"].values()))
+            self.assertEqual(current["presence_status"], "present")
+            self.assertEqual(current["missing_snapshot_count"], 0)
+            self.assertEqual(state["presence_observations"], [])
 
     def test_reappearance_does_not_override_explicit_cancellation(self):
         _, state = process_normalized(normalized([event(status="cancelled")], capture="seed"))

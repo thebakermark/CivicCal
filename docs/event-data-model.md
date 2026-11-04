@@ -43,7 +43,7 @@ Recommended initial fields:
 - `event_id`: stable CivicCal identifier.
 - `title`: normalized display title.
 - `description`: normalized description, retaining source text separately.
-- `start`, `end`: date/time values with explicit semantics.
+- `start`, `end`: date/time values with explicit semantics, including whether a date-valued end is exclusive.
 - `all_day`: boolean.
 - `timezone`: IANA timezone when known.
 - `time_status`: `zoned`, `utc`, `floating`, `date_only`, or `unresolved`.

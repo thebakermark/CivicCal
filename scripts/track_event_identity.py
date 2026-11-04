@@ -277,10 +277,13 @@ def process_normalized(document: dict, prior_state: dict | None = None,
 
     # Absence requires an explicit adapter completeness assertion and evidence.
     snapshot = document.get("snapshot") or {}
+    capture_info = document.get("capture") or {}
     completeness = snapshot.get("completeness") if isinstance(snapshot, dict) else None
     evidence = snapshot.get("evidence") if isinstance(snapshot, dict) else None
+    capture_outcome = capture_info.get("outcome") if isinstance(capture_info, dict) else None
     complete_snapshot = (
         completeness == "complete" and isinstance(evidence, str) and bool(evidence.strip())
+        and (capture_outcome is None or capture_outcome == "captured")
         and (bool(events) or snapshot.get("empty_snapshot_confirmed") is True)
     )
     missing_count = 0

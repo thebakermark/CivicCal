@@ -253,13 +253,15 @@ def _event_lines(event_id: str, record: dict) -> list[str]:
         end_param, end_value = _temporal(end, time_status, "end", tzid)
         if end_param != start_param:
             raise FeedError(f"{event_id}: DTSTART and DTEND value types do not match.")
-        if start_param:
+        if start_param == "VALUE=DATE":
             # Never guess whether a publisher's all-day end date is inclusive.
             if current.get("end_exclusive") is not True:
                 raise FeedError(
                     f"{event_id}: all-day end date is ambiguous; "
                     "set end_exclusive=true only when source semantics establish it."
                 )
+            lines.append(f"DTEND;{end_param}:{end_value}")
+        elif end_param:
             lines.append(f"DTEND;{end_param}:{end_value}")
         else:
             lines.append(f"DTEND:{end_value}")

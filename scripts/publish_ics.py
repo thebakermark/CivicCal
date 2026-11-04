@@ -161,8 +161,8 @@ def _timezone_component(tzid: str, years: set[int]) -> list[str]:
         lines.extend([
             f"BEGIN:{kind}",
             f"DTSTART:{dates[0].strftime('%Y%m%dT%H%M%S')}",
-            f"TZOFFSETFROM:{old}",
-            f"TZOFFSETTO:{new}",
+            f"TZOFFSETFROM:{_offset_text(old)}",
+            f"TZOFFSETTO:{_offset_text(new)}",
             f"TZNAME:{_escape(name)}",
         ])
         if len(dates) > 1:
@@ -311,8 +311,13 @@ def build_calendar(identity_state: dict, manifest: dict) -> tuple[str, dict]:
     for event_id in approved:
         current = records_by_id[event_id].get("current") or {}
         tzid = current.get("timezone")
-        if isinstance(tzid, str) and tzid:
-            year = _event_year(current.get("start"))
+        start = current.get("start")
+        raw_start = start.get("value") if isinstance(start, dict) else None
+        has_explicit_offset = isinstance(raw_start, str) and (
+            raw_start.endswith("Z") or bool(re.search(r"[+-]\\d{2}:?\\d{2}$", raw_start))
+        )
+        if current.get("time_status") == "zoned" and isinstance(tzid, str) and tzid and not has_explicit_offset:
+            year = _event_year(start)
             if year is not None:
                 timezone_years.setdefault(tzid, set()).add(year)
     for tzid, years in sorted(timezone_years.items()):

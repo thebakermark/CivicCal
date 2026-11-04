@@ -16,11 +16,6 @@ from typing import Any
 RULES = (
     ("school_break", re.compile(r"\\b(thanksgiving|winter|spring|summer|fall|holiday) break\\b", re.I),
      "no_school", "Named school break"),
-    ("teacher_institute", re.compile(
-        r"\\b(teacher institute|institute day|teacher in[- ]service|"
-        r"professional development|staff development|teacher workday|"
-        r"teacher work day)\\b", re.I),
-     "no_school", "Staff training/workday wording; confirm the district's student schedule"),
     ("no_school", re.compile(
         r"\\b(no school|no student attendance|students? (?:do not|will not) attend|"
         r"school (?:is )?closed|schools? closed|school not in session|"
@@ -32,6 +27,11 @@ RULES = (
      "shortened_day", "Explicit half-day wording"),
     ("late_start", re.compile(r"\\b(late start|delayed start|late arrival)\\b", re.I),
      "delayed_start", "Explicit delayed-start wording"),
+    ("teacher_institute", re.compile(
+        r"\\b(teacher institute|institute day|teacher in[- ]service|"
+        r"professional development|staff development|teacher workday|"
+        r"teacher work day)\\b", re.I),
+     "confirm_student_attendance", "Staff training/workday wording; the source does not explicitly state whether students attend"),
 )
 
 FORMAT = "civiccal.school-schedule.v1"

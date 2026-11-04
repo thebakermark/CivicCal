@@ -6,6 +6,7 @@ from pathlib import Path
 
 from scripts.parse_capture import (
     HandoffError,
+    capture_summary,
     load_capture,
     parse_payload,
     select_adapter,
@@ -31,6 +32,23 @@ class ParseCaptureTests(unittest.TestCase):
         }
         path = write_capture(source_id, payload if status == 200 else None, metadata, Path(folder))
         return path
+
+    def test_capture_summary_preserves_outcome_and_page_provenance(self):
+        metadata = {
+            "captured_at": "2026-11-04T12:00:00Z",
+            "content_sha256": "a" * 64,
+            "final_url": "https://example.test/listing",
+            "requested_url": "https://example.test/listing",
+            "source_url": "https://example.test/calendar",
+            "http_status": 200,
+            "outcome": "captured",
+            "page_role": "listing",
+        }
+        summary = capture_summary(metadata, Path("capture.json"))
+        self.assertEqual(summary["outcome"], "captured")
+        self.assertEqual(summary["http_status"], 200)
+        self.assertEqual(summary["page_role"], "listing")
+        self.assertEqual(summary["source_url"], "https://example.test/calendar")
 
     def test_ics_capture_dispatches_to_existing_ics_parser(self):
         payload = (ROOT / "data/fixtures/sample-community.ics").read_bytes()

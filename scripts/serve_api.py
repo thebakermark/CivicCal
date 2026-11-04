@@ -244,7 +244,11 @@ def make_handler(state_path: Path, manifest_path: Path, registry_path: Path | No
                     offset=offset,
                 )
                 self._json(200, result, last_modified=_last_modified(state, manifest, values.get("source_id")))
-            except (FeedError, QueryError, ServiceInputError) as exc:
+            except FeedError:
+                # Invalid stored publication/identity data is a server-side
+                # integrity failure, not a malformed client request.
+                self._json(503, {"error": "service_unavailable"})
+            except (QueryError, ServiceInputError) as exc:
                 self._json(400, {"error": "invalid_request", "message": str(exc)})
             except DataUnavailable:
                 self._json(503, {"error": "service_unavailable"})

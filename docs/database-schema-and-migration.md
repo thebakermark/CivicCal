@@ -23,6 +23,8 @@ The database must preserve existing behavior:
 
 The logical model below is database-engine-neutral. SQLite is the likely first embedded/local implementation, with a later PostgreSQL adapter possible. This is not yet a final engine decision.
 
+The source authorization model is human-controlled: authorization flags are manually edited by an operator. Application code may read and enforce them but must not write them. See [Source Authorization Control Boundary](source-authorization-boundary.md). The relational event-history expansion and exact migration reconciliation rules are defined in [Relational Event-History Model](event-history-relational-model.md).
+
 ## 2. Proposed logical entities
 
 ### Organization
@@ -50,7 +52,7 @@ Fields:
 - `timezone_policy`, `completeness_profile`, `configuration_json`.
 - `created_at`, `updated_at`.
 
-A source's consent and access controls remain explicit. Changing a flag does not itself fetch or schedule anything. Source registry IDs remain stable across migration.
+A source's consent and access controls remain explicit and human-edited. The application has read-and-enforce access only; it must not grant consent, approve access, mark reviews complete, or enable polling. Migration must preserve each flag exactly and never change it. Changing a flag does not itself fetch or schedule anything. Source registry IDs remain stable across migration.
 
 ### Capture
 

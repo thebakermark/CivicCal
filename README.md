@@ -28,12 +28,18 @@ The initial source registry is in [data/sources.json](data/sources.json). Entrie
 
 ## Development status
 
-Early foundation. A guarded, one-shot HTTP capture utility is available at [scripts/capture_source.py](scripts/capture_source.py). The offline [capture-to-parser handoff](scripts/parse_capture.py) verifies archived payloads and dispatches them to existing parsers. [Event normalization](scripts/normalize_events.py) maps parser output into common event records while preserving every original source record and flagging incomplete data. [Source completeness validation](scripts/validate_snapshot.py) checks page coverage and pagination evidence before any absence observation can be recorded. [Source-scoped event identity and revision tracking](scripts/track_event_identity.py) now assigns stable IDs only when a publisher supplies a stable event ID, and records material changes without cross-source merging. Identity state is written through a replaceable storage interface with an atomic JSON-file backend; database selection is deferred until laptop review. These tools remain offline; no public API or automated ingestion is deployed yet.
+Early foundation. A guarded, one-shot HTTP capture utility is available at [scripts/capture_source.py](scripts/capture_source.py). The [HTML page coordinator](scripts/capture_coordinator.py) and [single-feed iCalendar coordinator](scripts/capture_ics_source.py) connect capture, parsing, normalization, and source-completeness validation for their respective source types. The offline [capture-to-parser handoff](scripts/parse_capture.py) verifies archived payloads and dispatches them to existing parsers. [Event normalization](scripts/normalize_events.py) maps parser output into common event records while preserving every original source record and flagging incomplete data. [Source completeness validation](scripts/validate_snapshot.py) checks page coverage and pagination evidence before any absence observation can be recorded. [Source-scoped event identity and revision tracking](scripts/track_event_identity.py) now assigns stable IDs only when a publisher supplies a stable event ID, and records material changes without cross-source merging. Identity state is written through a replaceable storage interface with an atomic JSON-file backend; database selection is deferred until laptop review. These tools remain offline; no public API or automated ingestion is deployed yet.
 
 Example manual capture (only for a source whose registry gates permit network access):
 
 ```sh
 python scripts/capture_source.py --source-id example-source --archive-dir data/captures
+
+# For a registered ICS feed whose source gates permit capture:
+python scripts/capture_ics_source.py \\
+  --source-id summit-hill-sd161-events-ical \\
+  --archive-dir data/captures \\
+  --output data/processed/summit-hill-district-events.json
 
 # For a source-scoped page URL, only when the source's registry gates permit it:
 python scripts/capture_source.py --source-id village-of-mokena-events \\
@@ -69,7 +75,8 @@ The project blueprint is documented before expanding the implementation:
 - [Roadmap and milestones](docs/roadmap.md)
 - [Source lifecycle and capture contract](docs/source-lifecycle.md)
 - [Source completeness and pagination](docs/source-completeness.md)
-- [One-shot capture coordinator](docs/capture-coordinator.md)
+- [One-shot HTML capture coordinator](docs/capture-coordinator.md)
+- [One-shot iCalendar capture coordinator](docs/ics-capture-coordinator.md)
 - [Capture-to-parser handoff](docs/capture-to-parser.md)
 - [Canonical event data model](docs/event-data-model.md)
 - [Event identity and revision tracking](docs/event-identity-revisions.md)

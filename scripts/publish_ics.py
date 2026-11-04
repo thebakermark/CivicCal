@@ -117,7 +117,9 @@ def _offset_text(value: timedelta) -> str:
     sign = "+" if seconds >= 0 else "-"
     seconds = abs(seconds)
     hours, remainder = divmod(seconds, 3600)
-    minutes = remainder // 60
+    minutes, seconds_remainder = divmod(remainder, 60)
+    if seconds_remainder:
+        return f"{sign}{hours:02d}{minutes:02d}{seconds_remainder:02d}"
     return f"{sign}{hours:02d}{minutes:02d}"
 
 
@@ -129,8 +131,8 @@ def _timezone_component(tzid: str, years: set[int]) -> list[str]:
         raise FeedError(f"Unknown IANA timezone {tzid!r}.") from exc
     if not years:
         raise FeedError("Cannot build VTIMEZONE without event years.")
-    first_year = max(1900, min(years) - 1)
-    last_year = min(2100, max(years) + 2)
+    first_year = max(2, min(years) - 1)
+    last_year = min(9997, max(years) + 2)
     start_utc = datetime(first_year, 1, 1, tzinfo=timezone.utc)
     end_utc = datetime(last_year + 1, 1, 1, tzinfo=timezone.utc)
     step = timedelta(hours=6)
@@ -165,6 +167,15 @@ def _timezone_component(tzid: str, years: set[int]) -> list[str]:
         kind = "DAYLIGHT" if new > old else "STANDARD"
         key = (kind, _offset_text(old), _offset_text(new), name)
         groups.setdefault(key, []).append(local)
+
+    if not groups:
+        fixed = datetime(first_year, 1, 1, tzinfo=zone)
+        offset = fixed.utcoffset()
+        if offset is None:
+            raise FeedError(f"Timezone {tzid!r} has no resolvable UTC offset.")
+        groups[("STANDARD", _offset_text(offset), _offset_text(offset), fixed.tzname() or tzid)] = [
+            datetime(first_year, 1, 1)
+        ]
 
     lines = ["BEGIN:VTIMEZONE", f"TZID:{_escape(tzid)}"]
     for (kind, old, new, name), dates in sorted(groups.items()):

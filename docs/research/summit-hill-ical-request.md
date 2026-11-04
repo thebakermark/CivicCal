@@ -33,9 +33,9 @@ Decoded, it is:
 https://www.summithill.org/apps/events/ical/?id=0&cb=1793784704293
 ```
 
-The `cb` parameter resembles a cache-busting value. However, the official publisher's current Download .ICS link resolves without `cb`. There is not yet evidence that `cb` is required, that the server validates it, or that it changes the response.
+The direct Download .ICS link resolves without `cb`, while the official Google Calendar subscription link wraps the same feed in a `webcal://` URL and includes `cb=<13-digit timestamp>`. A second rendering produced a different timestamp. This confirms that the publisher dynamically adds `cb` when generating its Google Calendar subscription URL. It strongly suggests a cache-busting purpose, but it does not prove the server requires the parameter or that it changes feed content.
 
-**Implementation decision:** store the stable publisher URL with `id=0`; do not persist a timestamped `cb` value. Do not add automatic cache-busting to the capture client unless a real HTTP comparison demonstrates that it is necessary. If later testing requires a cache-buster, generate it per request and keep it out of source identity and event provenance.
+**Implementation decision:** store the stable publisher URL with `id=0`; never persist a generated `cb` value as source identity. Preserve the ability to add a fresh `cb` value at request time if direct HTTP testing shows that the endpoint or an intermediary serves stale responses without it. Do not add it to every request yet: doing so could interfere with normal HTTP cache validators (`ETag` / `Last-Modified`) and 304 handling.
 
 ## Retrieval behavior observed
 

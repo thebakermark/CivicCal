@@ -63,7 +63,7 @@ def update_publication(
     if not isinstance(events, dict):
         raise PublicationApprovalError("Identity state events must be an object.")
 
-    matches = []
+    records_by_id = {}
     seen_ids = set()
     for identity_key, record in events.items():
         if not isinstance(record, dict):
@@ -77,13 +77,12 @@ def update_publication(
         seen_ids.add(stored_id)
         if not isinstance(stored_source, str) or not stored_source.strip():
             raise PublicationApprovalError(f"Identity record {stored_id!r} has no valid source_id.")
-        if stored_id == event_id:
-            matches.append(record)
-    if len(matches) != 1:
+        records_by_id[stored_id] = record
+    if event_id not in records_by_id:
         raise PublicationApprovalError(f"Event ID {event_id!r} must resolve to exactly one stored event.")
-    if matches[0]["source_id"] != source_id:
+    if records_by_id[event_id]["source_id"] != source_id:
         raise PublicationApprovalError(
-            f"Event {event_id!r} belongs to source {matches[0]['source_id']!r}, not {source_id!r}."
+            f"Event {event_id!r} belongs to source {records_by_id[event_id]['source_id']!r}, not {source_id!r}."
         )
 
     if not isinstance(manifest, dict) or manifest.get("format") != "civiccal.publication-manifest.v1":
@@ -93,6 +92,22 @@ def update_publication(
         raise PublicationApprovalError("approved_event_ids must be an array of non-empty event IDs.")
     if len(set(approved)) != len(approved):
         raise PublicationApprovalError("Publication manifest contains duplicate event IDs.")
+    for approved_id in approved:
+        approved_record = records_by_id.get(approved_id)
+        if approved_record is None:
+            raise PublicationApprovalError(
+                f"Already-approved event ID {approved_id!r} is missing from identity state."
+            )
+        approved_source = approved_record["source_id"]
+        registered_source_count = sum(
+            1 for row in source_records
+            if isinstance(row, dict) and row.get("id") == approved_source
+        )
+        if registered_source_count != 1:
+            raise PublicationApprovalError(
+                f"Approved event {approved_id!r} source {approved_source!r} "
+                "must resolve to exactly one registered source."
+            )
 
     updated = deepcopy(manifest)
     was_approved = event_id in approved

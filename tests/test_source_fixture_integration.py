@@ -103,7 +103,7 @@ class SourceFixtureIntegrationTests(unittest.TestCase):
             calendar_text, summary = build_calendar(persisted, publication)
             self.assertEqual(summary["published_count"], 1)
             self.assertIn(f"UID:{event_id}@civiccal", calendar_text)
-            self.assertIn("SUMMARY:Chamber of Commerce Parade of Lights & Village Tree Lighting Ceremony", calendar_text)
+            self.assertIn("SUMMARY:Chamber of Commerce Parade of Lights & Village Tree Lighting Ceremony", calendar_text.replace("\r\n ", ""))
             self.assertIn("DTSTART:20261121T170000", calendar_text)
             self.assertNotIn("DTEND:", calendar_text)
 

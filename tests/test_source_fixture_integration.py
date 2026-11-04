@@ -135,6 +135,22 @@ class SourceFixtureIntegrationTests(unittest.TestCase):
                 self.assertEqual(
                     [item["event_id"] for item in relay_json["events"]], [event_id]
                 )
+
+                # Revocation takes effect on the next request without deleting
+                # the stored event or changing the source registry.
+                publication, revocation = update_publication(
+                    registry, persisted, publication, source_id, event_id, "revoke"
+                )
+                self.assertTrue(revocation["changed"])
+                manifest_path.write_text(json.dumps(publication), encoding="utf-8")
+                with urlopen(base + f"/calendars/sources/{source_id}.ics") as response:
+                    revoked_feed = response.read().decode("utf-8")
+                revoked_parsed = parse_ics(revoked_feed, source_id="revoked-relay")
+                self.assertEqual(revoked_parsed["event_count"], 0)
+                with urlopen(base + f"/api/v1/events?source_id={source_id}") as response:
+                    revoked_json = json.loads(response.read())
+                self.assertEqual(revoked_json["events"], [])
+                self.assertIn(event_id, persisted["events"][next(iter(persisted["events"]))]["event_id"])
             finally:
                 server.shutdown()
                 server.server_close()

@@ -22,10 +22,11 @@ except ImportError:  # direct script execution
 
 
 OPENAPI = {
-    "openapi": "3.1.0",
+    "openapi": "3.1.1",
     "info": {"title": "CivicCal Read-only API", "version": "1.0.0"},
     "paths": {
         "/health": {"get": {"summary": "Service health"}},
+        "/api/v1/openapi.json": {"get": {"summary": "OpenAPI description"}},
         "/api/v1/events": {
             "get": {
                 "summary": "List explicitly approved public events",

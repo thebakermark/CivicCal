@@ -11,25 +11,23 @@ If this roadmap or another legacy design conflicts with those records, reconcile
 
 ## Mission
 
-CivicCal is community information infrastructure for collecting publicly useful local events from independent organizations, preserving their source context, and distributing them through standard calendar and developer interfaces.
-
-It is not limited to a consumer-facing calendar website. Its primary product is a dependable, reusable event catalog and subscription service.
+CivicCal is a personal-use calendar-source collection and relay system. The user chooses which organizations and event calendars matter; the source-finding and verification workflow is collaborative. CivicCal preserves source context and provides independent calendar subscriptions for the user's own calendar apps and local tools. It is not a public community service or resident-facing directory.
 
 ## Product principles
 
-- Broad community coverage: schools, local government, park districts, libraries, nonprofits, civic groups, youth organizations, faith communities, clubs, and other public-interest sources.
+- Flexible source coverage: the user may choose schools, local government, park districts, libraries, nonprofits, civic groups, youth organizations, faith communities, clubs, or any other relevant organization.
 - Preserve what publishers actually say. Do not invent dates, times, locations, fees, eligibility, or registration details.
 - Keep source provenance and change history.
 - Missing from a later capture does not automatically mean cancelled.
 - Do not silently merge or delete possible duplicates.
 - Deterministic processing; no LLM in eligibility gates, event identity, or publication decisions.
 - Free/self-hostable core, portable across Linux hosts, with replaceable storage and delivery components.
-- Public read access to published information; administrative controls for source management and review.
+- Private, operator-controlled use; source selection and authorization remain under the user's control.
 - No deployment, automatic polling, or external service dependency is implied by this roadmap.
 
 ## End-to-end lifecycle
 
-1. Discover an organization and its public event sources.
+1. User identifies an organization; work together to find and verify its official event sources.
 2. Register the source, its format, URL, scope, timezone policy, and operational settings.
 3. Capture source content politely and reproducibly.
 4. Archive the raw response and capture metadata.
@@ -96,7 +94,7 @@ It is not limited to a consumer-facing calendar website. Its primary product is 
 
 **Complete when:** a clean install can initialize, ingest fixtures, query history, back up, and restore.
 
-### 6. Public JSON API
+### 6. Private read-only JSON API
 - Define versioned, read-only endpoints.
 - Support date ranges, geography, organization, source, category, text search, pagination, and incremental change queries.
 - Publish OpenAPI documentation and consistent error responses.
@@ -126,20 +124,20 @@ It is not limited to a consumer-facing calendar website. Its primary product is 
 
 **Complete when:** an operator can identify broken sources, recover a failed run, and restore the service from backup.
 
-### 10. Local launch and expansion
+### 10. Personal-use rollout and expansion
 - Validate coverage and accuracy for Mokena SD 159, Summit Hill SD 161, Village of Mokena, Mokena Community Park District, and Mokena Community Public Library.
 - Expand to nearby communities only after the first service is reliable.
-- Publish public documentation and subscription instructions.
+- Document how the user adds each selected source feed to their own calendar app.
 
-**Complete when:** residents can subscribe to stable feeds and developers can use the documented API.
+**Complete when:** the user can subscribe to stable feeds and use the private API from local tools.
 
 ## MVP outcome (the product we are building)
 
-The MVP is a working end-to-end public event discovery and independent source-relay service—not merely an API prototype or a set of feed generators.
+The MVP is a working end-to-end personal calendar-source collection and independent source-relay tool—not merely an API prototype or a set of feed generators.
 
-A user must be able to:
+The user must be able to:
 
-1. Discover registered local organizations and their official public event sources.
+1. Choose an organization and identify its official event sources with the user's input.
 2. Capture events and their available details from those sources (title, dates/times, location, description, links, categories, registration details, and source attribution where published).
 3. Parse and normalize those records into a consistent CivicCal event model while preserving source provenance and uncertainty.
 4. Store organizations, sources, events, source observations, and update history in a persistent database.

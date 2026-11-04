@@ -34,6 +34,11 @@ Example manual capture (only for a source whose registry gates permit network ac
 
 ```sh
 python scripts/capture_source.py --source-id example-source --archive-dir data/captures
+
+# For a source-scoped page URL, only when the source's registry gates permit it:
+python scripts/capture_source.py --source-id village-of-mokena-events \\
+  --request-url 'https://mokenail.municipalone.com/calendarView.aspx?cid=30642' \\
+  --page-role detail --archive-dir data/captures
 ```
 
 Normalization example (offline, using a parser-result JSON file):

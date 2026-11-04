@@ -70,7 +70,7 @@ def _load_documents(state_path: Path, manifest_path: Path) -> tuple[dict, dict]:
 
 def _last_modified(state: dict, manifest: dict) -> str | None:
     approved = manifest.get("approved_event_ids", [])
-    approved_set = set(approved) if isinstance(approved, list) else set()
+    approved_set = {item for item in approved if isinstance(item, str)} if isinstance(approved, list) else set()
     timestamps = []
     events = state.get("events", {}) if isinstance(state, dict) else {}
     if not isinstance(events, dict):
@@ -79,7 +79,7 @@ def _last_modified(state: dict, manifest: dict) -> str | None:
         if not isinstance(record, dict) or record.get("event_id") not in approved_set:
             continue
         revisions = record.get("revisions")
-        if not isinstance(revisions, list) or not revisions:
+        if not isinstance(revisions, list) or not revisions or not isinstance(revisions[-1], dict):
             continue
         observed = revisions[-1].get("observed_at")
         if not isinstance(observed, str):
@@ -140,7 +140,7 @@ def make_handler(state_path: Path, manifest_path: Path):
             if parsed.path == "/health":
                 self._json(200, {"status": "ok", "mode": "read-only", "storage": "file"})
                 return
-            if parsed.path == "/openapi.json":
+            if parsed.path in {"/openapi.json", "/api/v1/openapi.json"}:
                 self._json(200, OPENAPI)
                 return
             if parsed.path not in {"/api/v1/events", "/calendars/community.ics"}:

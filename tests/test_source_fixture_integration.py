@@ -46,7 +46,7 @@ class SourceFixtureIntegrationTests(unittest.TestCase):
         source_id = "village-of-mokena-events"
         page_url = (
             "https://www.mokena.gov/calendarView.aspx"
-            "?catid=0&cid=30642&id=0"
+            "?catid=0&cid=28236&id=0"
         )
         html = (root / "data/fixtures/village-calendar-detail.html").read_text(
             encoding="utf-8"
@@ -60,7 +60,7 @@ class SourceFixtureIntegrationTests(unittest.TestCase):
 
         normalized = normalize_document(parsed)
         self.assertEqual(normalized["event_count"], 1)
-        self.assertEqual(normalized["events"][0]["source_event_id"], "30642")
+        self.assertEqual(normalized["events"][0]["source_event_id"], "28236")
         self.assertEqual(normalized["events"][0]["time_status"], "floating")
 
         with tempfile.TemporaryDirectory() as directory:

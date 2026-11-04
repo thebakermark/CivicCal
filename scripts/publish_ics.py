@@ -339,9 +339,9 @@ def build_calendar(identity_state: dict, manifest: dict) -> tuple[str, dict]:
             raw_start.endswith("Z") or bool(re.search(r"[+-]\d{2}:?\d{2}$", raw_start))
         )
         if current.get("time_status") == "zoned" and isinstance(tzid, str) and tzid and not has_explicit_offset:
-            year = _event_year(start)
-            if year is not None:
-                timezone_years.setdefault(tzid, set()).add(year)
+            years = {year for year in (_event_year(start), _event_year(current.get("end"))) if year is not None}
+            if years:
+                timezone_years.setdefault(tzid, set()).update(years)
     for tzid, years in sorted(timezone_years.items()):
         lines.extend(_timezone_component(tzid, years))
     for event_id in approved:

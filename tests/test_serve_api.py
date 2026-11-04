@@ -88,12 +88,17 @@ class ServeAPITests(unittest.TestCase):
         self.assertNotIn("evt-private", body)
 
     def test_etag_returns_not_modified_for_unchanged_feed(self):
-        with urlopen(self.base + "/calendars/community.ics") as response:
+        with urlopen(self.base + "/calendars/sources/library.ics") as response:
             etag = response.headers["ETag"]
         request = Request(self.base + "/calendars/community.ics", headers={"If-None-Match": etag})
         with self.assertRaises(HTTPError) as caught:
             urlopen(request)
         self.assertEqual(caught.exception.code, 304)
+
+    def test_unknown_source_returns_not_found(self):
+        with self.assertRaises(HTTPError) as caught:
+            urlopen(self.base + "/calendars/sources/not-registered.ics")
+        self.assertEqual(caught.exception.code, 404)
 
     def test_invalid_query_is_a_client_error(self):
         with self.assertRaises(HTTPError) as caught:
@@ -111,7 +116,9 @@ class ServeAPITests(unittest.TestCase):
         with urlopen(self.base + "/health") as response:
             self.assertEqual(json.loads(response.read())["status"], "ok")
         with urlopen(self.base + "/api/v1/openapi.json") as response:
-            self.assertIn("/api/v1/events", json.loads(response.read())["paths"])
+            paths = json.loads(response.read())["paths"]
+            self.assertIn("/api/v1/events", paths)
+            self.assertIn("/calendars/sources/{source_id}.ics", paths)
 
 
 if __name__ == "__main__":

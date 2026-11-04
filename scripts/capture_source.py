@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
-from urllib.request import Request, urlopen
+from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_REGISTRY = ROOT / "data" / "sources.json"
@@ -68,8 +68,16 @@ def _validate_https_url(url: str) -> None:
         raise CaptureError("Source redirected to an unsafe URL; only credential-free HTTPS is allowed.")
 
 
+class SafeHTTPSRedirectHandler(HTTPRedirectHandler):
+    """Reject unsafe redirect destinations before making the redirected request."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        _validate_https_url(newurl)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
 def capture_url(url: str, *, etag: str | None = None, last_modified: str | None = None,
-                timeout: int = 20, opener=urlopen) -> tuple[bytes | None, dict]:
+                timeout: int = 20, opener=None) -> tuple[bytes | None, dict]:
     _validate_https_url(url)
     headers = {
         "User-Agent": USER_AGENT,
@@ -82,8 +90,9 @@ def capture_url(url: str, *, etag: str | None = None, last_modified: str | None 
         headers["If-Modified-Since"] = last_modified
 
     request = Request(url, headers=headers)
+    safe_open = opener or build_opener(SafeHTTPSRedirectHandler()).open
     try:
-        with opener(request, timeout=timeout) as response:
+        with safe_open(request, timeout=timeout) as response:
             final_url = response.geturl()
             _validate_https_url(final_url)
             body = response.read(MAX_BYTES + 1)

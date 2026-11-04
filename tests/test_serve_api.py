@@ -108,7 +108,7 @@ class ServeAPITests(unittest.TestCase):
     def test_health_and_openapi_are_available(self):
         with urlopen(self.base + "/health") as response:
             self.assertEqual(json.loads(response.read())["status"], "ok")
-        with urlopen(self.base + "/openapi.json") as response:
+        with urlopen(self.base + "/api/v1/openapi.json") as response:
             self.assertIn("/api/v1/events", json.loads(response.read())["paths"])
 
 

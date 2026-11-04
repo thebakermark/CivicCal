@@ -1,0 +1,291 @@
+{
+  "format": "civiccal.school-year-calendar-transcription.v1",
+  "organization": "Mokena School District 159",
+  "school_year": "2026-2027",
+  "source": {
+    "title": "Official Mokena SD 159 district iCalendar export",
+    "url": "https://thrillshare-cmsv2.services.thrillshare.com/api/v4/o/9768/cms/events/generate_ical",
+    "file_name": "mokena_school_district_159_events.ics",
+    "sha256": "33cf370e9abde1cfddef88e77e82babce747e7e1f7313ebcea4248f8b1fb2774",
+    "captured_at": "2026-11-03T23:30:43Z",
+    "vevent_count": 5936,
+    "coverage_start": "2026-11-03",
+    "coverage_end": "2099-12-25",
+    "calendar_timezone": "America/Chicago",
+    "time_policy": "VEVENT DTSTART/DTEND values in this export are floating local values without TZID or UTC marker. Preserve as floating; do not assign a timezone to individual events solely from the VTIMEZONE component.",
+    "verification": "Derived from the user-provided official district iCalendar export. Original event UIDs and source wording are retained below. Repeated entries remain represented in source_event_uids; this is a schedule-oriented reference view, not a destructive deduplication."
+  },
+  "events": [
+    {
+      "title": "Election Day — e-learning at MJHS; MES and MIS in person",
+      "start_date": "2026-11-03",
+      "end_date_inclusive": "2026-11-03",
+      "schedule_type": "e_learning",
+      "student_attendance": "mixed_by_school",
+      "school_scope": {
+        "in_person": [
+          "Mokena Elementary School",
+          "Mokena Intermediate School"
+        ],
+        "remote_learning": [
+          "Mokena Junior High School"
+        ]
+      },
+      "source_text": "Election Day--MES In Person Learning; description: MES and MIS will be in session. MJHS will have an E-Learning Day.",
+      "source_event_uids": [
+        "b212aa19-5181-4332-8ad9-cd9f226191bb",
+        "3aa1edec-21de-42af-8792-a7009f184e37"
+      ]
+    },
+    {
+      "title": "Parent/Teacher Conferences — no student attendance",
+      "start_date": "2026-11-12",
+      "end_date_inclusive": "2026-11-12",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "school_scope": "District calendar; MES-specific conference entry also present",
+      "conference_time": "2:00 PM–8:00 PM",
+      "source_text": "No School - Parent/Teacher Conferences 2:00-8:00; MES Parent/Teacher Conferences",
+      "source_event_uids": [
+        "beee8071-aee1-48af-95e9-0e8e67909878",
+        "cf313288-3bd4-4f78-b6ac-79d6d834aa1c",
+        "f3064f99-422f-4b5f-9247-a0bd3fbd2981",
+        "17b422c5-cf8c-45b1-a92f-a02ec8fb3666",
+        "215ca32e-4303-4315-9ce8-7aea41cb965b"
+      ]
+    },
+    {
+      "title": "Parent/Teacher Conferences — no student attendance",
+      "start_date": "2026-11-13",
+      "end_date_inclusive": "2026-11-13",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "school_scope": "District calendar; MES-specific conference entry also present",
+      "conference_time": "8:00 AM–1:00 PM",
+      "source_text": "No School - Parent/Teacher Conferences 8:00-1:00; MES Parent/Teacher Conferences; Teachers make own breaks",
+      "source_event_uids": [
+        "7fb19f8e-735a-417d-a584-52fb5b31b734",
+        "2e6e3703-9f1f-4d75-8e9d-a9e2935bf1c5",
+        "73b47f2a-46ce-450c-9a36-dd3c0c1cec7b",
+        "3e9942ae-e092-4893-a758-c5058cbe2dae"
+      ]
+    },
+    {
+      "title": "Early dismissal",
+      "start_date": "2026-11-20",
+      "end_date_inclusive": "2026-11-20",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "MES explicitly; additional generic early-dismissal entries have unspecified school scope",
+      "dismissal_time": "12:00 PM (MES)",
+      "additional_note": "No Early Start/Early Childhood Classes",
+      "source_text": "MES Early Dismissal at 12:00 PM; Early Dismissal Day; Early Dismissal",
+      "source_event_uids": [
+        "186472af-b239-4981-b934-a85bd5b5a815",
+        "1a1e4326-0abf-4c30-bc22-9ce2d768779b",
+        "e39262bb-9089-4d79-8b27-58c3bc96fa29"
+      ]
+    },
+    {
+      "title": "Thanksgiving break — no school",
+      "start_date": "2026-11-23",
+      "end_date_inclusive": "2026-11-27",
+      "schedule_type": "school_break",
+      "student_attendance": "no_school",
+      "school_scope": "District calendar; MES no-student-attendance entry also present",
+      "source_text": "MES No Student Attendance; No School; Thanksgiving Break-No School",
+      "source_event_uids": [
+        "009cdc94-9daa-46b0-8056-51e6d10375c5",
+        "b970f107-f705-4149-996d-9fc0dec02a14",
+        "96c2413a-728d-45bf-b1fc-0232c7c2810e",
+        "478fa03f-fbf0-4c41-aaaf-7ab46e3b1aca"
+      ]
+    },
+    {
+      "title": "Early dismissal",
+      "start_date": "2026-12-18",
+      "end_date_inclusive": "2026-12-18",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "MES explicitly; additional generic early-dismissal entries have unspecified school scope",
+      "dismissal_time": "12:00 PM (MES)",
+      "additional_note": "No Early Start/Early Childhood Classes",
+      "source_text": "MES Early Dismissal at 12:00 PM; Early Dismissal Day; Early Dismissal",
+      "source_event_uids": [
+        "8c2ce5d1-4323-4c2c-a48a-ef610f18cf1e",
+        "044c1a48-cb3d-4393-853c-fee0ef34ac11",
+        "f5f8cb25-ccbc-4f8b-bd63-2a647a5ad1c1"
+      ]
+    },
+    {
+      "title": "Winter break",
+      "start_date": "2026-12-21",
+      "end_date_inclusive": "2027-01-01",
+      "schedule_type": "school_break",
+      "student_attendance": "no_school",
+      "school_scope": "District calendar; MES winter-break entry also present",
+      "source_text": "MES Winter Break; Winter Break; Winter Break-No School",
+      "source_event_uids": [
+        "af7a21c0-0830-4d68-89ad-84d3fe846a67",
+        "8608e8c1-2d20-423e-8c36-26b648902aa3",
+        "e0f959c1-83d7-4d15-bf70-d2c7e286f42d",
+        "a6d68043-8915-4680-8a7b-d402d9b11e5f",
+        "c586bfde-ffcc-4fcf-b237-b279e9f672b4",
+        "e31b6e92-820b-49ec-bde4-c2f4a62dbaf3",
+        "7f11f3f1-0166-4f1a-82d3-ac8a22b47da2"
+      ]
+    },
+    {
+      "title": "Teacher institute day — no school",
+      "start_date": "2027-01-04",
+      "end_date_inclusive": "2027-01-04",
+      "schedule_type": "teacher_institute",
+      "student_attendance": "no_school",
+      "school_scope": "District calendar; MES-specific no-student-attendance entry also present",
+      "source_text": "MES Teacher Institute Day; No School - Teacher Institute Day; Teacher Institute Day-No School",
+      "source_event_uids": [
+        "d18ea5ec-cc3d-4636-bdde-a9c5dcee2662",
+        "e9e023f0-dfdd-4eb4-b5de-a10d206012d4",
+        "1b5922af-f5a8-41a3-9a26-6ceb92430a72",
+        "6b1aa44d-3c49-41c4-8c54-c667a5879c17"
+      ]
+    },
+    {
+      "title": "Students return from winter break",
+      "start_date": "2027-01-05",
+      "end_date_inclusive": "2027-01-05",
+      "schedule_type": "school_resumes",
+      "student_attendance": "school_in_session",
+      "school_scope": "MES explicitly",
+      "source_text": "MES Students Return from Winter Break",
+      "source_event_uids": [
+        "a765b52a-c3c1-41da-959b-12778e0a6ef8"
+      ]
+    },
+    {
+      "title": "Early dismissal",
+      "start_date": "2027-01-15",
+      "end_date_inclusive": "2027-01-15",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "MES explicitly; additional generic early-dismissal entries have unspecified school scope",
+      "dismissal_time": "12:00 PM (MES)",
+      "additional_note": "No Early Start/Early Childhood Classes",
+      "source_text": "MES Early Dismissal at 12:00 PM; Early Dismissal Day; Early Dismissal",
+      "source_event_uids": [
+        "4dbc6d4d-7a77-498d-8a34-6cdbb3f84e80",
+        "75ec3e03-fc93-4b2a-b76e-0d6a7b65599b",
+        "3c385b5b-73bf-43b0-ad65-b664de47d9f2"
+      ]
+    },
+    {
+      "title": "Martin Luther King Jr. Day — no school",
+      "start_date": "2027-01-18",
+      "end_date_inclusive": "2027-01-18",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "school_scope": "District calendar; MES no-school entry also present",
+      "source_text": "Martin Luther King Jr. Day-No School; MES No School; No School - Dr. Martin Luther King, Jr. Day",
+      "source_event_uids": [
+        "88e09aeb-f99f-45f5-b8df-828e8c2c8dc8",
+        "d68fa5c3-f12e-45a5-8a74-bb9b69499699",
+        "b9e5c49a-e9f2-4106-a764-be6f6072a523"
+      ]
+    },
+    {
+      "title": "Early dismissal",
+      "start_date": "2027-02-12",
+      "end_date_inclusive": "2027-02-12",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "MES explicitly; additional generic early-dismissal entries have unspecified school scope",
+      "dismissal_time": "12:00 PM (MES)",
+      "additional_note": "No Early Start/Early Childhood Classes",
+      "source_text": "MES Early Dismissal at 12:00 PM; Early Dismissal Day; Early Dismissal",
+      "source_event_uids": [
+        "95ef39f3-ddd2-4544-8701-b1e80662c90e",
+        "08dd60ee-6f48-46b0-a527-79160ffba5d7",
+        "30a4c4ed-c5fe-431a-9346-f1ac652757c4"
+      ]
+    },
+    {
+      "title": "Presidents' Day — no school",
+      "start_date": "2027-02-15",
+      "end_date_inclusive": "2027-02-15",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "school_scope": "District calendar; MES no-school entry also present",
+      "source_text": "MES No School; No School - President's Day; President's Day-No School",
+      "source_event_uids": [
+        "c5436ad6-91f7-4375-90f3-51eace824ec3",
+        "72f3f265-03d0-4f8e-a8cd-f300148a120f",
+        "5fb4ce80-8b84-4225-87bf-f9f954fb39c5"
+      ]
+    },
+    {
+      "title": "Early dismissal",
+      "start_date": "2027-03-12",
+      "end_date_inclusive": "2027-03-12",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "MES explicitly; additional generic early-dismissal entries have unspecified school scope",
+      "dismissal_time": "12:00 PM (MES)",
+      "additional_note": "No Early Start/Early Childhood Classes",
+      "source_text": "MES Early Dismissal at 12:00 PM; Early Dismissal Day; Early Dismissal",
+      "source_event_uids": [
+        "ac6ce566-0a50-4675-ade9-905a5a2aebc0",
+        "f3828a51-d6a5-491c-b85e-350cda61bdd0",
+        "4e489e30-b6dc-4189-ba9a-d143d7a77c3b"
+      ]
+    },
+    {
+      "title": "Spring break",
+      "start_date": "2027-03-26",
+      "end_date_inclusive": "2027-04-02",
+      "schedule_type": "school_break",
+      "student_attendance": "no_school",
+      "school_scope": "District calendar; MES spring-break entry also present",
+      "source_text": "MES Spring Break; No School; Spring Break-No School",
+      "source_event_uids": [
+        "f7f5dbb1-2450-4efc-96b3-51e19ac33009",
+        "a6dd9fc1-ed63-4283-b6c1-61b8daeea76b",
+        "a1cf535e-3aac-4436-a5b9-bd93aaa45e93",
+        "7cb439e0-ac03-47f8-b424-3eed3689d31d",
+        "f26ef318-9161-4098-8d8c-40e367d15a24",
+        "e0da4925-d4bd-4261-9bd5-6a7dbb18cf33",
+        "626d3377-67fb-4b6d-84df-a2743aa80c4e",
+        "3c14896c-f2e5-4cd3-b7e7-f8a0b252294b",
+        "380c4164-9269-4e16-83b6d7f4b0"
+      ]
+    },
+    {
+      "title": "Early dismissal",
+      "start_date": "2027-04-16",
+      "end_date_inclusive": "2027-04-16",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "School scope not stated in the captured feed entries",
+      "source_text": "Early Dismissal Day; Early Dismissal",
+      "source_event_uids": [
+        "77314d4e-420a-41ff-8a90-ce3914c14e8f",
+        "d86f857f-a1b5-40f5-bf3f-a1b5f?"
+      ]
+    },
+    {
+      "title": "Last day of school — early dismissal",
+      "start_date": "2027-05-28",
+      "end_date_inclusive": "2027-05-28",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "MES explicitly; additional generic early-dismissal entries have unspecified school scope",
+      "dismissal_time": "12:00 PM (MES)",
+      "additional_note": "Last day of school; no early-start/early-childhood classes",
+      "source_text": "MES Last Day of School - Early Dismissal at 12:00 PM; Early Dismissal Day; Early Dismissal",
+      "source_event_uids": [
+        "b820874e-2f43-4c7e-a875-a619205639f2",
+        "701133db-bdab-443f-b727-1d95bd70be1f",
+        "46df2345-b632-4858-9538-a848eec5742a"
+      ]
+    }
+  ]
+}

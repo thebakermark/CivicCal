@@ -48,19 +48,19 @@ def validate_fixtures(root: Path = ROOT) -> dict[str, Any]:
     assert park_events[1]["date_text"] is None, "Judging date must not become an event date"
     assert park_events[2]["event_date_year_known"] is True
 
-    village_url = "https://www.mokena.gov/calendarView.aspx?catid=0&cid=30642&id=0"
+    village_url = "https://www.mokena.gov/calendarView.aspx?catid=0&cid=28236&id=0"
     village = parse_village_html(
         _read(root / "data/fixtures/village-calendar-detail.html"),
         page_url=village_url,
     )
     village_events = village["events"]
     assert village["event_count"] == 1, "Village detail fixture should yield one event"
-    assert village_events[0]["uid"] == "30642"
-    assert village_events[0]["title"] == "Village of Mokena's Food Trucks on Front"
-    assert village_events[0]["start_text"] == "Wednesday September 16, 2026"
-    assert village_events[0]["time_text"] == "4:00 PM - 8:00 PM"
+    assert village_events[0]["uid"] == "28236"
+    assert village_events[0]["title"] == "Chamber of Commerce Parade of Lights & Village Tree Lighting Ceremony"
+    assert village_events[0]["start_text"] == "Saturday November 21, 2026"
+    assert village_events[0]["time_text"] == "5:00 PM"
     assert village_events[0]["timezone"] is None
-    assert village_events[0]["description"] is None
+    assert village_events[0]["description"].startswith("The Mokena Chamber of Commerce presents the Parade of Lights")
 
     normalized_sources = [
         normalize_document(ics),
@@ -83,8 +83,8 @@ def validate_fixtures(root: Path = ROOT) -> dict[str, Any]:
 
     normalized_village = normalized_by_id[village["source_id"]]
     assert normalized_village["event_count"] == 1
-    assert normalized_village["events"][0]["start"]["value"] == "2026-09-16T16:00"
-    assert normalized_village["events"][0]["end"]["value"] == "2026-09-16T20:00"
+    assert normalized_village["events"][0]["start"]["value"] == "2026-11-21T17:00"
+    assert normalized_village["events"][0]["end"] is None
     assert normalized_village["events"][0]["time_status"] == "floating"
 
     sources = [
@@ -135,7 +135,7 @@ def validate_fixtures(root: Path = ROOT) -> dict[str, Any]:
                 "title/date/time extracted",
                 "explicit date and time normalized as floating local time",
                 "timezone not guessed",
-                "empty Details field remains empty",
+                "published description retained",
                 "canonical event record created",
             ],
         },

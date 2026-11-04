@@ -143,9 +143,13 @@ def _event_lines(event_id: str, record: dict) -> list[str]:
         if end_param != start_param:
             raise FeedError(f"{event_id}: DTSTART and DTEND value types do not match.")
         if start_param:
-            # All-day DTEND is emitted only when explicitly marked exclusive.
-            if current.get("end_exclusive") is True:
-                lines.append(f"DTEND;{end_param}:{end_value}")
+            # Never guess whether a publisher's all-day end date is inclusive.
+            if current.get("end_exclusive") is not True:
+                raise FeedError(
+                    f"{event_id}: all-day end date is ambiguous; "
+                    "set end_exclusive=true only when source semantics establish it."
+                )
+            lines.append(f"DTEND;{end_param}:{end_value}")
         else:
             lines.append(f"DTEND:{end_value}")
 
@@ -174,7 +178,7 @@ def _event_lines(event_id: str, record: dict) -> list[str]:
     status = current.get("status")
     if status == "cancelled":
         lines.append("STATUS:CANCELLED")
-    elif status in {"scheduled", "postponed", "rescheduled"}:
+    elif status in {"scheduled", "rescheduled"}:
         lines.append("STATUS:CONFIRMED")
     if current.get("recurrence"):
         raise FeedError(

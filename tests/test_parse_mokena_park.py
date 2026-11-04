@@ -35,5 +35,13 @@ class MokenaParkParserTests(unittest.TestCase):
         self.assertTrue(event["links"][0]["url"].startswith("https://secure.rec1.com/"))
 
 
+
+    def test_emits_registry_source_id(self):
+        self.assertEqual(self.result["source_id"], "mokena-park-district-events")
+        self.assertTrue(all(
+            event["source_id"] == "mokena-park-district-events"
+            for event in self.result["events"]
+        ))
+
 if __name__ == "__main__":
     unittest.main()

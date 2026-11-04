@@ -68,6 +68,17 @@ The captured school-schedule entries include:
 - April 16: generic early-dismissal entries; school scope is not explicit in the captured records
 - May 28: MES last day of school, early dismissal at 12:00 PM
 
-The capture begins November 3, 2026, so this fixture is **not a complete 2026–27 school-year calendar**. The approved district PDF remains the source needed to fill August–October and independently verify the full-year schedule. The iCalendar export's VTIMEZONE declares America/Chicago, but individual DTSTART/DTEND values are floating (no TZID or UTC marker); CivicCal preserves that distinction rather than assigning a timezone by assumption.
+The capture begins November 3, 2026, so this fixture is **not a complete 2026–27 school-year calendar**. The approved district calendar has now been retrieved through the district's public Google Drive viewer and transcribed separately in `data/fixtures/mokena-sd159-2026-27-approved-calendar.json`. It fills the missing August–October dates and adds the April 6 school-specific e-learning exception. The iCalendar export's VTIMEZONE declares America/Chicago, but individual DTSTART/DTEND values are floating (no TZID or UTC marker); CivicCal preserves that distinction rather than assigning a timezone by assumption. The iCalendar export's VTIMEZONE declares America/Chicago, but individual DTSTART/DTEND values are floating (no TZID or UTC marker); CivicCal preserves that distinction rather than assigning a timezone by assumption.
 
 This fixture is derived from the actual export, not from an automated live capture. Its hash and capture metadata are recorded in the fixture for reproducibility. Source event UIDs remain intact for later identity/reconciliation work.
+
+
+## Mokena SD 159 approved calendar transcription
+
+`data/fixtures/mokena-sd159-2026-27-approved-calendar.json` is a manual transcription of the district-approved 2026–27 calendar PDF linked from the district's March 19, 2026 calendar announcement. The public Google Drive viewer rendered the one-page calendar as an image.
+
+The calendar summary records 176 student attendance days, four teacher institute days, nine school-improvement/early-dismissal days, and five emergency days. It confirms August 17–18 as teacher institute days, August 19 as the first student day, October 9 as a teacher institute day, and January 4 as a teacher institute day. It also identifies the nine early-dismissal dates and preserves five emergency days as contingency dates rather than scheduled attendance days.
+
+The approved calendar explicitly states: “MES, MIS will be in session, MJHS E-Learning Day 11/3, 4/6.” CivicCal represents November 3 and April 6 as mixed-by-school learning schedules, not district-wide closures. The November 3 entry is also present in the iCalendar-derived fixture; April 6 is newly added from the approved calendar transcription.
+
+The calendar image does not provide exact dismissal times. Times are retained only where independently explicit in the district iCalendar source. This transcription is a reference fixture, not an automated PDF parser or a live capture.

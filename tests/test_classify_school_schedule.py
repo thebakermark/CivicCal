@@ -129,5 +129,20 @@ class SchoolScheduleClassificationTests(unittest.TestCase):
         self.assertEqual(april6["school_scope"]["in_person"],
                          ["Mokena Elementary School", "Mokena Intermediate School"])
 
+
+    def test_mokena_live_feed_supplement_preserves_september_dismissal_times(self):
+        path = Path(__file__).parents[1] / "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json"
+        fixture = json.loads(path.read_text(encoding="utf-8"))
+        sep4 = next(event for event in fixture["events"]
+                    if event["start_date"] == "2026-09-04")
+        self.assertEqual(sep4["dismissal_times_by_school"], {
+            "MJHS": "10:55 AM",
+            "MIS": "11:30 AM",
+            "MES": "12:00 PM"
+        })
+        self.assertIn("early-dismissal-times-graphic", sep4["evidence"])
+        self.assertTrue(any(item["claim"] != "Exact dismissal times by school"
+                            for item in fixture["excluded_or_unresolved"]))
+
 if __name__ == "__main__":
     unittest.main()

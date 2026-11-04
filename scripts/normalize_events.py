@@ -283,6 +283,7 @@ def normalize_document(document: dict) -> dict:
             "capture_method": "manual-public-page-review",
             "observed_at": document["observed_at"],
             "source_url": document["source_url"],
+            "observation_note": document.get("observation_note"),
             "content_sha256": None,
         }
     elif document.get("format") in {"civiccal.ics.v1", "civiccal.html-events.v1",

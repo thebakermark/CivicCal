@@ -28,7 +28,7 @@ The initial source registry is in [data/sources.json](data/sources.json). Entrie
 
 ## Development status
 
-Early foundation. A guarded, one-shot HTTP capture utility is available at [scripts/capture_source.py](scripts/capture_source.py). It archives raw responses and capture metadata; it does not parse events, schedule polling, or publish data. No public API or automated ingestion is deployed yet.
+Early foundation. A guarded, one-shot HTTP capture utility is available at [scripts/capture_source.py](scripts/capture_source.py). The offline [capture-to-parser handoff](scripts/parse_capture.py) verifies archived payloads and dispatches them to existing parsers. Neither command schedules polling or publishes data. No public API or automated ingestion is deployed yet.
 
 Example manual capture (only for a source whose registry gates permit network access):
 
@@ -55,6 +55,7 @@ The project blueprint is documented before expanding the implementation:
 
 - [Roadmap and milestones](docs/roadmap.md)
 - [Source lifecycle and capture contract](docs/source-lifecycle.md)
+- [Capture-to-parser handoff](docs/capture-to-parser.md)
 - [Canonical event data model](docs/event-data-model.md)
 - [Processing pipeline](docs/processing-pipeline.md)
 - [Storage architecture](docs/storage-architecture.md)

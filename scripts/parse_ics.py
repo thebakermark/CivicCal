@@ -182,6 +182,8 @@ def parse_ics(text: str, source_id: str = "unassigned", source_url: str | None =
             "categories": [unescape_text(v) for _, raw in props.get("CATEGORIES", []) for v in split_unquoted(raw, ",")],
             "start": start,
             "end": end,
+            # RFC 5545 defines DATE-valued DTEND as non-inclusive.
+            "end_exclusive": bool(end and end["kind"] == "date"),
             "all_day": bool(start and start["kind"] == "date"),
             "status": status,
             "cancelled": status == "CANCELLED",

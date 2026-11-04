@@ -77,6 +77,7 @@ The project blueprint is documented before expanding the implementation:
 - [Source completeness and pagination](docs/source-completeness.md)
 - [One-shot HTML capture coordinator](docs/capture-coordinator.md)
 - [One-shot iCalendar capture coordinator](docs/ics-capture-coordinator.md)
+- [Summit Hill iCalendar request contract](docs/research/summit-hill-ical-request.md)
 - [Capture-to-parser handoff](docs/capture-to-parser.md)
 - [Canonical event data model](docs/event-data-model.md)
 - [Event identity and revision tracking](docs/event-identity-revisions.md)

@@ -8,6 +8,7 @@ on:
       - "tests/**"
       - "data/fixtures/**"
       - "docs/ics-normalization.md"
+      - "docs/source-fixture-validation.md"
       - ".github/workflows/validate-registry.yml"
   pull_request:
     paths:
@@ -16,6 +17,7 @@ on:
       - "tests/**"
       - "data/fixtures/**"
       - "docs/ics-normalization.md"
+      - "docs/source-fixture-validation.md"
       - ".github/workflows/validate-registry.yml"
   workflow_dispatch:
 
@@ -34,7 +36,9 @@ jobs:
           python-version: "3.x"
       - name: Validate source registry
         run: python scripts/validate_registry.py
-      - name: Run ICS parser tests
+      - name: Run parser and integration tests
         run: python -m unittest discover -s tests -v
+      - name: Validate initial source fixtures together
+        run: python scripts/validate_source_fixtures.py
       - name: Parse sample calendar
         run: python scripts/parse_ics.py data/fixtures/sample-community.ics --source-id fixture

@@ -16,10 +16,10 @@ from urllib.parse import parse_qs, unquote, urlsplit
 
 try:
     from .publish_ics import FeedError, build_calendar
-    from .query_events import QueryError, query_events
+    from .query_events import QueryDataError, QueryError, query_events
 except ImportError:  # direct script execution
     from publish_ics import FeedError, build_calendar
-    from query_events import QueryError, query_events
+    from query_events import QueryDataError, QueryError, query_events
 
 
 OPENAPI = {
@@ -244,7 +244,7 @@ def make_handler(state_path: Path, manifest_path: Path, registry_path: Path | No
                     offset=offset,
                 )
                 self._json(200, result, last_modified=_last_modified(state, manifest, values.get("source_id")))
-            except FeedError:
+            except (FeedError, QueryDataError):
                 # Invalid stored publication/identity data is a server-side
                 # integrity failure, not a malformed client request.
                 self._json(503, {"error": "service_unavailable"})

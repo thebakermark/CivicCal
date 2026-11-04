@@ -64,13 +64,13 @@ def load_capture(metadata_path: Path, expected_source_id: str) -> tuple[dict, by
     return metadata, payload
 
 
-def capture_summary(metadata: dict, metadata_path: Path) -> dict:
+def capture_summary(metadata: dict, metadata_path: Path, final_url: str | None = None) -> dict:
     """Preserve the capture outcome and page provenance through parsing."""
     return {
         "metadata_file": str(metadata_path),
         "captured_at": metadata.get("captured_at"),
         "content_sha256": metadata.get("content_sha256"),
-        "final_url": metadata.get("final_url"),
+        "final_url": final_url or metadata.get("final_url"),
         "requested_url": metadata.get("requested_url"),
         "source_url": metadata.get("source_url"),
         "http_status": metadata.get("http_status"),
@@ -153,7 +153,7 @@ def main() -> int:
             "format": "civiccal.parse-result.v1",
             "source_id": args.source_id,
             "adapter": adapter,
-            "capture": capture_summary(metadata, args.capture_metadata) | {"final_url": page_url},
+            "capture": capture_summary(metadata, args.capture_metadata, page_url),
             "parser_output": parsed,
         }
         args.output.parent.mkdir(parents=True, exist_ok=True)

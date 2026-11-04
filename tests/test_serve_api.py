@@ -96,7 +96,7 @@ class ServeAPITests(unittest.TestCase):
         self.state_path.write_text(json.dumps(state), encoding="utf-8")
         with self.assertRaises(HTTPError) as caught:
             urlopen(self.base + "/calendars/sources/library.ics")
-        self.assertEqual(caught.exception.code, 400)
+        self.assertEqual(caught.exception.code, 503)
 
     def test_ics_endpoint_returns_calendar_content(self):
         with urlopen(self.base + "/calendars/sources/library.ics") as response:

@@ -200,6 +200,20 @@ class PublishICSTests(unittest.TestCase):
         with self.assertRaises(FeedError):
             build_calendar(state_with(record), manifest("evt_123"))
 
+    def test_duplicate_identity_event_ids_fail_closed(self):
+        state = state_with(identity_record())
+        duplicate = identity_record()
+        duplicate["source_id"] = "another-source"
+        state["events"]["second-key"] = duplicate
+        with self.assertRaisesRegex(FeedError, "duplicate event ID"):
+            build_calendar(state, manifest("evt_123"))
+
+    def test_identity_record_requires_source_id(self):
+        record = identity_record()
+        record.pop("source_id")
+        with self.assertRaisesRegex(FeedError, "source_id"):
+            build_calendar(state_with(record), manifest("evt_123"))
+
     def test_invalid_or_unapproved_ids_rejected(self):
         with self.assertRaises(FeedError):
             build_calendar(state_with(identity_record()), manifest("missing"))

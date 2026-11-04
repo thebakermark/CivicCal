@@ -36,7 +36,15 @@ Example manual capture (only for a source whose registry gates permit network ac
 python scripts/capture_source.py --source-id example-source --archive-dir data/captures
 ```
 
-Normalization example (offline, using a parser-result JSON file):\n\n```sh\npython scripts/normalize_events.py data/parse-results/example.json --output data/normalized/example.json\n```\n\nSee [event normalization and validation](docs/event-normalization.md) for the field and time-handling contract.\n\n## Principles
+Normalization example (offline, using a parser-result JSON file):
+
+```sh
+python scripts/normalize_events.py data/parse-results/example.json --output data/normalized/example.json
+```
+
+See [event normalization and validation](docs/event-normalization.md) for the field and time-handling contract.
+
+## Principles
 
 1. Publicly accessible events first; clearly label registration-required and member-only events.
 2. Never treat a temporary fetch failure as proof that an event was cancelled.
@@ -56,7 +64,8 @@ The project blueprint is documented before expanding the implementation:
 - [Roadmap and milestones](docs/roadmap.md)
 - [Source lifecycle and capture contract](docs/source-lifecycle.md)
 - [Capture-to-parser handoff](docs/capture-to-parser.md)
-- [Canonical event data model](docs/event-data-model.md)\n- [Event identity and revision tracking](docs/event-identity-revisions.md)
+- [Canonical event data model](docs/event-data-model.md)
+- [Event identity and revision tracking](docs/event-identity-revisions.md)
 - [Processing pipeline](docs/processing-pipeline.md)
 - [Storage architecture](docs/storage-architecture.md)
 - [Public JSON API specification](docs/api-specification.md)

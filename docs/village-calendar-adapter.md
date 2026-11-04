@@ -21,7 +21,12 @@ The committed tests use a controlled HTML sample based on the inspected detail
 page's published fields. It is not represented as a complete captured response.
 Before live ingestion, verify the parser against saved listing and detail HTML.
 The listing parser intentionally does not assign dates from calendar-grid
-positions; detail pages remain authoritative for event date/time.
+positions; detail pages remain authoritative for event date/time. It also
+reports explicit HTML `rel="next"` links as pagination candidates. It never
+claims that the final page has been reached: absence of a `rel="next"` link is
+not proof that the publisher has no other pages. Every discovered detail link
+must be reconciled against a successfully parsed detail page before the
+snapshot validator can consider completeness.
 
 No network requests, polling, publication, timezone inference, or event merging
 are performed. Source registry eligibility remains unchanged and polling stays

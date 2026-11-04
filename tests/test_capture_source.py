@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 from urllib.error import HTTPError
 
-from scripts.capture_source import CaptureError, capture_url, load_source, write_capture
+from scripts.capture_source import CaptureError, SafeHTTPSRedirectHandler, capture_url, load_source, write_capture
 
 
 class FakeResponse:
@@ -94,8 +94,7 @@ class CaptureSourceTests(unittest.TestCase):
             "Content-Type": "text/calendar", "ETag": '"v1"',
             "Last-Modified": "Tue, 03 Nov 2026 12:00:00 GMT",
         })
-        with patch("scripts.capture_source.urlopen", return_value=response):
-            body, metadata = capture_url("https://example.org/feed")
+        body, metadata = capture_url("https://example.org/feed", opener=lambda request, timeout: response)
         self.assertEqual(body, b"calendar")
         self.assertEqual(metadata["content_length"], 8)
         self.assertEqual(metadata["etag"], '"v1"')
@@ -133,10 +132,10 @@ class CaptureSourceTests(unittest.TestCase):
         self.assertEqual(metadata["http_status"], 304)
 
     def test_insecure_redirect_target_is_rejected(self):
-        response = FakeResponse(url="http://example.org/redirected")
-        with patch("scripts.capture_source.urlopen", return_value=response):
-            with self.assertRaisesRegex(CaptureError, "unsafe URL"):
-                capture_url("https://example.org/feed")
+        handler = SafeHTTPSRedirectHandler()
+        request = __import__("urllib.request", fromlist=["Request"]).Request("https://example.org/feed")
+        with self.assertRaisesRegex(CaptureError, "unsafe URL"):
+            handler.redirect_request(request, None, 302, "Found", {}, "http://example.org/redirected")
 
     def test_source_types_outside_http_capture_are_rejected(self):
         with tempfile.TemporaryDirectory() as folder:

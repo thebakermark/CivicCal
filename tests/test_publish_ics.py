@@ -1,6 +1,7 @@
 import unittest
 
 from scripts.publish_ics import FeedError, build_calendar, _fold
+from scripts.parse_ics import parse_ics
 
 
 def identity_record(event_id="evt_123", status="scheduled", **overrides):
@@ -130,6 +131,19 @@ class PublishICSTests(unittest.TestCase):
                 "format": "civiccal.publication-manifest.v1",
                 "approved_event_ids": ["evt_123", "evt_123"],
             })
+
+
+    def test_generated_feed_round_trips_through_ics_parser(self):
+        generated, _ = build_calendar(state_with(identity_record()), manifest("evt_123"))
+        parsed = parse_ics(generated, source_id="roundtrip")
+        self.assertEqual(parsed["event_count"], 1)
+        event = parsed["events"][0]
+        self.assertEqual(event["uid"], "evt_123@civiccal")
+        self.assertEqual(event["title"], "Village Meeting")
+        self.assertEqual(event["description"], "Public meeting, bring questions.\nDoors open at 6.")
+        self.assertEqual(event["status"], "CONFIRMED")
+        self.assertEqual(event["start"]["kind"], "date-time")
+        self.assertTrue(event["start"]["utc"])
 
     def test_utf8_line_folding_respects_octet_limit(self):
         folded = _fold("SUMMARY:" + "🎈" * 50)

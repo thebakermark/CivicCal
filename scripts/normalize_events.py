@@ -16,7 +16,7 @@ from datetime import date, datetime, time
 from pathlib import Path
 from typing import Any
 
-FORMATS = {"civiccal.parse-result.v1", "civiccal.normalized-events.v1"}
+FORMATS = {"civiccal.parse-result.v1", "civiccal.normalized-events.v1", "civiccal.manual-events.v1"}
 DATE_FORMATS = ("%Y-%m-%d", "%B %d, %Y", "%b %d, %Y",
                 "%A, %B %d, %Y", "%A, %b %d, %Y",
                 "%A %B %d, %Y", "%A %b %d, %Y")
@@ -238,7 +238,9 @@ def normalize_event(event: dict, source_id: str, capture: dict | None = None) ->
         "is_free": event.get("is_accessible_for_free") if isinstance(event.get("is_accessible_for_free"), bool) else None,
         "status": _status(event),
         "attendance_mode": event.get("event_attendance_mode"),
-        "audience": copy.deepcopy(event.get("audience")),
+        "audience": copy.deepcopy(event.get("audience") or event.get("age_groups")),
+        "registration_required": event.get("registration_required") if isinstance(event.get("registration_required"), bool) else None,
+        "registration_status": event.get("registration_status"),
         "organizer": copy.deepcopy(event.get("organizer")),
         "image_url": event.get("image"),
         "categories": copy.deepcopy(categories),
@@ -270,6 +272,19 @@ def normalize_document(document: dict) -> dict:
         source_id = document.get("source_id")
         parser_output = document.get("parser_output")
         capture = document.get("capture")
+    elif document.get("format") == "civiccal.manual-events.v1":
+        source_id = document.get("source_id")
+        if not isinstance(document.get("observed_at"), str) or not document["observed_at"].strip():
+            raise NormalizationError("Manual event snapshots require observed_at.")
+        if not isinstance(document.get("source_url"), str) or not document["source_url"].startswith("https://"):
+            raise NormalizationError("Manual event snapshots require an HTTPS source_url.")
+        parser_output = document
+        capture = {
+            "capture_method": "manual-public-page-review",
+            "observed_at": document["observed_at"],
+            "source_url": document["source_url"],
+            "content_sha256": None,
+        }
     elif document.get("format") in {"civiccal.ics.v1", "civiccal.html-events.v1",
                                     "civiccal.park-district-events.v1", "civiccal.village-events.v1"}:
         source_id = document.get("source_id")

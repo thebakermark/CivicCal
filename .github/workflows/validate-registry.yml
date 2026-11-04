@@ -9,8 +9,8 @@ on:
       - "data/fixtures/**"
       - "docs/ics-normalization.md"
       - "docs/source-fixture-validation.md"
-      - "docs/capture-to-parser.md"\n      - "docs/event-normalization.md"
-      - "docs/processing-pipeline.md"
+      - "docs/capture-to-parser.md"
+      - "docs/event-normalization.md"
       - "docs/processing-pipeline.md"
       - "docs/html-normalization.md"
       - "docs/mokena-park-adapter.md"
@@ -25,6 +25,7 @@ on:
       - "docs/ics-normalization.md"
       - "docs/source-fixture-validation.md"
       - "docs/capture-to-parser.md"
+      - "docs/event-normalization.md"
       - "docs/processing-pipeline.md"
       - ".github/workflows/validate-registry.yml"
   workflow_dispatch:

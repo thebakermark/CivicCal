@@ -23,6 +23,8 @@ The database must preserve existing behavior:
 
 The logical model below is database-engine-neutral. SQLite is the likely first embedded/local implementation, with a later PostgreSQL adapter possible. This is not yet a final engine decision.
 
+See [Relational Event-History Model](event-history-relational-model.md) for the complete sequence, relationship, and no-double-counting rules.
+
 The source authorization model is human-controlled: authorization flags are manually edited by an operator. Application code may read and enforce them but must not write them. See [Source Authorization Control Boundary](source-authorization-boundary.md). The relational event-history expansion and exact migration reconciliation rules are defined in [Relational Event-History Model](event-history-relational-model.md).
 
 ## 2. Proposed logical entities
@@ -110,9 +112,10 @@ Fields:
 - `observation_id` — stable observation ID; primary key.
 - `event_id`, `source_id`, `capture_id` / `capture_key`.
 - `source_event_id`, `observed_at`, `material_fingerprint`.
+- `event_sequence` — explicit per-event sequence preserving the legacy `observation_ids[]` array order.
 - `event_json` — full normalized source observation.
 
-Unique constraint: `observation_id`. Retain observation-to-revision linkage; an unchanged observation does not need to create a new revision.
+Unique constraint: `observation_id`; also enforce uniqueness of `(event_id, event_sequence)`. The observation row's `event_id` foreign key is the authoritative membership relationship; do not retain a second mutable observation-ID array on `source_events`. Validate every legacy array reference during migration. Retain observation-to-revision linkage; an unchanged observation does not need to create a new revision.
 
 ### Event revision
 
@@ -125,7 +128,7 @@ Fields:
 - `previous_fingerprint`.
 - `values_json` — material projection used by the current tracker.
 
-Primary key: `(event_id, revision_number)`. Revisions are never updated or deleted by normal ingestion. Current event state is a convenient projection of the latest revision, not a replacement for history.
+Primary key: `(event_id, revision_number)`. Each revision must reference the observation that triggered it, with a same-event ownership constraint (composite relationship `(event_id, observation_id)` to the observation table). Revisions are never updated or deleted by normal ingestion. Current event state is a convenient projection of the latest revision, not a replacement for history. Preserve revision array order/number; do not use timestamps as the sequence.
 
 ### Presence observation
 
@@ -135,9 +138,10 @@ Fields:
 - `presence_observation_id` — stable ID.
 - `source_id`, `event_id`, `capture_id` / `capture_key`.
 - `observed_at`, `presence` (present/missing).
-- `missing_snapshot_count`, `completeness_evidence`, `reason`.
+- `presence_sequence` — explicit sequence preserving the global `presence_observations[]` array order.
+- `missing_snapshot_count`, `completeness_evidence`, `reason`, `record_json`.
 
-A missing observation is not a cancellation. Explicit source status changes are stored separately as lifecycle transitions and must be based on source evidence.
+The global `presence_observations[]` array is authoritative. Event-level `missing_observation_history[]` is a nested mirror and must be reconciled, not imported a second time. Reappearance mirrors may have different shapes; preserve unmatched nested data in migration diagnostics/legacy JSON and never double-count. A missing observation is not a cancellation. Explicit source status changes are stored separately as lifecycle transitions and must be based on source evidence.
 
 ### Unkeyed observation and identity conflict
 
@@ -148,10 +152,11 @@ Keep events without stable publisher IDs and same-capture identity collisions as
 Append-only explicit status history.
 
 Fields:
-- `event_id`, `observed_at`, `observation_id`.
+- `event_id`, `lifecycle_sequence` — explicit per-event sequence preserving `lifecycle_history[]` order.
+- `observed_at`, nullable `observation_id` where the source transition has no direct observation link.
 - `transition_type`, `from_status`, `to_status`, `evidence_json`.
 
-This preserves the current `lifecycle_history` semantics and keeps explicit publisher cancellation distinct from snapshot absence.
+Primary key: `(event_id, lifecycle_sequence)`. Where `observation_id` is present, enforce that it belongs to the same event. This preserves the current `lifecycle_history` semantics and keeps explicit publisher cancellation distinct from snapshot absence. Timestamps are not a reliable ordering key.
 
 ### Publication approval and audit
 
@@ -203,10 +208,12 @@ Initial indexes:
 - `captures(source_id, captured_at)`
 - `source_events(source_id, source_event_id)`
 - `source_events(source_id, presence_status)`
-- `event_observations(event_id, observed_at)`
+- `event_observations(event_id, event_sequence)`
+- `event_observations(event_id, observed_at)
 - `event_observations(source_id, capture_key)`
 - `event_revisions(event_id, revision_number)`
-- `presence_observations(source_id, observed_at)`
+- `presence_observations(source_id, presence_sequence)`
+- `presence_observations(source_id, observed_at)
 - `publication_approvals(source_id, event_id)`
 - query indexes for event start date and source ID after actual query patterns are measured.
 

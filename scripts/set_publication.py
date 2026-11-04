@@ -117,12 +117,12 @@ def update_publication(
 
 def _atomic_write_json(path: Path, value: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    rendered = json.dumps(value, ensure_ascii=False, indent=2) + "\\n"
+    rendered = json.dumps(value, ensure_ascii=False, indent=2) + "\n"
     fd, temporary_name = tempfile.mkstemp(
         prefix=f".{path.name}.", suffix=".tmp", dir=str(path.parent)
     )
     try:
-        with os.fdopen(fd, "w", encoding="utf-8", newline="\\n") as handle:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as handle:
             handle.write(rendered)
             handle.flush()
             os.fsync(handle.fileno())
@@ -156,7 +156,7 @@ def main() -> int:
         )
         if summary["changed"]:
             _atomic_write_json(args.manifest, updated)
-        sys.stdout.write(json.dumps(summary, ensure_ascii=False, indent=2) + "\\n")
+        sys.stdout.write(json.dumps(summary, ensure_ascii=False, indent=2) + "\n")
         return 0
     except (PublicationApprovalError, OSError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)

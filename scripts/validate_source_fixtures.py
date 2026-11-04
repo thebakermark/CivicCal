@@ -8,15 +8,19 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 from typing import Any
+
+ROOT = Path(__file__).resolve().parents[1]
+# Direct script execution puts scripts/ rather than the repository root on
+# sys.path. Add the root so the existing scripts namespace imports resolve.
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from scripts.parse_ics import parse_ics
 from scripts.parse_mokena_park import parse_html as parse_park_html
 from scripts.parse_village import parse_html as parse_village_html
-
-
-ROOT = Path(__file__).resolve().parents[1]
 
 
 def _read(path: Path) -> str:
@@ -43,9 +47,7 @@ def validate_fixtures(root: Path = ROOT) -> dict[str, Any]:
     assert park_events[1]["date_text"] is None, "Judging date must not become an event date"
     assert park_events[2]["event_date_year_known"] is True
 
-    village_url = (
-        "https://www.mokena.gov/calendarView.aspx?catid=0&cid=30642&id=0"
-    )
+    village_url = "https://www.mokena.gov/calendarView.aspx?catid=0&cid=30642&id=0"
     village = parse_village_html(
         _read(root / "data/fixtures/village-calendar-detail.html"),
         page_url=village_url,

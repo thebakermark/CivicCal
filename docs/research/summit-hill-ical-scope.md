@@ -9,7 +9,7 @@ The default district Events page displays entries labelled **District Events** a
 
 `https://www.summithill.org/apps/events/ical/?id=0`
 
-The page also exposes separately selectable school calendars. The following IDs were observed by checking calendar pages and their displayed event labels:
+The page also exposes separately selectable school calendars. The following IDs were observed by checking calendar pages and their displayed event labels. For IDs 3–6, the **Subscribe → Download .ICS** link was followed on each page; each resolved to the matching `/apps/events/ical/?id=<id>` endpoint:
 
 | Calendar ID | Displayed calendar |
 |---:|---|
@@ -21,10 +21,10 @@ The page also exposes separately selectable school calendars. The following IDs 
 
 Evidence pages:
 - Default district calendar: https://www.summithill.org/apps/events/
-- ID 3: https://www.summithill.org/apps/events/2026/11/?id=3
-- ID 4: https://www.summithill.org/apps/events/2026/11/?id=4
-- ID 5: https://www.summithill.org/apps/events/2024/8/?id=5
-- ID 6: https://www.summithill.org/apps/events/2027/2/?id=6
+- ID 3: https://www.summithill.org/apps/events/2026/11/?id=3 → `https://www.summithill.org/apps/events/ical/?id=3`
+- ID 4: https://www.summithill.org/apps/events/2026/11/?id=4 → `https://www.summithill.org/apps/events/ical/?id=4`
+- ID 5: https://www.summithill.org/apps/events/2026/11/?id=5 → `https://www.summithill.org/apps/events/ical/?id=5`
+- ID 6: https://www.summithill.org/apps/events/2026/11/?id=6 → `https://www.summithill.org/apps/events/ical/?id=6`
 
 The visible district page lists Mary Drew Early Learning Center among its calendar filters, but its corresponding numeric ID on the district domain has not been established. Do not infer that it is ID 7.
 
@@ -42,13 +42,17 @@ This is a separate school-site feed. Its `id=0` is not the district-domain `id=0
 
 ## Current implementation
 
-The registry now contains two separate Summit Hill feed records, both assigned to the Summit Hill School District 161 organization:
+The registry now contains six separate Summit Hill feed records, all assigned to the Summit Hill School District 161 organization:
 
 1. `summit-hill-sd161-events-ical` — district-domain `id=0`
-2. `summit-hill-mary-drew-events-ical` — Mary Drew subdomain `id=0`
+2. `summit-hill-indian-trail-events-ical` — district-domain `id=3`
+3. `summit-hill-dr-julian-rogus-events-ical` — district-domain `id=4`
+4. `summit-hill-hilda-walker-events-ical` — district-domain `id=5`
+5. `summit-hill-summit-hill-jr-high-events-ical` — district-domain `id=6`
+6. `summit-hill-mary-drew-events-ical` — Mary Drew subdomain `id=0`
 
-Both remain `access_status: review_required`, `polling_enabled: false`, `terms_reviewed: false`, and `robots_reviewed: false`.
+All six remain `access_status: review_required`, `polling_enabled: false`, `terms_reviewed: false`, and `robots_reviewed: false`.
 
-The district-level numeric ID for Mary Drew, and the district-domain IDs for any additional school calendars not mapped above, remain unknown. Do not guess them or add speculative endpoints. The actual ICS payloads still need comparison with visible events before claiming complete coverage.
+The district-level numeric ID for Mary Drew remains unknown. Do not guess it. The actual ICS payloads still need comparison with visible events before claiming complete coverage.
 
 No automated retrieval, polling, database write, or publication was run.

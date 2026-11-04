@@ -34,7 +34,7 @@ def documents():
             "time_status": "date_only",
             "status": "scheduled",
         },
-        "revisions": [{"revision": 1, "observed_at": "2026-11-04T18:00:00Z"}],
+        "revisions": [{"revision": 1, "observed_at": "2026-11-04T19:00:00Z"}],
     }
     state = {"format": "civiccal.identity-state.v1", "events": {"a": event, "b": private}}
     manifest = {
@@ -51,7 +51,7 @@ class ServeAPITests(unittest.TestCase):
         root = Path(self.temp.name)
         state, manifest = documents()
         self.registry_path = root / "sources.json"
-        self.registry_path.write_text(json.dumps({"source_records": [{"id": "library"}, {"id": "internal"}]}), encoding="utf-8")
+        self.registry_path.write_text(json.dumps({"source_records": [{"id": "library"}, {"id": "internal"}, {"id": "empty-source"}]}), encoding="utf-8")
         self.state_path = root / "state.json"
         self.manifest_path = root / "manifest.json"
         self.state_path.write_text(json.dumps(state), encoding="utf-8")
@@ -107,6 +107,21 @@ class ServeAPITests(unittest.TestCase):
         with urlopen(self.base + "/calendars/sources/internal.ics") as response:
             internal_modified = response.headers["Last-Modified"]
         self.assertNotEqual(library_modified, internal_modified)
+
+    def test_empty_registered_source_returns_empty_valid_calendar(self):
+        with urlopen(self.base + "/calendars/sources/empty-source.ics") as response:
+            body = response.read().decode("utf-8")
+        self.assertIn("BEGIN:VCALENDAR", body)
+        self.assertIn("END:VCALENDAR", body)
+        self.assertNotIn("BEGIN:VEVENT", body)
+
+    def test_duplicate_source_ids_fail_closed(self):
+        self.registry_path.write_text(json.dumps({"source_records": [
+            {"id": "library"}, {"id": "library"}
+        ]}), encoding="utf-8")
+        with self.assertRaises(HTTPError) as caught:
+            urlopen(self.base + "/calendars/sources/library.ics")
+        self.assertEqual(caught.exception.code, 503)
 
     def test_unknown_source_returns_not_found(self):
         with self.assertRaises(HTTPError) as caught:

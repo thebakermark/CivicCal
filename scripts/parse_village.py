@@ -26,6 +26,8 @@ class VillagePageParser(HTMLParser):
         self.text_parts: list[str] = []
         self.headings: list[str] = []
         self.links: list[dict[str, str]] = []
+        self.pagination_links: list[str] = []
+        self._anchor_rel: str | None = None
         self._heading_tag: str | None = None
         self._heading_parts: list[str] = []
         self._anchor_href: str | None = None
@@ -38,6 +40,7 @@ class VillagePageParser(HTMLParser):
             self._heading_parts = []
         if tag.lower() == "a":
             self._anchor_href = attrs_map.get("href")
+            self._anchor_rel = attrs_map.get("rel")
             self._anchor_parts = []
 
     def handle_data(self, data: str) -> None:
@@ -62,7 +65,10 @@ class VillagePageParser(HTMLParser):
             parsed = urlparse(href)
             if DETAIL_PATH.search(parsed.path) and parse_qs(parsed.query).get("cid"):
                 self.links.append({"title": label, "url": href})
+            if self._anchor_rel and "next" in self._anchor_rel.casefold().split():
+                self.pagination_links.append(href)
             self._anchor_href = None
+            self._anchor_rel = None
             self._anchor_parts = []
 
 
@@ -149,6 +155,17 @@ def parse_html(html: str, page_url: str = SOURCE_URL) -> dict:
         "event_count": 0,
         "events": [],
         "detail_links": list(unique.values()),
+        "pagination": {
+            "strategy": "rel_next",
+            "next_page_urls": list(dict.fromkeys(parser.pagination_links)),
+            "terminal_page_confirmed": False,
+            "completeness": "unknown",
+            "evidence": (
+                "A rel=next link was found; subsequent pages must be captured and checked."
+                if parser.pagination_links else
+                "No rel=next link was found; this does not prove the listing has no other pages."
+            ),
+        },
         "warnings": [
             "Calendar grid dates are not assigned to events by visual position.",
             "Each calendarView.aspx detail page is the authoritative event record.",

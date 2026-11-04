@@ -4,11 +4,13 @@ on:
   push:
     paths:
       - "data/sources.json"
+      - "data/source-completeness.json"
       - "scripts/**"
       - "tests/**"
       - "data/fixtures/**"
       - "docs/ics-normalization.md"
       - "docs/source-fixture-validation.md"
+      - "docs/source-completeness.md"
       - "docs/capture-to-parser.md"
       - "docs/event-normalization.md"
       - "docs/event-identity-revisions.md"
@@ -16,6 +18,7 @@ on:
       - "docs/storage-interface.md"
       - "docs/storage-architecture.md"
       - "docs/processing-pipeline.md"
+      - "docs/source-completeness.md"
       - "docs/event-data-model.md"
       - "docs/storage-interface.md"
       - "docs/storage-architecture.md"

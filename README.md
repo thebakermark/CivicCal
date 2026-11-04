@@ -28,7 +28,7 @@ The initial source registry is in [data/sources.json](data/sources.json). Entrie
 
 ## Development status
 
-Early foundation. A guarded, one-shot HTTP capture utility is available at [scripts/capture_source.py](scripts/capture_source.py). The offline [capture-to-parser handoff](scripts/parse_capture.py) verifies archived payloads and dispatches them to existing parsers. Neither command schedules polling or publishes data. No public API or automated ingestion is deployed yet.
+Early foundation. A guarded, one-shot HTTP capture utility is available at [scripts/capture_source.py](scripts/capture_source.py). The offline [capture-to-parser handoff](scripts/parse_capture.py) verifies archived payloads and dispatches them to existing parsers. [Event normalization](scripts/normalize_events.py) maps parser output into common event records while preserving every original source record and flagging incomplete data. These commands do not schedule polling or publish data. No public API or automated ingestion is deployed yet.
 
 Example manual capture (only for a source whose registry gates permit network access):
 
@@ -36,7 +36,7 @@ Example manual capture (only for a source whose registry gates permit network ac
 python scripts/capture_source.py --source-id example-source --archive-dir data/captures
 ```
 
-## Principles
+Normalization example (offline, using a parser-result JSON file):\n\n```sh\npython scripts/normalize_events.py data/parse-results/example.json --output data/normalized/example.json\n```\n\nSee [event normalization and validation](docs/event-normalization.md) for the field and time-handling contract.\n\n## Principles
 
 1. Publicly accessible events first; clearly label registration-required and member-only events.
 2. Never treat a temporary fetch failure as proof that an event was cancelled.

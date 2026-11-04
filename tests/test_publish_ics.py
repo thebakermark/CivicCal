@@ -145,6 +145,9 @@ class PublishICSTests(unittest.TestCase):
         self.assertIn("TZOFFSETTO:-0500", text)
         self.assertIn("DTSTART;TZID=America/Chicago:20270314T090000", text)
         self.assertIn("DTEND;TZID=America/Chicago:20270314T100000", text)
+        parsed = parse_ics(text, source_id="roundtrip")
+        self.assertEqual(parsed["events"][0]["start"]["value"], "2027-03-14T09:00:00")
+        self.assertEqual(parsed["events"][0]["start"]["timezone"], "America/Chicago")
 
 
 

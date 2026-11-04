@@ -259,6 +259,8 @@ Migration must be deterministic, repeatable, and non-destructive.
 - A target database containing partial or conflicting data must fail validation or require an explicit clean rebuild. Do not silently reconcile by deletion.
 - Preserve the old JSON data until backups, parity, and restore are verified.
 
+See [Current JSON State to Database Migration Map](json-migration-map.md) for the field-by-field mapping from the actual registry, identity-state JSON, archived capture metadata, and publication manifest into the proposed entities, including current-state gaps.
+
 ## 7. Acceptance tests before cutover
 
 The database backend is not ready until tests demonstrate:

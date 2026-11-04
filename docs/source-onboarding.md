@@ -25,7 +25,7 @@ For each organization, look for event sources in this order:
 3. Documented public JSON API.
 4. Official event platform with a public calendar view or export.
 5. Official website event listing, only after reviewing access rules.
-6. Registered event-notification mailbox, only with explicit authorization.
+6. Email/mailbox ingestion is deferred from the MVP and requires a separate product decision and explicit authorization.
 
 Prefer feeds and documented interfaces over HTML scraping. Do not bypass logins, CAPTCHAs, paywalls, or technical access controls.
 

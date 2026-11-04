@@ -37,3 +37,12 @@ The document also receives a count summary. Original title, description, dates, 
 - Matching is deterministic and local. No model, network request, date inference, event deletion, or calendar publication is involved.
 
 This is a first-pass classifier, not a substitute for checking the district's published calendar legend or school-specific exceptions. Rules should be expanded only against real source examples and regression tests.
+
+
+## Verified Summit Hill calendar example
+
+`data/fixtures/summit-hill-2026-27-school-schedule.json` is a manual, source-verified transcription of the one-page 2026–27 District Calendar linked from the official Summit Hill School District 161 School Calendar page. It records 18 schedule-related entries, including half days, no-school days, conferences, Thanksgiving, winter break, spring break, and a polling-place closure limited to Mary Drew Early Learning Center.
+
+The fixture preserves the exact published wording, inclusive date ranges, and school scope. It deliberately does not invent dismissal times. The August teacher institute dates remain marked for student-attendance confirmation because the PDF labels them teacher institute days but does not explicitly say "No School" on those rows.
+
+The fixture is a verified reference dataset for rule tests, not a claim that PDF extraction is automated. The PDF is the source of truth; the transcription should be compared with any future captured calendar feed before publication.

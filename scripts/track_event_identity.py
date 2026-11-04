@@ -28,7 +28,8 @@ MATERIAL_FIELDS = (
     "title", "description", "start", "end", "all_day", "time_status",
     "timezone", "location", "event_url", "registration_url",
     "registration_deadline", "cost_text", "is_free", "status",
-    "attendance_mode", "audience", "organizer", "image_url", "categories",
+    "attendance_mode", "audience", "registration_required", "registration_status",
+    "organizer", "image_url", "categories",
     "recurrence",
 )
 

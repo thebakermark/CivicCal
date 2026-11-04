@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -133,18 +134,24 @@ def capture_url(url: str, *, etag: str | None = None, last_modified: str | None 
 
 
 def write_capture(source_id: str, body: bytes | None, metadata: dict, archive_dir: Path) -> Path:
+    if not re.fullmatch(r"[a-z0-9][a-z0-9-]*", source_id):
+        raise CaptureError("Source ID contains characters that are unsafe for an archive path.")
     target_dir = archive_dir / source_id
     target_dir.mkdir(parents=True, exist_ok=True)
     digest = metadata.get("content_sha256")
-    stem = digest if digest else f"not-modified-{metadata['captured_at'].replace(':', '').replace('-', '')}"
-    if body is not None:
-        payload_path = target_dir / f"{stem}.bin"
+    timestamp = re.sub(r"[^0-9TZ]", "", metadata["captured_at"])
+    if body is not None and digest:
+        payload_path = target_dir / f"{digest}.bin"
         if not payload_path.exists():
             payload_path.write_bytes(body)
-    metadata_path = target_dir / f"{stem}.json"
-    metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        metadata["raw_payload_file"] = payload_path.name
+        metadata_stem = f"capture-{timestamp}-{digest[:12]}"
+    else:
+        metadata["raw_payload_file"] = None
+        metadata_stem = f"not-modified-{timestamp}"
+    metadata_path = target_dir / f"{metadata_stem}.json"
+    metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
     return metadata_path
-
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)

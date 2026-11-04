@@ -32,7 +32,7 @@
       ],
       "require_detail_link_reconciliation": false,
       "allow_complete_snapshot": false,
-      "reason_disabled": "The checked-in HTML fixture is representative rather than a complete live capture, and this editorial page is not the organization's complete event calendar.",
+      "reason_disabled": "The checked-in HTML fixture is representative rather than a complete live capture, and this curated editorial page is not the organization's complete event calendar. Seasonal program brochures and board meetings are separate sources.",
       "allowed_hosts": [
         "www.mokenapark.com"
       ],
@@ -146,6 +146,24 @@
       ],
       "allowed_paths": [
         "/apps/events/ical/"
+      ]
+    },
+    {
+      "source_id": "mokena-park-district-board-meetings",
+      "profile_id": "park-district-board-meetings-v1",
+      "scope": "The official Board Information page's published Board of Commissioners meeting schedule only.",
+      "pagination_strategy": "single_page",
+      "required_page_roles": [
+        "listing"
+      ],
+      "require_detail_link_reconciliation": false,
+      "allow_complete_snapshot": false,
+      "reason_disabled": "The page currently lists the 2026 schedule only; the next-year schedule is not published in the inspected page. No authorized live capture or parser fixture exists.",
+      "allowed_hosts": [
+        "www.mokenapark.com"
+      ],
+      "allowed_paths": [
+        "/board-information/"
       ]
     }
   ]

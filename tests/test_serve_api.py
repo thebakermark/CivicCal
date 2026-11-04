@@ -146,6 +146,16 @@ class ServeAPITests(unittest.TestCase):
             urlopen(self.base + "/calendars/sources/not-registered.ics")
         self.assertEqual(caught.exception.code, 404)
 
+    def test_duplicate_event_ids_fail_closed_for_json_api(self):
+        state = json.loads(self.state_path.read_text(encoding="utf-8"))
+        duplicate = dict(state["events"]["a"])
+        duplicate["source_id"] = "another-source"
+        state["events"]["duplicate"] = duplicate
+        self.state_path.write_text(json.dumps(state), encoding="utf-8")
+        with self.assertRaises(HTTPError) as caught:
+            urlopen(self.base + "/api/v1/events")
+        self.assertEqual(caught.exception.code, 503)
+
     def test_invalid_query_is_a_client_error(self):
         with self.assertRaises(HTTPError) as caught:
             urlopen(self.base + "/api/v1/events?limit=101")

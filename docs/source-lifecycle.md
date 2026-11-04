@@ -80,13 +80,13 @@ Adapters should not write canonical events directly. Capture and parsing are sep
 - Distinguish transient errors, permanent errors, malformed content, and policy-disabled sources.
 - Do not retry indefinitely.
 
-## MVP manual operation and post-release automation
+## MVP manual operation
 
-For the MVP, source operation is manual. An operator changes the explicit registry flags and separately initiates any permitted one-shot capture. Changing a flag does not trigger a task, network request, capture, or polling activation.
+For the MVP, source operation is manual. An authorized human edits the source registry flags. Changing a flag has no side effect: it does not trigger a task, network request, capture, polling, or publication. A permitted one-shot capture is a separate explicit operator action.
 
-`polling_enabled` remains false by default. A true value is configuration only until a polling scheduler is implemented and the operator explicitly enables it under the documented readiness gates. No background polling is part of the MVP.
+The application reads and enforces authorization but never changes authorization flags. Polling remains disabled by default and is not implemented as a background service. Any future monitoring, scheduling, or automation requires a new explicit product decision; it must not infer permission or treat flag edits as commands.
 
-After release, CivicCal may add a deterministic reconciler and durable task queue to detect configuration changes and identify required work. That enhancement is specified separately in `docs/source-automation.md`. It must not be treated as implemented MVP behavior. Any future worker must re-read the current registry and recheck all access, terms, robots, consent, and explicit approval gates immediately before network access.
+See [Source Authorization Control Boundary](source-authorization-boundary.md) and [Source Automation](source-automation.md).
 
 ## Raw capture archive
 

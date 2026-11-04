@@ -30,9 +30,10 @@ The document also receives a count summary. Original title, description, dates, 
 ## Rules and safeguards
 
 - Explicit no-school/closure wording is recognized.
+- E-learning and remote-learning days are distinct from no-school days.
 - Named seasonal breaks are recognized.
 - Early dismissal/release, half-day, and delayed-start wording are distinct.
-- Teacher institute, in-service, professional-development, and teacher-workday wording is flagged as no student attendance, with a rationale reminding reviewers to confirm the district's actual student schedule.
+- Teacher institute, in-service, professional-development, and teacher-workday wording is flagged for attendance confirmation unless the source explicitly states no school.
 - Unmatched events remain unclassified; the classifier does not infer that a holiday or staff event means students are off.
 - Matching is deterministic and local. No model, network request, date inference, event deletion, or calendar publication is involved.
 
@@ -46,3 +47,27 @@ This is a first-pass classifier, not a substitute for checking the district's pu
 The fixture preserves the exact published wording, inclusive date ranges, and school scope. It deliberately does not invent dismissal times. The August teacher institute dates remain marked for student-attendance confirmation because the PDF labels them teacher institute days but does not explicitly say "No School" on those rows.
 
 The fixture is a verified reference dataset for rule tests, not a claim that PDF extraction is automated. The PDF is the source of truth; the transcription should be compared with any future captured calendar feed before publication.
+
+
+## Mokena SD 159 extracted schedule example
+
+`data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json` is a schedule-focused transcription from the user-provided official SD 159 iCalendar export. The source export contained 5,936 VEVENT records and covered November 3, 2026 through December 25, 2099. The fixture preserves source UIDs for every represented schedule record, including repeated entries; it does not delete or merge source events.
+
+The captured school-schedule entries include:
+
+- November 3, 2026: MES and MIS in-person; MJHS e-learning (school-specific wording in the source description)
+- November 12–13: parent/teacher conferences and no student attendance
+- November 20 and December 18: MES early dismissal at 12:00 PM; the export also has generic early-dismissal records whose school scope is not explicit
+- November 23–27: Thanksgiving break
+- December 21, 2026–January 1, 2027: winter break
+- January 4: teacher institute day, explicitly no school
+- January 5: MES students return from winter break
+- January 15, February 12, March 12: MES early dismissal at 12:00 PM
+- January 18 and February 15: no school
+- March 26–April 2: spring break
+- April 16: generic early-dismissal entries; school scope is not explicit in the captured records
+- May 28: MES last day of school, early dismissal at 12:00 PM
+
+The capture begins November 3, 2026, so this fixture is **not a complete 2026–27 school-year calendar**. The approved district PDF remains the source needed to fill August–October and independently verify the full-year schedule. The iCalendar export's VTIMEZONE declares America/Chicago, but individual DTSTART/DTEND values are floating (no TZID or UTC marker); CivicCal preserves that distinction rather than assigning a timezone by assumption.
+
+This fixture is derived from the actual export, not from an automated live capture. Its hash and capture metadata are recorded in the fixture for reproducibility. Source event UIDs remain intact for later identity/reconciliation work.

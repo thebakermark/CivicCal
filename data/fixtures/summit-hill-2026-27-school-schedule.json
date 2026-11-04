@@ -1,0 +1,177 @@
+{
+  "format": "civiccal.school-year-calendar-transcription.v1",
+  "organization": "Summit Hill School District 161",
+  "school_year": "2026-2027",
+  "source": {
+    "title": "2026-27 District Calendar",
+    "url": "https://4.files.edl.io/6880/02/27/26/205237-d3ecd887-dee3-4089-ad5b-d8b29281ee6e.pdf",
+    "approved_date": "2026-02-18",
+    "revised_date": "2026-02-25",
+    "page": 1,
+    "verification": "Official district School Calendar page links directly to this one-page PDF. Entries below are a manual transcription of the published calendar; no dates or dismissal times have been inferred."
+  },
+  "events": [
+    {
+      "title": "Teacher Institute Days",
+      "start_date": "2026-08-17",
+      "end_date_inclusive": "2026-08-19",
+      "scope": "district",
+      "schedule_type": "teacher_institute",
+      "student_attendance": "confirm_student_attendance",
+      "source_text": "August 17, 18 & 19 — Teacher Institute Days"
+    },
+    {
+      "title": "Labor Day - No School",
+      "start_date": "2026-09-07",
+      "end_date_inclusive": "2026-09-07",
+      "scope": "district",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "source_text": "September 7 — Labor Day - No School"
+    },
+    {
+      "title": "1/2 Day School in AM/PM Teacher In-service",
+      "start_date": "2026-10-09",
+      "end_date_inclusive": "2026-10-09",
+      "scope": "district",
+      "schedule_type": "half_day",
+      "student_attendance": "shortened_day",
+      "source_text": "October 9 — 1/2 Day School in AM/PM Teacher In-service"
+    },
+    {
+      "title": "Columbus Day - No School",
+      "start_date": "2026-10-12",
+      "end_date_inclusive": "2026-10-12",
+      "scope": "district",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "source_text": "October 12 — Columbus Day - No School"
+    },
+    {
+      "title": "1/2 Day School in AM/PM Teacher In-service",
+      "start_date": "2026-10-30",
+      "end_date_inclusive": "2026-10-30",
+      "scope": "district",
+      "schedule_type": "half_day",
+      "student_attendance": "shortened_day",
+      "source_text": "October 30 — 1/2 Day School in AM/PM Teacher In-service"
+    },
+    {
+      "title": "Polling Place - No School at Mary Drew Early Learning Center Only",
+      "start_date": "2026-11-03",
+      "end_date_inclusive": "2026-11-03",
+      "scope": "Mary Drew Early Learning Center only",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "source_text": "November 3 — Polling Place – No School at Mary Drew Early Learning Center Only"
+    },
+    {
+      "title": "1/2 Day School in AM/PM Teacher In-service",
+      "start_date": "2026-11-20",
+      "end_date_inclusive": "2026-11-20",
+      "scope": "district",
+      "schedule_type": "half_day",
+      "student_attendance": "shortened_day",
+      "source_text": "November 20 — 1/2 Day School in AM/PM Teacher In-service"
+    },
+    {
+      "title": "Parent/Teacher Conference Day - No School",
+      "start_date": "2026-11-23",
+      "end_date_inclusive": "2026-11-24",
+      "scope": "district",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "source_text": "November 23 & 24 — Parent/Teacher Conference Day - No School"
+    },
+    {
+      "title": "Thanksgiving Holiday - No School",
+      "start_date": "2026-11-25",
+      "end_date_inclusive": "2026-11-27",
+      "scope": "district",
+      "schedule_type": "school_break",
+      "student_attendance": "no_school",
+      "source_text": "November 25-27 — Thanksgiving Holiday - No School"
+    },
+    {
+      "title": "1/2 Day School in AM/PM Teacher In-service",
+      "start_date": "2026-12-18",
+      "end_date_inclusive": "2026-12-18",
+      "scope": "district",
+      "schedule_type": "half_day",
+      "student_attendance": "shortened_day",
+      "source_text": "December 18 — 1/2 Day School in AM/PM Teacher In-service"
+    },
+    {
+      "title": "Holiday Break",
+      "start_date": "2026-12-21",
+      "end_date_inclusive": "2027-01-01",
+      "scope": "district",
+      "schedule_type": "school_break",
+      "student_attendance": "no_school",
+      "source_text": "December 21 – January 1 — Holiday Break"
+    },
+    {
+      "title": "Teacher Inservice - No School",
+      "start_date": "2027-01-04",
+      "end_date_inclusive": "2027-01-04",
+      "scope": "district",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "source_text": "January 4 — Teacher Inservice – No School"
+    },
+    {
+      "title": "Martin Luther King's Birthday - No School",
+      "start_date": "2027-01-18",
+      "end_date_inclusive": "2027-01-18",
+      "scope": "district",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "source_text": "January 18 — Martin Luther King’s Birthday - No School"
+    },
+    {
+      "title": "1/2 Day School in AM/PM Teacher In-service",
+      "start_date": "2027-02-12",
+      "end_date_inclusive": "2027-02-12",
+      "scope": "district",
+      "schedule_type": "half_day",
+      "student_attendance": "shortened_day",
+      "source_text": "February 12 — 1/2 Day School in AM/PM Teacher In-service"
+    },
+    {
+      "title": "President's Day - No School",
+      "start_date": "2027-02-15",
+      "end_date_inclusive": "2027-02-15",
+      "scope": "district",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "source_text": "February 15 — President’s Day - No School"
+    },
+    {
+      "title": "1/2 Day School in AM/PM Teacher In-Service",
+      "start_date": "2027-03-25",
+      "end_date_inclusive": "2027-03-25",
+      "scope": "district",
+      "schedule_type": "half_day",
+      "student_attendance": "shortened_day",
+      "source_text": "March 25 — 1/2 Day School in AM/PM Teacher In-Service"
+    },
+    {
+      "title": "Spring Break",
+      "start_date": "2027-03-26",
+      "end_date_inclusive": "2027-04-02",
+      "scope": "district",
+      "schedule_type": "school_break",
+      "student_attendance": "no_school",
+      "source_text": "March 26 – April 2 — Spring Break"
+    },
+    {
+      "title": "1/2 Day School in AM/PM Teacher In-service - Last Day Without Snow Days",
+      "start_date": "2027-05-26",
+      "end_date_inclusive": "2027-05-26",
+      "scope": "district",
+      "schedule_type": "half_day",
+      "student_attendance": "shortened_day",
+      "source_text": "May 26 — 1/2 Day School in AM/PM Teacher In-service; last day of school without snow days"
+    }
+  ]
+}

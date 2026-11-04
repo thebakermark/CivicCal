@@ -25,6 +25,8 @@ Design baseline. This document defines the intended contract; it is not a claim 
 - `GET /api/v1/changes` — incremental changes after a cursor or timestamp.
 - `GET /api/v1/openapi.json` — machine-readable API description.
 
+The current loopback implementation provides `/health`, `/api/v1/events`, `/calendars/community.ics`, and `/api/v1/openapi.json`. Organization/source endpoints, event detail, categories, incremental changes, geography filters, and remote deployment remain future work.
+
 ## Event query parameters
 
 - `from`, `to`: date/time window; require a bounded maximum range.

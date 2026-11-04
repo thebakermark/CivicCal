@@ -102,5 +102,32 @@ class SchoolScheduleClassificationTests(unittest.TestCase):
                             and event["start_date"] == "2027-03-26")
         self.assertEqual(spring_break["end_date_inclusive"], "2027-04-02")
 
+
+    def test_mokena_approved_calendar_fixture_reconciles_missing_dates(self):
+        path = Path(__file__).parents[1] / "data/fixtures/mokena-sd159-2026-27-approved-calendar.json"
+        fixture = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(fixture["calendar_summary"]["student_attendance_days"], 176)
+        self.assertEqual(fixture["calendar_summary"]["teacher_institute_days"], 4)
+        self.assertEqual(fixture["calendar_summary"]["school_improvement_early_dismissal_days"], 9)
+        self.assertEqual(fixture["calendar_summary"]["emergency_days"], 5)
+        institute = [event for event in fixture["events"]
+                     if event["schedule_type"] == "teacher_institute"]
+        self.assertEqual(len(institute), 3)
+        self.assertEqual(
+            {(event["start_date"], event["end_date_inclusive"]) for event in institute},
+            {("2026-08-17", "2026-08-18"), ("2026-10-09", "2026-10-09"),
+             ("2027-01-04", "2027-01-04")}
+        )
+        early_dismissals = [event for event in fixture["events"]
+                            if event["schedule_type"] == "early_dismissal"]
+        self.assertEqual(len(early_dismissals), 9)
+        april6 = next(event for event in fixture["events"]
+                      if event["start_date"] == "2027-04-06")
+        self.assertEqual(april6["student_attendance"], "mixed_by_school")
+        self.assertEqual(april6["school_scope"]["remote_learning"],
+                         ["Mokena Junior High School"])
+        self.assertEqual(april6["school_scope"]["in_person"],
+                         ["Mokena Elementary School", "Mokena Intermediate School"])
+
 if __name__ == "__main__":
     unittest.main()

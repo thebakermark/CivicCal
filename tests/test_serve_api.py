@@ -40,7 +40,7 @@ def documents():
     manifest = {
         "format": "civiccal.publication-manifest.v1",
         "calendar_name": "CivicCal Test",
-        "approved_event_ids": ["evt-public"],
+        "approved_event_ids": ["evt-public", "evt-private"],
     }
     return state, manifest
 
@@ -51,7 +51,7 @@ class ServeAPITests(unittest.TestCase):
         root = Path(self.temp.name)
         state, manifest = documents()
         self.registry_path = root / "sources.json"
-        self.registry_path.write_text(json.dumps({"source_records": [{"id": "library"}]}), encoding="utf-8")
+        self.registry_path.write_text(json.dumps({"source_records": [{"id": "library"}, {"id": "internal"}]}), encoding="utf-8")
         self.state_path = root / "state.json"
         self.manifest_path = root / "manifest.json"
         self.state_path.write_text(json.dumps(state), encoding="utf-8")
@@ -73,7 +73,7 @@ class ServeAPITests(unittest.TestCase):
         with urlopen(self.base + "/api/v1/events") as response:
             payload = json.loads(response.read())
             self.assertEqual(response.status, 200)
-        self.assertEqual([item["event_id"] for item in payload["events"]], ["evt-public"])
+        self.assertEqual([item["event_id"] for item in payload["events"]], ["evt-public", "evt-private"])
 
     def test_events_endpoint_supports_filters(self):
         with urlopen(self.base + "/api/v1/events?source_id=library&category=storytime") as response:
@@ -90,10 +90,23 @@ class ServeAPITests(unittest.TestCase):
     def test_etag_returns_not_modified_for_unchanged_feed(self):
         with urlopen(self.base + "/calendars/sources/library.ics") as response:
             etag = response.headers["ETag"]
-        request = Request(self.base + "/calendars/community.ics", headers={"If-None-Match": etag})
+        request = Request(self.base + "/calendars/sources/library.ics", headers={"If-None-Match": etag})
         with self.assertRaises(HTTPError) as caught:
             urlopen(request)
         self.assertEqual(caught.exception.code, 304)
+
+    def test_other_source_relay_contains_only_its_own_events(self):
+        with urlopen(self.base + "/calendars/sources/internal.ics") as response:
+            body = response.read().decode("utf-8")
+        self.assertIn("UID:evt-private@civiccal", body)
+        self.assertNotIn("UID:evt-public@civiccal", body)
+
+    def test_source_last_modified_is_scoped(self):
+        with urlopen(self.base + "/calendars/sources/library.ics") as response:
+            library_modified = response.headers["Last-Modified"]
+        with urlopen(self.base + "/calendars/sources/internal.ics") as response:
+            internal_modified = response.headers["Last-Modified"]
+        self.assertNotEqual(library_modified, internal_modified)
 
     def test_unknown_source_returns_not_found(self):
         with self.assertRaises(HTTPError) as caught:

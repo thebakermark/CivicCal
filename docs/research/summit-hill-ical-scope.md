@@ -40,6 +40,18 @@ The official Mary Drew site is on a separate subdomain:
 
 This is a separate school-site feed. Its `id=0` is not the district-domain `id=0` feed. The web reader rejects the ICS response as `text/calendar`, so the actual payload has not been inspected.
 
+## Decision: use the dedicated Mary Drew feed
+
+**Chosen approach:** use the official Mary Drew school-site feed as the Mary Drew calendar source:
+
+`https://mdelc.summithill.org/apps/events/ical/?id=0`
+
+Do not block source onboarding on discovering a second, district-domain numeric filter ID for Mary Drew. The dedicated subdomain is the school's own official Events page, exposes its own Download .ICS link, and labels its local calendar **Events**. This is a direct, independently identified source and avoids guessing at the district selector's internal IDs.
+
+The district-domain Mary Drew filter ID is therefore recorded as **not needed for the initial source set**, rather than guessed. Revisit only if a later coverage comparison shows that the dedicated feed omits events that appear under the district's Mary Drew filter.
+
+This is a source-selection decision, not approval to fetch or poll the feed. Its payload remains uninspected, and its terms/robots review is still outstanding. Keep the record at `review_required` with polling disabled until those gates are resolved.
+
 ## Current implementation
 
 The registry now contains six separate Summit Hill feed records, all assigned to the Summit Hill School District 161 organization:

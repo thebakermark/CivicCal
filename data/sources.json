@@ -216,10 +216,12 @@
       "url": "https://thrillshare-cmsv2.services.thrillshare.com/api/v4/o/9768/cms/events/generate_ical?filter_ids=&section_ids=",
       "access_status": "blocked",
       "polling_enabled": false,
+      "consent_required": true,
+      "consent_granted": false,
       "terms_reviewed": true,
       "robots_reviewed": false,
       "event_access": "unknown",
-      "notes": "Official district Events page exposes a 'Click to Download Calendar' iCalendar export. Apptegy Terms of Use (last updated 2026-09-01, section 3) prohibit automated access using bots, scrapers, or spiders without Apptegy's prior written consent. The feed host robots.txt could not be retrieved during review. Do not automate or use the network importer unless written consent is obtained and robots/access rules are rechecked. User-provided local ICS files may still be processed offline. Reviewed 2026-11-03."
+      "notes": "Official district Events page exposes a 'Click to Download Calendar' iCalendar export. Apptegy Terms of Use (last updated 2026-09-01, section 3) prohibit automated access using bots, scrapers, or spiders without Apptegy's prior written consent. The feed host robots.txt could not be retrieved during review. Manual network import is controlled by consent_granted. Leave consent_granted=false until written consent is received; set it to true to enable one-shot manual imports. Scheduled polling remains disabled. User-provided local ICS files may still be processed offline. Reviewed 2026-11-03."
     }
   ],
   "verification_policy": {

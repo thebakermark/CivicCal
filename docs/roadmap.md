@@ -37,6 +37,8 @@ It is not limited to a consumer-facing calendar website. Its primary product is 
 ### 0. Blueprint and reuse assessment
 - Document source lifecycle, event model, processing, storage, API, ICS, webhooks, operations, and reuse strategy.
 - Define open-standard boundaries and the future MeaningWire adapter boundary in [Semantic Interoperability](semantic-interoperability.md).
+- Keep source authorization human-edited and application read-and-enforce only, as specified in [Source Authorization Control Boundary](source-authorization-boundary.md).
+- Define the relational expansion of event observations, revisions, presence, and lifecycle history in [Relational Event-History Model](event-history-relational-model.md).
 - Inspect candidate projects' code, tests, dependencies, licenses, and architecture before copying code.
 - Record decisions and unresolved questions.
 
@@ -47,6 +49,7 @@ It is not limited to a consumer-facing calendar website. Its primary product is 
 - Record publisher, source URL, organization, geographic scope, content type, timezone policy, polling policy, access/consent flags where applicable, and review status.
 - Validate registry records and document source onboarding.
 - Keep source discovery separate from source activation.
+- Authorization flags are manually edited by a human; application code may enforce but never change them.
 
 **Complete when:** every initial Mokena-area source has a traceable registry entry and an explicit operational status.
 

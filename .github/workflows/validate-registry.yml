@@ -9,6 +9,10 @@ on:
       - "data/fixtures/**"
       - "docs/ics-normalization.md"
       - "docs/source-fixture-validation.md"
+      - "docs/processing-pipeline.md"
+      - "docs/html-normalization.md"
+      - "docs/mokena-park-adapter.md"
+      - "docs/village-calendar-adapter.md"
       - ".github/workflows/validate-registry.yml"
   pull_request:
     paths:

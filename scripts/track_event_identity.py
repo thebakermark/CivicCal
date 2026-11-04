@@ -16,6 +16,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+try:  # Support both direct script execution and package-style imports.
+    from .storage import JsonFileIdentityStateStore
+except ImportError:  # pragma: no cover - exercised by the command-line entry point.
+    from storage import JsonFileIdentityStateStore
+
 
 STATE_FORMAT = "civiccal.identity-state.v1"
 RESULT_FORMAT = "civiccal.identity-result.v1"
@@ -249,16 +254,17 @@ def main() -> int:
     args = parser.parse_args()
     try:
         document = json.loads(Path(args.input).read_text(encoding="utf-8"))
-        state_path = Path(args.state)
-        prior = json.loads(state_path.read_text(encoding="utf-8")) if state_path.exists() else None
+        store = JsonFileIdentityStateStore(args.state)
+        prior = store.load_identity_state()
         result, state = process_normalized(document, prior, args.observed_at)
         rendered = json.dumps(result, ensure_ascii=False, indent=2) + "\n"
-        state_rendered = json.dumps(state, ensure_ascii=False, indent=2) + "\n"
         if args.output:
             Path(args.output).write_text(rendered, encoding="utf-8")
         else:
             sys.stdout.write(rendered)
-        Path(args.state_output or args.state).write_text(state_rendered, encoding="utf-8")
+        output_store = (JsonFileIdentityStateStore(args.state_output)
+                        if args.state_output else store)
+        output_store.save_identity_state(state)
         print(f"New events: {result['new_events']}; revisions: {result['new_revisions']}; "
               f"unchanged: {result['unchanged_events']}; unkeyed: {result['unkeyed_count']}; "
               f"identity conflicts: {len(result['identity_conflicts'])}.", file=sys.stderr)

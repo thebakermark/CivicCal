@@ -12,6 +12,7 @@ on:
       - "docs/source-fixture-validation.md"
       - "docs/source-completeness.md"
       - "docs/capture-coordinator.md"
+      - "docs/ics-capture-coordinator.md"
       - "docs/capture-to-parser.md"
       - "docs/event-normalization.md"
       - "docs/event-identity-revisions.md"

@@ -47,9 +47,9 @@ Mapping:
 - Preserve `event_id` exactly.
 - Store `current` in the full normalized JSON column; retain the current fingerprint and lifecycle/presence projection.
 - Expand nested `revisions[]` into `event_revisions`, preserving array order as revision number order.
-- Expand `missing_observation_history[]` into `presence_observations` with presence set to missing and preserve all original fields.
+- Reconcile `missing_observation_history[]` against global `presence_observations[]`; do not import nested mirror records a second time. Missing facts are duplicated in both locations by the current tracker. Reappearance is also represented in both locations, with a sparse nested transition record and a global present record. Import the global record once and preserve/reconcile the nested mirror as described in [Relational Event-History Model](event-history-relational-model.md).
 - Expand `lifecycle_history[]` into `lifecycle_transitions`, preserving order and source observation references.
-- Preserve `observation_ids[]` as links to the corresponding observation rows. Every referenced observation must exist and belong to the same source/event identity; otherwise fail validation.
+- Resolve `observation_ids[]` against global observation rows; every referenced observation must exist and belong to the same source/event identity. Use the observation row's event foreign key as the authoritative relational link, not a second mutable array. Preserve the legacy array order as an explicit event sequence.
 
 Do not create a second global/canonical event record. One current source event remains owned by one source.
 
@@ -61,7 +61,7 @@ Each item in `observations[]` contains:
 - `observed_at`, `material_fingerprint`;
 - full normalized `event`.
 
-Expand one row per observation. Resolve `identity_key` to exactly one imported source event. Preserve the full event JSON and the original capture key. Do not collapse repeated observations with the same material fingerprint; unchanged observations are part of the source history.
+Expand one row per observation. Resolve `identity_key` to exactly one imported source event. Preserve the full event JSON and the original capture key. Do not collapse repeated observations with the same material fingerprint; unchanged observations are part of the source history. Assign an explicit per-event sequence using the event's observation_ids[] order and validate global observations not referenced by any event.
 
 Validate that each observation ID is unique and that its source and identity key agree with its referenced source event.
 
@@ -82,6 +82,8 @@ The current `processed_captures[]` is a list of deterministic token strings, not
 - A later ingestion implementation should persist a richer receipt, including source, capture key, processed timestamp, and result summary.
 
 ## 7. Presence observations
+
+The global `presence_observations[]` array is the authoritative import source. Event-level `missing_observation_history[]` is a legacy mirror: missing records are copied into both places, and reappearance is recorded in both places using different shapes. Import each global record once, reconcile the nested mirror by event/capture/timestamp/transition semantics, and report unmatched mirrors rather than double-counting them. Preserve nested-only fields in migration diagnostics or legacy JSON when needed for exact round-trip compatibility. See [Relational Event-History Model](event-history-relational-model.md) for the full reconciliation rules.
 
 Import every item in `presence_observations[]` as an append-only row. Preserve all original keys in JSON even when selected fields are promoted to columns.
 
@@ -122,6 +124,8 @@ The import should emit a machine-readable report with:
 - explicit pass/fail for foreign-key, ownership, and fingerprint consistency checks.
 
 The migration fails closed if any required record is malformed, ambiguous, duplicated, or references a missing owner. A report may be generated for diagnosis, but the database must not be cut over with unresolved integrity failures.
+
+See [Relational Event-History Model](event-history-relational-model.md) for the complete relational expansion, sequence-number rules, same-event foreign-key constraints, and presence-mirror reconciliation.
 
 ## 11. No-loss rule
 

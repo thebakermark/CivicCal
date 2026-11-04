@@ -1,5 +1,14 @@
 # CivicCal Roadmap
 
+## Source of truth
+
+- Product scope and acceptance: [Product Requirements](product-requirements.md).
+- Accepted decisions: [Decision Register](decision-register.md).
+- Implementation status and evidence: [Feature Register](feature-register.md).
+- Current gap assessment: [Project Assessment](project-assessment-2026-11-04.md).
+
+If this roadmap or another legacy design conflicts with those records, reconcile the older document before implementation.
+
 ## Mission
 
 CivicCal is community information infrastructure for collecting publicly useful local events from independent organizations, preserving their source context, and distributing them through standard calendar and developer interfaces.
@@ -105,14 +114,14 @@ It is not limited to a consumer-facing calendar website. Its primary product is 
 
 ### 8. Webhooks and integrations
 - Define event-change notifications using a documented envelope (CloudEvents is the preferred starting point).
-- Support subscriber registration, secret rotation, signed requests, retries, delivery logs, and disable/delete controls.
+- After MVP, consider subscriber registration, secret rotation, signed requests, retries, delivery logs, and disable/delete controls.
 - Keep webhooks optional; feeds and API remain independently useful.
 
 **Complete when:** a test receiver can reliably process create/update/cancel notifications and recover from failed delivery.
 
 ### 9. Operations and reliability
 - Add source-health status, ingestion run history, structured logs, metrics, alertable failures, backup/restore checks, and security review.
-- Keep scheduling simple (systemd timer or cron invoking a worker that exits).
+- Scheduling and unattended polling are deferred and require a separate explicit decision; they are not part of the MVP.
 - Avoid mandatory Redis, Celery, paid workflow platforms, or hosted AI.
 
 **Complete when:** an operator can identify broken sources, recover a failed run, and restore the service from backup.

@@ -28,7 +28,13 @@ The initial source registry is in [data/sources.json](data/sources.json). Entrie
 
 ## Development status
 
-Early foundation. No public API or automated ingestion is deployed yet.
+Early foundation. A guarded, one-shot HTTP capture utility is available at [scripts/capture_source.py](scripts/capture_source.py). It archives raw responses and capture metadata; it does not parse events, schedule polling, or publish data. No public API or automated ingestion is deployed yet.
+
+Example manual capture (only for a source whose registry gates permit network access):
+
+```sh
+python scripts/capture_source.py --source-id example-source --archive-dir data/captures
+```
 
 ## Principles
 

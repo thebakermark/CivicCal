@@ -56,26 +56,55 @@ class CaptureSourceTests(unittest.TestCase):
             with self.assertRaisesRegex(CaptureError, "not approved"):
                 load_source(path, "sample-feed")
 
-    def test_registry_gate_rejects_unreviewed_terms_or_robots(self):
+    def test_registry_gate_rejects_unreviewed_terms(self):
         with tempfile.TemporaryDirectory() as folder:
-            path = self.registry(folder, self.source(robots_reviewed=False))
+            path = self.registry(folder, self.source(terms_reviewed=False))
             with self.assertRaisesRegex(CaptureError, "terms_reviewed=true"):
                 load_source(path, "sample-feed")
 
-    def test_written_consent_switch_is_preserved_without_enabling_polling(self):
+    def test_registry_gate_rejects_unreviewed_robots(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.registry(folder, self.source(robots_reviewed=False))
+            with self.assertRaisesRegex(CaptureError, "robots_reviewed=true"):
+                load_source(path, "sample-feed")
+
+    def test_written_consent_is_additional_to_all_standard_gates(self):
         with tempfile.TemporaryDirectory() as folder:
             path = self.registry(folder, self.source(
-                access_status="blocked", consent_required=True, consent_granted=True,
-                robots_reviewed=False,
+                consent_required=True, consent_granted=True,
             ))
             source = load_source(path, "sample-feed")
             self.assertTrue(source["consent_granted"])
             self.assertFalse(source["polling_enabled"])
 
+    def test_consent_does_not_override_access_approval(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.registry(folder, self.source(
+                access_status="blocked", consent_required=True, consent_granted=True,
+            ))
+            with self.assertRaisesRegex(CaptureError, "not approved"):
+                load_source(path, "sample-feed")
+
+    def test_consent_does_not_override_terms_review(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.registry(folder, self.source(
+                consent_required=True, consent_granted=True, terms_reviewed=False,
+            ))
+            with self.assertRaisesRegex(CaptureError, "terms_reviewed=true"):
+                load_source(path, "sample-feed")
+
+    def test_consent_does_not_override_robots_review(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.registry(folder, self.source(
+                consent_required=True, consent_granted=True, robots_reviewed=False,
+            ))
+            with self.assertRaisesRegex(CaptureError, "robots_reviewed=true"):
+                load_source(path, "sample-feed")
+
     def test_consent_required_source_is_blocked_until_flag_is_true(self):
         with tempfile.TemporaryDirectory() as folder:
             path = self.registry(folder, self.source(
-                access_status="blocked", consent_required=True, consent_granted=False,
+                consent_required=True, consent_granted=False,
             ))
             with self.assertRaisesRegex(CaptureError, "consent_granted=true"):
                 load_source(path, "sample-feed")

@@ -6,21 +6,41 @@
 
 ## Authoritative district evidence located
 
-The district's own Apptegy live-feed pages contain these schedule notices:
+The district's own Apptegy live-feed pages and district-created graphics provide the following supplemental schedule evidence:
 
 | Date | District statement | Interpretation |
 |---|---|---|
-| 2026-09-07 | “There is no school on Monday due to Labor Day.” | No student attendance; date resolved to Monday, September 7, 2026. |
-| 2026-10-09 | “There is no school on Friday, October 9th due to Teachers Institute…” | No student attendance. |
-| 2026-10-12 | “…and Monday, October 12th due to a school holiday.” | No student attendance. |
-| 2026-10-13 | “…We will see everyone back on Tuesday, October 13th!” | District return-to-school date. |
+| 2026-08-19 | “What a great morning at all of our schools as we welcomed our students to the 2026-2027 school year!” | First day of school; district-wide. |
+| 2026-09-04 | September district dates graphic: “EARLY RELEASE DAY.” | Early release; exact dismissal times are not attached because the separate times graphic's date association is not conclusive. |
+| 2026-09-07 | “NO SCHOOL–LABOR DAY”; live-feed reminder says there is no school Monday due to Labor Day. | No student attendance; date resolved to Monday, September 7, 2026. |
+| 2026-10-09 | “NO SCHOOL TEACHERS INSTITUTE”; explicit live-feed reminder confirms Friday, October 9. | No student attendance. |
+| 2026-10-12 | “NO SCHOOL SCHOOL HOLIDAY”; explicit live-feed reminder confirms Monday, October 12. | No student attendance. |
+| 2026-10-13 | “We will see everyone back on Tuesday, October 13th!” | District return-to-school date. |
+| 2026-10-30 | October district dates graphic: “EARLY DISMISSAL DAY.” | Early dismissal; exact times not stated in the graphic. |
 
 District live-feed source pages:
+- https://mes.mokena159.org/o/mis/live-feed?page_no=2
+- https://mes.mokena159.org/o/mis/live-feed
 - https://mis.mokena159.org/live-feed
 - https://mjhs.mokena159.org/o/mis/live-feed
 - https://mes.mokena159.org/live-feed
 
-The September Labor Day reminder and October 9–13 notice are published by Mokena School District 159 on its own school-site live feeds. These notices are stronger evidence than third-party calendar transcriptions.
+District-created graphics:
+- September dates: https://core-docs.s3.amazonaws.com/mokena_school_district_159_ar/live_feed_image/image/29325072/large_DIstrict_Dates__10_.png
+- October dates: https://core-docs.s3.amazonaws.com/mokena_school_district_159_ar/live_feed_image/image/30848899/large_DIstrict_Dates__14_.png
+- October no-school reminder: https://core-docs.s3.amazonaws.com/mokena_school_district_159_ar/live_feed_image/image/30662630/large_No_School__7_.png
+
+The district's live-feed posts and graphics are direct district sources. They supersede third-party calendar transcriptions for the dates they explicitly identify.
+
+## Supplemental fixture
+
+The supplemental evidence is recorded separately in:
+
+`data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json`
+
+This is intentionally separate from the iCalendar-derived fixture. These live-feed records have no iCalendar UIDs, and CivicCal must not fabricate UIDs or merge these records into the source-feed identity history. The supplement preserves each statement and links it to the district page or graphic that supports it.
+
+A district-created graphic also gives dismissal times of MJHS 10:55 AM, MIS 11:30 AM, and MES 12:00 PM. However, the accessible post context does not conclusively establish that this graphic belongs to September 4, so those times are deliberately not assigned to that date.
 
 ## Calendar PDF candidate rejected
 
@@ -36,11 +56,11 @@ That Google Drive document still needs to be retrieved and independently checked
 
 ## Data handling decision
 
-- Keep the existing iCalendar-derived schedule fixture unchanged for now.
-- The iCalendar snapshot begins on 2026-11-03, so it cannot establish August–October coverage.
-- Treat the four district live-feed dates above as independently verified supplemental evidence. Add them to the normalized school-schedule dataset only with explicit live-feed provenance, not fabricated iCalendar UIDs.
-- Do not import the third-party calendar index's remaining August–October entries without district confirmation; that index has known conflicts with the district's own feed.
-- Do not enable network retrieval or polling. The SD159 automated-access consent gate remains unchanged (consent_granted=false, polling_enabled=false).
+- Keep the existing iCalendar-derived schedule fixture unchanged. It begins November 3, 2026 and retains its original source UIDs.
+- Use the separate live-feed supplement for the seven district-confirmed dates above. Do not fabricate iCalendar UIDs.
+- Do not import the third-party calendar index's remaining August–October entries without district confirmation. In particular, August 17–18 teacher institute dates remain unresolved because no readable official district evidence confirming student attendance status was found in this review.
+- Do not infer dismissal times from a graphic whose association with a specific date is unclear.
+- Do not enable network retrieval or polling. The SD159 automated-access consent gate remains unchanged (`consent_granted=false`, `polling_enabled=false`).
 
 ## Related official calendar announcement
 

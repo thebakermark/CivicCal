@@ -17,6 +17,7 @@ LISTING_ONE = b"""<html><body>
 </body></html>"""
 LISTING_TWO = b"""<html><body>
 <a href="https://mokenail.municipalone.com/calendarView.aspx?cid=1002">Board Meeting</a>
+<a rel="last" href="https://www.mokena.gov/calendar.aspx?page=2">Last</a>
 </body></html>"""
 DETAIL_ONE = b"""<html><body><nav>Home Government Residents Economic Development How Do I?</nav><main>
 <div>Community Day</div><div>Event Date:</div><div>Saturday, June 13, 2026</div>
@@ -115,6 +116,29 @@ class CaptureCoordinatorTests(unittest.TestCase):
             self.assertTrue(result["coordinator"]["automatic_polling_enabled"] is False)
             self.assertTrue(result["coordinator"]["published"] is False)
             self.assertEqual(len(list((Path(folder) / "archive").rglob("*.bin"))), 4)
+
+    def test_missing_explicit_terminal_page_signal_prevents_complete_snapshot(self):
+        with tempfile.TemporaryDirectory() as folder:
+            policies = self.policies(folder)
+            original_factory = self.opener_factory()
+
+            def no_last_factory(source, policies_path):
+                def open_request(request, timeout=20):
+                    response = original_factory(source, policies_path)(request, timeout)
+                    if request.full_url == "https://www.mokena.gov/calendar.aspx?page=2":
+                        response.body = response.body.replace(
+                            b'<a rel="last" href="https://www.mokena.gov/calendar.aspx?page=2">Last</a>', b""
+                        )
+                    return response
+                return open_request
+
+            result = coordinate_village_capture(
+                self.source(), policies, Path(folder) / "archive",
+                opener_factory=no_last_factory,
+            )
+            self.assertEqual(result["snapshot"]["completeness"], "partial")
+            self.assertTrue(any("terminal page" in blocker
+                                for blocker in result["snapshot"]["blockers"]))
 
     def test_live_profile_disabled_keeps_snapshot_unknown(self):
         with tempfile.TemporaryDirectory() as folder:

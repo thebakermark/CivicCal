@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any
 
 RULES = (
-    ("school_break", re.compile(r"\\b(thanksgiving|winter|spring|summer|fall|holiday) break\\b", re.I),
+    ("school_break", re.compile(r"\\b(thanksgiving (?:break|holiday)|(?:winter|spring|summer|fall|holiday) break)\\b", re.I),
      "no_school", "Named school break"),
     ("no_school", re.compile(
         r"\\b(no school|no student attendance|students? (?:do not|will not) attend|"

@@ -131,8 +131,10 @@ def _timezone_component(tzid: str, years: set[int]) -> list[str]:
         raise FeedError(f"Unknown IANA timezone {tzid!r}.") from exc
     if not years:
         raise FeedError("Cannot build VTIMEZONE without event years.")
+    if min(years) < 2 or max(years) > 9998:
+        raise FeedError("IANA timezone publication supports event years 0002 through 9998.")
     first_year = max(2, min(years) - 1)
-    last_year = min(9997, max(years) + 2)
+    last_year = min(9998, max(years) + 2)
     start_utc = datetime(first_year, 1, 1, tzinfo=timezone.utc)
     end_utc = datetime(last_year + 1, 1, 1, tzinfo=timezone.utc)
     step = timedelta(hours=6)

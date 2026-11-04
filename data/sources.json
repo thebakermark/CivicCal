@@ -215,7 +215,7 @@
       "terms_reviewed": false,
       "robots_reviewed": false,
       "event_access": "mixed",
-      "notes": "Official Upcoming Events page. Current page contains curated event listings with dates/times, descriptions, registration links, eligibility, fees, and deadlines. This is not necessarily the complete program/class or sports schedule; treat as a distinct featured/upcoming-events source and assess additional calendar sources separately. Preserve registration details and original event links during extraction. Polling remains disabled pending terms/robots and parser review."
+      "notes": "Official Upcoming Events editorial page. Curated event highlights include dates/times, descriptions, registration links, eligibility, fees, and deadlines. It is not the complete program/class, sports, league, or facility schedule. The public homepage also links to seasonal program brochures (PDF), which are a separate source channel and are not yet supported by the current source-type registry/parser. The separate official Board Information page publishes the Board of Commissioners meeting schedule and is registered as mokena-park-district-board-meetings. Preserve registration details and original event links during extraction. Polling remains disabled pending terms/robots review and a complete, authorized live capture."
     },
     {
       "id": "mokena-sd159-events-ical",
@@ -302,6 +302,18 @@
       "robots_reviewed": false,
       "event_access": "mixed",
       "notes": "Official Summit Hill School District 161 Events page for Summit Hill Jr. High School Events exposes Subscribe > Download .ICS, resolving to this exact endpoint. The calendar ID and displayed calendar label were verified on the official district Events page on 2026-11-03; the Download .ICS link was followed to confirm the endpoint. Feed payload has not been inspected; the web reader rejects text/calendar. Terms/robots review and comparison against visible school events required before automated retrieval. Polling remains disabled."
+    },
+    {
+      "id": "mokena-park-district-board-meetings",
+      "organization_id": "mokena-community-park-district",
+      "source_type": "html",
+      "url": "https://www.mokenapark.com/board-information/",
+      "access_status": "review_required",
+      "polling_enabled": false,
+      "terms_reviewed": false,
+      "robots_reviewed": false,
+      "event_access": "public",
+      "notes": "Official Board Information page for the Mokena Community Park District. Lists the 2026 Board of Commissioners meeting schedule, including November 24 and December 15 at 6:00 PM at The Oaks Recreation & Fitness Center. The page also states the normal fourth-Tuesday cadence but shows January and December exceptions in the published 2025 notice; do not extrapolate a 2027 schedule from cadence alone. No live raw capture or parser fixture has been created. Terms/robots review and capture verification remain outstanding; polling disabled."
     }
   ],
   "verification_policy": {

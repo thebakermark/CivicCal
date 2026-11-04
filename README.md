@@ -42,3 +42,19 @@ Early foundation. No public API or automated ingestion is deployed yet.
 ## License
 
 To be selected before public contributions or reuse are encouraged.
+
+## Architecture and implementation roadmap
+
+The project blueprint is documented before expanding the implementation:
+
+- [Roadmap and milestones](docs/roadmap.md)
+- [Source lifecycle and capture contract](docs/source-lifecycle.md)
+- [Canonical event data model](docs/event-data-model.md)
+- [Processing pipeline](docs/processing-pipeline.md)
+- [Storage architecture](docs/storage-architecture.md)
+- [Public JSON API specification](docs/api-specification.md)
+- [iCalendar feed publishing](docs/calendar-feeds.md)
+- [Webhook specification](docs/webhook-specification.md)
+- [Open-source reuse assessment](docs/open-source-reuse.md)
+
+The core is planned as a portable modular Python application, SQLite-first, with public JSON and iCalendar interfaces. These documents describe the target design; they do not mean the API, feed publisher, webhook service, database, or scheduled polling are already deployed.

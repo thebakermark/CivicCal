@@ -20,13 +20,10 @@ on:
       - "docs/storage-interface.md"
       - "docs/storage-architecture.md"
       - "docs/processing-pipeline.md"
-      - "docs/source-completeness.md"
-      - "docs/event-data-model.md"
-      - "docs/storage-interface.md"
-      - "docs/storage-architecture.md"
       - "docs/html-normalization.md"
       - "docs/mokena-park-adapter.md"
       - "docs/village-calendar-adapter.md"
+      - "docs/school-schedule-classification.md"
       - ".github/workflows/validate-registry.yml"
   pull_request:
     paths:
@@ -42,6 +39,7 @@ on:
       - "docs/processing-pipeline.md"
       - "docs/source-completeness.md"
       - "docs/capture-coordinator.md"
+      - "docs/school-schedule-classification.md"
       - ".github/workflows/validate-registry.yml"
   workflow_dispatch:
 

@@ -117,6 +117,32 @@ class PublishICSTests(unittest.TestCase):
         with self.assertRaises(FeedError):
             build_calendar(state_with(record), manifest("evt_123"))
 
+
+    def test_iana_timezone_emits_vtimezone_and_preserves_local_wall_time(self):
+        record = identity_record()
+        record["current"].update({
+            "start": {"value": "2027-03-14T09:00:00", "kind": "date-time"},
+            "end": {"value": "2027-03-14T10:00:00", "kind": "date-time"},
+            "time_status": "zoned",
+            "timezone": "America/Chicago",
+        })
+        text, _ = build_calendar(state_with(record), manifest("evt_123"))
+        self.assertIn("BEGIN:VTIMEZONE\\r\\nTZID:America/Chicago", text)
+        self.assertIn("TZOFFSETFROM:-0600", text)
+        self.assertIn("TZOFFSETTO:-0500", text)
+        self.assertIn("DTSTART;TZID=America/Chicago:20270314T090000", text)
+        self.assertIn("DTEND;TZID=America/Chicago:20270314T100000", text)
+
+    def test_unknown_iana_timezone_is_rejected(self):
+        record = identity_record()
+        record["current"].update({
+            "start": {"value": "2027-03-14T09:00:00", "kind": "date-time"},
+            "time_status": "zoned",
+            "timezone": "Mars/Olympus_Mons",
+        })
+        with self.assertRaises(FeedError):
+            build_calendar(state_with(record), manifest("evt_123"))
+
     def test_recurrence_rejected_until_supported(self):
         record = identity_record()
         record["current"]["recurrence"] = {"rule": "FREQ=WEEKLY"}

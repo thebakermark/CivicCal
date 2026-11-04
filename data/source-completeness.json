@@ -165,6 +165,24 @@
       "allowed_paths": [
         "/board-information/"
       ]
+    },
+    {
+      "source_id": "mokena-library-board-meetings",
+      "profile_id": "library-board-meetings-v1",
+      "scope": "The public Board of Library Trustees meeting schedule and its linked agenda/minutes date references on the official board page.",
+      "pagination_strategy": "single_page",
+      "required_page_roles": [
+        "listing"
+      ],
+      "require_detail_link_reconciliation": false,
+      "allow_complete_snapshot": false,
+      "reason_disabled": "The page contains a conflicting December 2026 date (schedule says December 15; agendas/minutes list December 22) and asterisk-marked exceptions whose times are not fully specified. No authorized raw capture or parser fixture exists.",
+      "allowed_hosts": [
+        "mokenalibrary.org"
+      ],
+      "allowed_paths": [
+        "/library-board"
+      ]
     }
   ]
 }

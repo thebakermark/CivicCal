@@ -98,6 +98,7 @@ def coordinate_village_capture(source: dict, policies_path: Path, archive_dir: P
     pending_urls: list[str] = []
     page_limit_hit = False
     detail_limit_hit = False
+    pagination_cycle = False
 
     def capture_page(url: str, role: str) -> tuple[bytes, dict, Path]:
         allowed_url = validate_request_url(source, url, policies_path)
@@ -152,7 +153,10 @@ def coordinate_village_capture(source: dict, policies_path: Path, archive_dir: P
             })
             for next_url in parsed.get("pagination", {}).get("next_page_urls", []):
                 validate_request_url(source, next_url, policies_path)
-                if next_url not in seen_listing_urls and next_url not in listing_queue:
+                if next_url in seen_listing_urls:
+                    pagination_cycle = True
+                    warnings.append(f"Pagination cycle detected at {next_url}; terminal page is not established.")
+                elif next_url not in listing_queue:
                     listing_queue.append(next_url)
         except Exception as exc:
             warnings.append(f"Listing page failed ({url}): {exc}")
@@ -211,7 +215,7 @@ def coordinate_village_capture(source: dict, policies_path: Path, archive_dir: P
             "strategy": profile.get("pagination_strategy"),
             "expected_page_count": len(pages),
             "observed_page_count": len(pages),
-            "terminal_page_confirmed": not listing_queue and not page_limit_hit,
+            "terminal_page_confirmed": not listing_queue and not page_limit_hit and not pagination_cycle,
             "pending_next_urls": pending_urls,
         },
         "pages": pages,
@@ -220,6 +224,9 @@ def coordinate_village_capture(source: dict, policies_path: Path, archive_dir: P
     if detail_limit_hit:
         snapshot["completeness"] = "partial"
         snapshot["blockers"].append("One or more discovered event-detail pages were not processed.")
+    if pagination_cycle:
+        snapshot["completeness"] = "partial"
+        snapshot["blockers"].append("Pagination links formed a cycle; a terminal page was not established.")
     if warnings and snapshot["completeness"] == "complete":
         snapshot["completeness"] = "partial"
         snapshot["blockers"].extend(warnings)

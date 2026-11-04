@@ -170,6 +170,14 @@
       "type": "nonprofit",
       "verification_status": "organization_verification_required",
       "notes": "Candidate community service organization; verify local presence and public event channels."
+    },
+    {
+      "id": "summit-hill-school-district-161",
+      "name": "Summit Hill School District 161",
+      "type": "school",
+      "website": "https://www.summithill.org/",
+      "verification_status": "official_site_identified",
+      "notes": "Official district website and Events page identified. The district Events page exposes an iCalendar download link; school-level calendar filters are also visible. Confirm exact calendar scope and review terms/robots before enabling automated retrieval."
     }
   ],
   "source_records": [
@@ -222,6 +230,18 @@
       "robots_reviewed": false,
       "event_access": "unknown",
       "notes": "Official district Events page exposes a 'Click to Download Calendar' iCalendar export. Apptegy Terms of Use (last updated 2026-09-01, section 3) prohibit automated access using bots, scrapers, or spiders without Apptegy's prior written consent. The feed host robots.txt could not be retrieved during review. Manual network import is controlled by consent_granted. Leave consent_granted=false until written consent is received; set it to true to enable one-shot manual imports. Scheduled polling remains disabled. User-provided local ICS files may still be processed offline. Reviewed 2026-11-03."
+    },
+    {
+      "id": "summit-hill-sd161-events-ical",
+      "organization_id": "summit-hill-school-district-161",
+      "source_type": "ics",
+      "url": "https://www.summithill.org/apps/events/ical/?id=0",
+      "access_status": "review_required",
+      "polling_enabled": false,
+      "terms_reviewed": false,
+      "robots_reviewed": false,
+      "event_access": "mixed",
+      "notes": "Official district Events page has a Subscribe > Download .ICS link resolving to this endpoint. Page displays District Events plus separate calendars for Indian Trail, Dr. Julian Rogus, Hilda Walker Intermediate, Summit Hill Jr. High, and Mary Drew Early Learning Center. The default id=0 calendar scope needs verification. Terms/robots review and calendar scope review required before any automated fetch. Discovered 2026-11-03."
     }
   ],
   "verification_policy": {

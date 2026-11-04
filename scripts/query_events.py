@@ -15,6 +15,10 @@ class QueryError(Exception):
     """Invalid API query or input document."""
 
 
+class QueryDataError(QueryError):
+    """Invalid persisted identity/publication data; this is a server error."""
+
+
 PUBLIC_EVENT_FIELDS = (
     "title", "description", "start", "end", "end_exclusive", "all_day", "time_status", "timezone",
     "location", "event_url", "registration_url", "registration_deadline",
@@ -84,14 +88,14 @@ def query_events(identity_state: dict, manifest: dict, *,
     records = {}
     for identity_key, record in identity_state["events"].items():
         if not isinstance(record, dict):
-            raise QueryError(f"Identity record {identity_key!r} must be an object.")
+            raise QueryDataError(f"Identity record {identity_key!r} must be an object.")
         event_id = record.get("event_id")
         if not isinstance(event_id, str) or not event_id.strip():
-            raise QueryError(f"Identity record {identity_key!r} has no valid event_id.")
+            raise QueryDataError(f"Identity record {identity_key!r} has no valid event_id.")
         if event_id in records:
-            raise QueryError(f"Identity state contains duplicate event ID {event_id!r}.")
+            raise QueryDataError(f"Identity state contains duplicate event ID {event_id!r}.")
         if not isinstance(record.get("source_id"), str) or not record["source_id"].strip():
-            raise QueryError(f"Identity record {event_id!r} has no valid source_id.")
+            raise QueryDataError(f"Identity record {event_id!r} has no valid source_id.")
         records[event_id] = record
     missing = [event_id for event_id in approved if event_id not in records]
     if missing:

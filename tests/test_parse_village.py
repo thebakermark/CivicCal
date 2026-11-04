@@ -8,7 +8,7 @@ DETAIL_URL = "https://mokenail.municipalone.com/calendarView.aspx?catid=0&cid=30
 
 class VillageParserTests(unittest.TestCase):
     def test_parses_event_detail_fields_without_guessing_timezone(self):
-        html = """<!doctype html><html><body><nav><h2>Government</h2></nav><main>
+        html = """<!doctype html><html><body><nav>Home Government Residents Economic Development How Do I?</nav><main>
         <h1>Village of Mokena's Food Trucks on Front</h1>
         <div>Event Date:</div><div>Wednesday September 16, 2026</div>
         <div>Event Time:</div><div>4:00 PM - 8:00 PM</div>

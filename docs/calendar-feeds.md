@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Let residents subscribe using calendar applications they already use. CivicCal publishes feeds; it does not replace Apple Calendar, Google Calendar, Outlook, or other clients.
+Let the user subscribe to selected source calendars using the calendar application they already use. CivicCal publishes feeds for the user's own use; it does not replace Apple Calendar, Google Calendar, Outlook, or other clients.
 
 ## Feed boundary
 

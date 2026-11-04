@@ -20,6 +20,7 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_REGISTRY = ROOT / "data" / "sources.json"
 DEFAULT_ARCHIVE = ROOT / "data" / "captures"
+DEFAULT_COMPLETENESS_POLICIES = ROOT / "data" / "source-completeness.json"
 USER_AGENT = "CivicCal/0.1 (+https://github.com/thebakermark/CivicCal)"
 MAX_BYTES = 20 * 1024 * 1024
 
@@ -67,6 +68,30 @@ def _validate_https_url(url: str) -> None:
     parsed = urlparse(url)
     if parsed.scheme != "https" or not parsed.netloc or parsed.username or parsed.password:
         raise CaptureError("Source redirected to an unsafe URL; only credential-free HTTPS is allowed.")
+
+def validate_request_url(source: dict, request_url: str, policies_path: Path = DEFAULT_COMPLETENESS_POLICIES) -> str:
+    """Allow a page URL only when its host and path are explicitly scoped to this source."""
+    _validate_https_url(request_url)
+    base = urlparse(source.get("url", ""))
+    requested = urlparse(request_url)
+    if requested.port not in (None, 443):
+        raise CaptureError("Alternate page URL must use the standard HTTPS port.")
+    if request_url == source.get("url"):
+        return request_url
+    try:
+        policies = json.loads(policies_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise CaptureError(f"Cannot read source page allowlists: {exc}") from exc
+    matches = [p for p in policies.get("profiles", [])
+               if isinstance(p, dict) and p.get("source_id") == source.get("id")]
+    if len(matches) != 1:
+        raise CaptureError("Alternate page URL requires exactly one source-specific allowlist.")
+    profile = matches[0]
+    allowed_hosts = {base.hostname, *profile.get("allowed_hosts", [])}
+    allowed_paths = set(profile.get("allowed_paths", []))
+    if requested.hostname not in allowed_hosts or requested.path not in allowed_paths:
+        raise CaptureError("Alternate page URL is outside the source's configured host/path allowlist.")
+    return request_url
 
 
 class SafeHTTPSRedirectHandler(HTTPRedirectHandler):
@@ -160,6 +185,10 @@ def main() -> int:
     parser.add_argument("--archive-dir", type=Path, default=DEFAULT_ARCHIVE)
     parser.add_argument("--previous-metadata", type=Path,
                         help="Prior capture metadata; its ETag and Last-Modified are sent conditionally.")
+    parser.add_argument("--request-url",
+                        help="Capture a source-scoped page URL allowed by data/source-completeness.json.")
+    parser.add_argument("--page-role", choices=("feed", "listing", "detail", "page"), default="page",
+                        help="Role of this page in a later completeness manifest.")
     parser.add_argument("--timeout", type=int, default=20)
     args = parser.parse_args()
 
@@ -167,6 +196,7 @@ def main() -> int:
         if not 1 <= args.timeout <= 120:
             raise CaptureError("--timeout must be between 1 and 120 seconds.")
         source = load_source(args.registry, args.source_id)
+        request_url = validate_request_url(source, args.request_url or source["url"])
         previous = {}
         if args.previous_metadata:
             try:
@@ -174,13 +204,15 @@ def main() -> int:
             except (OSError, json.JSONDecodeError) as exc:
                 raise CaptureError(f"Cannot read previous capture metadata: {exc}") from exc
         body, metadata = capture_url(
-            source["url"], etag=previous.get("etag"),
+            request_url, etag=previous.get("etag"),
             last_modified=previous.get("last_modified"), timeout=args.timeout,
         )
         metadata.update({
             "format": "civiccal.raw-capture.v1",
             "source_id": source["id"],
             "source_type": source["source_type"],
+            "source_url": source["url"],
+            "page_role": args.page_role,
         })
         path = write_capture(source["id"], body, metadata, args.archive_dir)
         if body is None:

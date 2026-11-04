@@ -53,7 +53,7 @@ class PublishICSTests(unittest.TestCase):
     def test_escapes_text_and_preserves_line_breaks(self):
         text, _ = build_calendar(state_with(identity_record()), manifest("evt_123"))
         self.assertIn(r"SUMMARY:Village Meeting", text)
-        self.assertIn(r"DESCRIPTION:Public meeting\, bring questions.\\nDoors open at 6.", text)
+        self.assertIn(r"DESCRIPTION:Public meeting\, bring questions.\nDoors open at 6.", text)
         self.assertIn(r"CATEGORIES:Government,Public Meeting", text)
         self.assertIn(r"LOCATION:Village Hall", text)
 

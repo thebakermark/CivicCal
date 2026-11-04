@@ -96,3 +96,15 @@ Relevant product documentation:
 - Example of a LibraryMarket tenant exposing an HTML calendar-feed route (not Mokena): https://ccpl.librarymarket.com/events/feed/html?_wrapper_format=lc_calendar_feed&adjust_range=1&current_date=2026-11-23&form_id=lc_calendar_upcoming_form&ongoing_events=hide&page=47
 
 The rendered web pages support source discovery and schema planning. They are not raw captures and do not grant permission for automated retrieval.
+
+
+## Separate public Board of Library Trustees schedule
+
+- Official page: https://mokenalibrary.org/library-board
+- Registry ID: `mokena-library-board-meetings`
+- The page says meetings are open to the public and normally held on the fourth Tuesday of each month at 7:30 PM in the Program Room on the library's lower level.
+- It lists meeting dates through June 2027: July 28, August 25, September 22 (special meeting at 7:15 PM before the regular 7:30 PM meeting), October 27, November 24, December 15*, January 26, February 23, March 23, April 27, May 25, and June 22.
+- **Date conflict:** the schedule list says December 15, 2026, but the same page's Board Agendas and Board Minutes sections both list December 22, 2026. Do not create a verified December calendar event until the library confirms which date is correct.
+- The asterisk appears on the September 22 and December 15 schedule entries, but the page does not explain the asterisk. Do not infer exact time or meeting type for December 15.
+
+This source is separate from the public programs calendar. Keep it at `review_required`, with polling disabled. A manual reference fixture should not be generated from this page until the December conflict and asterisk semantics are reconciled.

@@ -30,6 +30,17 @@ class ParseICSTests(unittest.TestCase):
         self.assertTrue(event["all_day"])
         self.assertEqual(event["start"]["kind"], "date")
 
+
+    def test_date_valued_dtend_is_explicitly_exclusive(self):
+        event = self.parse_one(
+            "BEGIN:VEVENT\r\nUID:multi\r\n"
+            "DTSTART;VALUE=DATE:20261103\r\n"
+            "DTEND;VALUE=DATE:20261106\r\n"
+            "SUMMARY:Multi-day program\r\nEND:VEVENT"
+        )
+        self.assertTrue(event["end_exclusive"])
+        self.assertEqual(event["end"]["value"], "2026-11-06")
+
     def test_cancelled_event(self):
         event = self.parse_one("BEGIN:VEVENT\r\nUID:e\r\nSTATUS:CANCELLED\r\nEND:VEVENT")
         self.assertTrue(event["cancelled"])

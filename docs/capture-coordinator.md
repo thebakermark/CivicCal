@@ -46,7 +46,7 @@ Every successful page response is archived as a raw content-addressed payload pl
 - Redirect destinations are checked against the source-specific allowlist before following the redirect.
 - Only credential-free HTTPS URLs on the configured hosts and exact paths are accepted.
 - The existing source access and consent gates remain mandatory.
-- A failed page, unparsed page, missing detail, page limit, detail limit, or pagination cycle prevents a complete snapshot.
+- A failed page, unparsed page, missing detail, page limit, detail limit, pagination cycle, or absent explicit terminal-page signal prevents a complete snapshot.
 - The coordinator never infers cancellation or deletion from an event missing from the current result.
 - Current Village policy keeps `allow_complete_snapshot: false`; therefore a successful run still reports `unknown` until real archived captures establish the publisher's actual pagination and coverage behavior.
 - The coordinator does not schedule itself, poll automatically, write a database, merge duplicates, or publish feeds/webhooks.

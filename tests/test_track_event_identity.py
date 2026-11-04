@@ -173,6 +173,19 @@ class TrackEventIdentityTests(unittest.TestCase):
             self.assertEqual(current["missing_snapshot_count"], 0)
             self.assertEqual(state["presence_observations"], [])
 
+
+    def test_failed_and_not_modified_capture_cannot_mark_events_missing(self):
+        for outcome in ("failed", "not_modified"):
+            _, state = process_normalized(normalized([event()], capture="seed"))
+            doc = normalized([], capture="next")
+            doc["snapshot"] = {"completeness": "complete", "evidence": "Adapter completeness claim.",
+                               "empty_snapshot_confirmed": True}
+            doc["capture"]["outcome"] = outcome
+            result, state = process_normalized(doc, state)
+            self.assertEqual(result["missing_events"], 0)
+            self.assertEqual(next(iter(state["events"].values()))["presence_status"], "present")
+            self.assertEqual(state["presence_observations"], [])
+
     def test_reappearance_does_not_override_explicit_cancellation(self):
         _, state = process_normalized(normalized([event(status="cancelled")], capture="seed"))
         absent = normalized([], capture="absent")

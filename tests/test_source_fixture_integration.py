@@ -13,6 +13,7 @@ from scripts.track_event_identity import process_normalized
 from scripts.storage import JsonFileIdentityStateStore
 from scripts.query_events import query_events
 from scripts.publish_ics import build_calendar
+from scripts.set_publication import update_publication
 from scripts.parse_ics import parse_ics
 from scripts.serve_api import make_handler
 
@@ -78,8 +79,21 @@ class SourceFixtureIntegrationTests(unittest.TestCase):
             publication = {
                 "format": "civiccal.publication-manifest.v1",
                 "calendar_name": "Mokena Community Events",
-                "approved_event_ids": [event_id],
+                "approved_event_ids": [],
             }
+            registry = {
+                "source_records": [{"id": source_id, "name": "Village of Mokena Events"}]
+            }
+
+            # The stored event remains private to the API/feed until an operator
+            # explicitly approves it for this exact registered source.
+            unapproved = query_events(persisted, publication, source_id=source_id)
+            self.assertEqual(unapproved["events"], [])
+            publication, approval = update_publication(
+                registry, persisted, publication, source_id, event_id, "approve"
+            )
+            self.assertTrue(approval["changed"])
+            self.assertTrue(approval["currently_approved"])
 
             queried = query_events(persisted, publication, source_id=source_id)
             self.assertEqual(
@@ -102,9 +116,7 @@ class SourceFixtureIntegrationTests(unittest.TestCase):
             manifest_path = Path(directory) / "publication.json"
             manifest_path.write_text(json.dumps(publication), encoding="utf-8")
             registry_path = Path(directory) / "sources.json"
-            registry_path.write_text(json.dumps({
-                "source_records": [{"id": source_id, "name": "Village of Mokena Events"}]
-            }), encoding="utf-8")
+            registry_path.write_text(json.dumps(registry), encoding="utf-8")
             server = ThreadingHTTPServer(
                 ("127.0.0.1", 0),
                 make_handler(state_path, manifest_path, registry_path),

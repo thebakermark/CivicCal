@@ -150,7 +150,7 @@ class SourceFixtureIntegrationTests(unittest.TestCase):
                 with urlopen(base + f"/api/v1/events?source_id={source_id}") as response:
                     revoked_json = json.loads(response.read())
                 self.assertEqual(revoked_json["events"], [])
-                self.assertIn(event_id, persisted["events"][next(iter(persisted["events"]))]["event_id"])
+                self.assertEqual(len(persisted["events"]), 1)
             finally:
                 server.shutdown()
                 server.server_close()

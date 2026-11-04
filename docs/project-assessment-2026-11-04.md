@@ -41,7 +41,7 @@ Current source authorization state: 11 sources are review_required and 1 source 
 | Identity/history | Implemented in JSON | Stable IDs, observations, revisions, presence/lifecycle; DB pending |
 | Publication approval | Implemented in JSON | Manual source-scoped approval/revocation; persistent audit history pending |
 | Database | Not implemented | JSON state remains current backend; DB required for MVP |
-| Read-only API | Local foundation | Query engine and loopback service; not database-backed/public; organization/source directory endpoints still missing |
+| Read-only API | Local foundation | Query engine and loopback service; not database-backed; private/local use is the intended scope |
 | Source-specific ICS | Offline/local foundation | Generator and loopback route; external stable URL not deployed |
 | Calendar-client subscription | Not proven | No verified external endpoint/client end-to-end test |
 | Webhooks | Spec only/deferred | Not needed for first useful calendar release |
@@ -58,7 +58,7 @@ The prior architecture described:
 - Community, organization, and category feeds.
 - Cross-source canonical event merging.
 
-These conflict with accepted decisions. The architecture is being reconciled to a modular, portable application with one independent source relay per source, no combined feed, no cross-source merging, no mailbox dependency, no unattended polling, and no selected hosting provider.
+These conflict with accepted decisions. The architecture is being reconciled to a personal-use, modular, portable application with one independent source relay per selected source, no combined feed, no cross-source merging, no mailbox dependency, no unattended polling, and no selected hosting provider. A public resident-facing directory or community service is not part of the product.
 
 The source automation specification is a post-release proposal only. Its proposed live_capture_approved flag is not an MVP feature and must not be added by implication. No flag change itself triggers a task or network action.
 
@@ -85,7 +85,7 @@ Do not call MVP complete until demonstrated from a clean environment:
 - Query records through the read-only API.
 - Generate a source-specific ICS feed from the same database-backed approved records.
 - Verify each feed excludes all other sources and unapproved events.
-- Subscribe a real calendar client to a stable external endpoint and verify a subsequent approved update without duplicate churn.
+- Subscribe the user's calendar client to the intended stable endpoint and verify a subsequent approved update without duplicate churn.
 - Back up and restore the database and raw archive.
 - Demonstrate migration parity and rollback.
 - Confirm no scheduled polling, webhook delivery, mailbox ingestion, or cross-source merge has been introduced without approval.

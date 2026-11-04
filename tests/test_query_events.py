@@ -76,6 +76,17 @@ class QueryEventsTests(unittest.TestCase):
         with self.assertRaises(QueryError):
             query_events(self.state, self.manifest, offset=-1)
 
+
+    def test_public_projection_excludes_internal_source_payloads(self):
+        internal = record("evt-private", "library", "2026-11-10", "Program")
+        internal["current"]["source_record"] = {"private_admin_note": "must not leak"}
+        internal["current"]["capture"] = {"headers": {"set-cookie": "secret"}}
+        result = query_events(state(internal), manifest("evt-private"))
+        event = result["events"][0]["event"]
+        self.assertNotIn("source_record", event)
+        self.assertNotIn("capture", event)
+        self.assertNotIn("private_admin_note", str(event))
+
     def test_date_filter_excludes_unparseable_dates(self):
         bad = record("evt-x", "other", "not-a-date", "Unclear date")
         result = query_events(state(bad), manifest("evt-x"), start_date="2026-11-01")

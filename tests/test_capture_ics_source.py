@@ -118,6 +118,32 @@ class CaptureICSCoordinatorTests(unittest.TestCase):
             self.assertEqual(len(archive), 1)
             self.assertEqual(archive[0].read_bytes(), FEED)
 
+    def test_verified_policy_can_mark_valid_nonempty_single_feed_complete(self):
+        with tempfile.TemporaryDirectory() as folder:
+            result = coordinate_ics_capture(
+                self.source(), self.policies(folder, allow_complete=True),
+                Path(folder) / "archive", opener_factory=self.opener_factory(),
+            )
+            self.assertEqual(result["snapshot"]["completeness"], "complete")
+            self.assertEqual(result["snapshot"]["blockers"], [])
+
+    def test_empty_feed_requires_explicit_operator_confirmation(self):
+        empty_feed = b"BEGIN:VCALENDAR\\nVERSION:2.0\\nEND:VCALENDAR\\n"
+        with tempfile.TemporaryDirectory() as folder:
+            policies = self.policies(folder, allow_complete=True)
+            without_confirmation = coordinate_ics_capture(
+                self.source(), policies, Path(folder) / "archive-a",
+                opener_factory=self.opener_factory(body=empty_feed),
+            )
+            self.assertEqual(without_confirmation["snapshot"]["completeness"], "partial")
+            with_confirmation = coordinate_ics_capture(
+                self.source(), policies, Path(folder) / "archive-b",
+                opener_factory=self.opener_factory(body=empty_feed),
+                empty_snapshot_confirmed=True,
+            )
+            self.assertEqual(with_confirmation["snapshot"]["completeness"], "complete")
+            self.assertTrue(with_confirmation["snapshot"]["empty_snapshot_confirmed"])
+
     def test_policy_can_never_be_overridden_by_cli_empty_confirmation(self):
         with tempfile.TemporaryDirectory() as folder:
             result = coordinate_ics_capture(

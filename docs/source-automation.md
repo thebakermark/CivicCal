@@ -1,10 +1,18 @@
 # Source automation and task reconciliation
 
-## Purpose
+## Status: post-release enhancement
 
-CivicCal should react to source configuration changes without relying on an operator to remember the next step. When an operational flag changes, monitoring determines whether work is now required, records a durable task, and lets a separate worker execute it only after rechecking all safety gates.
+This document specifies a **post-release** source-monitoring and task-reconciliation enhancement. It is not part of the MVP implementation scope.
 
-This is deterministic workflow automation. No LLM is used to decide eligibility, consent, task creation, or execution.
+For the MVP, source operation is deliberately manual: an operator changes the explicit registry flags and separately runs any approved one-shot capture command. A flag change does not trigger a task, network request, capture, or polling activation. Automatic polling remains disabled unless and until it is separately implemented and explicitly enabled.
+
+When this enhancement is scheduled after release, it should use deterministic workflow logic. No LLM should decide eligibility, consent, task creation, or execution.
+
+## MVP manual operation
+
+For the MVP, source flags are changed manually in the registry. The operator must separately initiate an approved one-shot capture; changing a flag alone has no side effect. `polling_enabled` remains false by default and does not activate a scheduler because scheduled polling is not part of the MVP. Existing eligibility checks, including any source-specific written-consent requirement, remain mandatory.
+
+Do not build a filesystem watcher, configuration reconciler, task queue, background worker, or automatic flag-triggered action before release. Revisit this document after release before implementing those capabilities.
 
 ## Core model
 
@@ -16,7 +24,7 @@ This is deterministic workflow automation. No LLM is used to decide eligibility,
 
 A flag change is a signal to evaluate, not an instruction to blindly execute.
 
-## Required monitoring behavior
+## Planned post-release monitoring behavior
 
 Run reconciliation:
 1. Immediately after a registry change made through a CivicCal command or API.
@@ -40,7 +48,7 @@ Reconcile each source independently. Never infer approval or readiness from anot
 | Parser or completeness profile changes | Invalidate affected validation fingerprint and enqueue revalidation; require recapture if the changed contract requires new evidence | Only after normal gates |
 | Source is paused, blocked, or retired | Suspend automation and cancel queued work; preserve archive and event history | No |
 
-The explicit `live_capture_approved` flag is a proposed addition to the registry. Until it is implemented, do not treat `access_status=approved` alone as a new independent approval mechanism; retain existing capture-script gates and require an operator-initiated one-shot command.
+The explicit `live_capture_approved` flag is a proposed post-release addition, not an MVP requirement. The MVP continues to use its existing manual registry flags and capture-script eligibility checks. Do not add this new flag or imply it is enforced until its schema, migration behavior, and tests are implemented.
 
 For consent-required sources such as Mokena SD159, written consent is an additional gate. It never replaces access approval, terms review, robots review, or explicit live-capture approval.
 
@@ -102,9 +110,9 @@ The operator should be able to pause a source immediately and inspect why a task
 
 ## Storage and implementation sequence
 
-The task queue and configuration-change history must be durable and transactional. Keep the interface storage-independent now; implement the persistent task store alongside the selected database backend rather than using an in-memory queue that can lose work on restart.
+All monitoring, reconciliation, and task-queue work described here is deferred until after MVP release. When implementation begins, the task queue and configuration-change history must be durable and transactional. Implement the persistent task store alongside the selected database backend rather than using an in-memory queue that can lose work on restart.
 
-Recommended sequence:
+Recommended post-release sequence:
 1. Define source configuration fingerprints and task contracts.
 2. Implement deterministic reconciliation with unit tests.
 3. Add durable task storage and idempotency.

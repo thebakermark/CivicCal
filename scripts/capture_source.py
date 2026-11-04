@@ -43,20 +43,21 @@ def load_source(registry_path: Path, source_id: str) -> dict:
     if source.get("source_type") not in {"ics", "rss", "atom", "json_api", "html"}:
         raise CaptureError(f"Source type {source.get('source_type')!r} is not supported for HTTP capture.")
 
-    # Preserve the explicit written-consent switch used by the SD 159 source.
-    if source.get("consent_required") is True:
-        if source.get("consent_granted") is not True:
-            raise CaptureError(
-                f"Source {source_id!r} requires written consent; set consent_granted=true "
-                "only after written consent is received."
-            )
-    else:
-        if source.get("access_status") != "approved":
-            raise CaptureError(
-                f"Source {source_id!r} is not approved; current status is {source.get('access_status')!r}."
-            )
-        if source.get("terms_reviewed") is not True or source.get("robots_reviewed") is not True:
-            raise CaptureError("Source must have terms_reviewed=true and robots_reviewed=true before network capture.")
+    # Every source must pass the ordinary access and policy gates. Written
+    # consent, when required, is an additional gate rather than a substitute.
+    if source.get("access_status") != "approved":
+        raise CaptureError(
+            f"Source {source_id!r} is not approved; current status is {source.get('access_status')!r}."
+        )
+    if source.get("terms_reviewed") is not True:
+        raise CaptureError("Source must have terms_reviewed=true before network capture.")
+    if source.get("robots_reviewed") is not True:
+        raise CaptureError("Source must have robots_reviewed=true before network capture.")
+    if source.get("consent_required") is True and source.get("consent_granted") is not True:
+        raise CaptureError(
+            f"Source {source_id!r} requires written consent; set consent_granted=true "
+            "only after written consent is received."
+        )
 
     parsed = urlparse(source.get("url", ""))
     if parsed.scheme != "https" or not parsed.netloc or parsed.username or parsed.password:

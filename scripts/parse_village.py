@@ -104,14 +104,11 @@ def parse_html(html: str, page_url: str = SOURCE_URL) -> dict:
 
     if is_detail:
         text = _page_text(parser)
-        title = parser.headings[-1] if parser.headings else None
-        # On MunicipalCMS detail pages the event title is the last content
-        # heading before the Event Date label. Prefer that over nav headings.
-        before_date = re.split(r"Event Date\s*:", text, maxsplit=1, flags=re.IGNORECASE)[0]
-        if before_date.strip():
-            candidate = clean(before_date.split()[-12:][0]) if False else None
-            # Use the final heading when present; text remains a fallback.
-            title = title or clean(before_date.split()[-1])
+        # MunicipalCMS renders the event title as plain content immediately
+        # before Event Date:, not as a heading. The breadcrumb boundary above
+        # separates it from the repeated site navigation.
+        before_date = re.split(r"Event Date\\s*:", text, maxsplit=1, flags=re.IGNORECASE)[0]
+        title = clean(before_date) or None
         event = {
             "source_id": SOURCE_ID,
             "source_url": SOURCE_URL,

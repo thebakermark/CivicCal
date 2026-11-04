@@ -1,18 +1,18 @@
 # CivicCal
 
-An event discovery and calendar-relay service for organizations in Mokena, Illinois and surrounding communities.
+ A personal-use calendar aggregator for Mokena, Illinois and nearby communities.
 
-CivicCal collects publicly accessible events from official calendars, community organizations, churches, clubs, civic bodies, and registered event-notification mailboxes. It normalizes events into a persistent source of truth and publishes a read-only API plus an independent iCalendar relay for each registered source.
+CivicCal reads free, publicly available event information published by public entities—such as the Village, library, park district, and school districts—normalizes it, stores it locally, and provides iCalendar subscription feeds for the user's own calendar apps. It does not access private accounts, nonpublic information, or restricted systems.
 
 ## Project goals
 
-- Aggregate public community events from multiple source types.
-- Publish a stable JSON API and independent source-specific iCalendar (ICS) relays.
-- Include churches, civic-engagement organizations, clubs, nonprofits, schools, libraries, parks, and local government.
-- Preserve source attribution, event history, and meaningful change records.
-- Preserve source attribution; do not merge events across independent source relays.
-- Monitor sources politely and respect applicable terms, robots rules, rate limits, and access restrictions.
-- Keep the public service inexpensive and portable, targeting free-tier hosting.
+- Collect free, publicly viewable event information from public entities.
+- Convert different calendar and event-page formats into one consistent event format.
+- Store events locally in a simple, replaceable data store.
+- Provide a separate iCalendar (ICS) subscription feed for each source.
+- Preserve the original event link and source attribution.
+- Use only public information; never log in, access private data, or bypass access controls.
+- Keep the project free and suitable for personal use.
 
 ## Initial geography
 
@@ -24,7 +24,7 @@ See [docs/architecture.md](docs/architecture.md).
 
 ## Source registry
 
-The initial source registry is in [data/sources.json](data/sources.json). Entries are research candidates until their official URLs, event access, and monitoring permissions have been verified. A listed organization is not a claim that it has approved CivicCal or supplied a feed.
+The initial source registry is in [data/sources.json](data/sources.json). Entries identify public calendar sources to process for personal use. They are not endorsements or claims that an organization has supplied a custom feed.
 
 ## Development status
 
@@ -108,4 +108,4 @@ The project blueprint is documented before expanding the implementation:
 - [Webhook specification](docs/webhook-specification.md)
 - [Open-source reuse assessment](docs/open-source-reuse.md)
 
-The core is planned as a portable modular Python application, SQLite-first, with public JSON and iCalendar interfaces. These documents describe the target design; they do not mean the API, feed publisher, webhook service, database, or scheduled polling are already deployed.
+The current implementation is an offline/local development tool. The JSON storage backend is in use; database selection and any always-on hosting can wait until the basic personal calendar workflow is running.

@@ -87,6 +87,13 @@ class QueryEventsTests(unittest.TestCase):
         self.assertNotIn("capture", event)
         self.assertNotIn("private_admin_note", str(event))
 
+
+    def test_public_projection_does_not_expose_organizer_contact_object(self):
+        item = record("evt-contact", "library", "2026-11-10", "Program")
+        item["current"]["organizer"] = {"name": "Program Coordinator", "email": "person@example.org"}
+        result = query_events(state(item), manifest("evt-contact"))
+        self.assertNotIn("organizer", result["events"][0]["event"])
+
     def test_date_filter_excludes_unparseable_dates(self):
         bad = record("evt-x", "other", "not-a-date", "Unclear date")
         result = query_events(state(bad), manifest("evt-x"), start_date="2026-11-01")

@@ -28,7 +28,7 @@ The initial source registry is in [data/sources.json](data/sources.json). Entrie
 
 ## Development status
 
-Early foundation. A guarded, one-shot HTTP capture utility is available at [scripts/capture_source.py](scripts/capture_source.py). The offline [capture-to-parser handoff](scripts/parse_capture.py) verifies archived payloads and dispatches them to existing parsers. [Event normalization](scripts/normalize_events.py) maps parser output into common event records while preserving every original source record and flagging incomplete data. [Source-scoped event identity and revision tracking](scripts/track_event_identity.py) now assigns stable IDs only when a publisher supplies a stable event ID, and records material changes without cross-source merging. These tools remain offline; no public API or automated ingestion is deployed yet.
+Early foundation. A guarded, one-shot HTTP capture utility is available at [scripts/capture_source.py](scripts/capture_source.py). The offline [capture-to-parser handoff](scripts/parse_capture.py) verifies archived payloads and dispatches them to existing parsers. [Event normalization](scripts/normalize_events.py) maps parser output into common event records while preserving every original source record and flagging incomplete data. [Source-scoped event identity and revision tracking](scripts/track_event_identity.py) now assigns stable IDs only when a publisher supplies a stable event ID, and records material changes without cross-source merging. Identity state is written through a replaceable storage interface with an atomic JSON-file backend; database selection is deferred until laptop review. These tools remain offline; no public API or automated ingestion is deployed yet.
 
 Example manual capture (only for a source whose registry gates permit network access):
 
@@ -67,7 +67,8 @@ The project blueprint is documented before expanding the implementation:
 - [Canonical event data model](docs/event-data-model.md)
 - [Event identity and revision tracking](docs/event-identity-revisions.md)
 - [Processing pipeline](docs/processing-pipeline.md)
-- [Storage architecture](docs/storage-architecture.md)
+- [Storage interface (database deferred)](docs/storage-interface.md)
+- [Future storage architecture](docs/storage-architecture.md)
 - [Public JSON API specification](docs/api-specification.md)
 - [iCalendar feed publishing](docs/calendar-feeds.md)
 - [Webhook specification](docs/webhook-specification.md)

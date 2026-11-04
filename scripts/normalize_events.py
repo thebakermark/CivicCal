@@ -24,6 +24,7 @@ TIME_RANGE = re.compile(
     r"^\s*(\d{1,2}(?::\d{2})?\s*[AP]M)\s*(?:-|–|—|to)\s*"
     r"(\d{1,2}(?::\d{2})?\s*[AP]M)\s*$", re.IGNORECASE
 )
+TIME_SINGLE = re.compile(r"^\s*(\d{1,2}(?::\d{2})?\s*[AP]M)\s*$", re.IGNORECASE)
 
 
 class NormalizationError(Exception):
@@ -42,19 +43,23 @@ def parse_date_text(value: Any) -> date | None:
     return None
 
 
-def parse_time_text(value: Any) -> tuple[time, time] | None:
+def parse_time_text(value: Any) -> tuple[time, time | None] | None:
     if not isinstance(value, str):
         return None
     match = TIME_RANGE.match(value)
-    if not match:
+    single = TIME_SINGLE.match(value) if not match else None
+    if not match and not single:
         return None
+
+    def parse_clock(raw: str) -> time:
+        compact = raw.upper().replace(" ", "")
+        return datetime.strptime(compact, "%I:%M%p" if ":" in compact else "%I%p").time()
+
     try:
-        return (datetime.strptime(match.group(1).upper().replace(" ", ""), "%I:%M%p").time()
-                if ":" in match.group(1) else
-                datetime.strptime(match.group(1).upper().replace(" ", ""), "%I%p").time(),
-                datetime.strptime(match.group(2).upper().replace(" ", ""), "%I:%M%p").time()
-                if ":" in match.group(2) else
-                datetime.strptime(match.group(2).upper().replace(" ", ""), "%I%p").time())
+        if single:
+            return parse_clock(single.group(1)), None
+        assert match is not None
+        return parse_clock(match.group(1)), parse_clock(match.group(2))
     except ValueError:
         return None
 
@@ -178,12 +183,14 @@ def normalize_event(event: dict, source_id: str, capture: dict | None = None) ->
             times = parse_time_text(event.get("time_text"))
             if times:
                 start_dt = datetime.combine(parsed_date, times[0])
-                end_dt = datetime.combine(parsed_date, times[1])
                 start = {"value": start_dt.isoformat(timespec="minutes"),
                          "kind": "date-time", "timezone": None, "utc_offset": None}
-                end = {"value": end_dt.isoformat(timespec="minutes"),
-                       "kind": "date-time", "timezone": None, "utc_offset": None}
-                start_status = end_status = "floating"
+                if times[1] is not None:
+                    end_dt = datetime.combine(parsed_date, times[1])
+                    end = {"value": end_dt.isoformat(timespec="minutes"),
+                           "kind": "date-time", "timezone": None, "utc_offset": None}
+                start_status = "floating"
+                end_status = "floating" if end is not None else "unresolved"
             else:
                 start = {"value": parsed_date.isoformat(), "kind": "date",
                          "timezone": None, "utc_offset": None}

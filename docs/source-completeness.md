@@ -86,7 +86,15 @@ Example shape:
 }
 ```
 
-The example illustrates the manifest contract; its page count and URLs are not a claim that a complete live Village capture has been performed. For a real manifest, `expected_page_count` and `observed_page_count` must both equal the number of supplied page records. Listing pages provide `discovered_detail_ids`; detail pages provide the publisher IDs actually parsed.
+The example illustrates the manifest contract; its page count and URLs are not a claim that a complete live Village capture has been performed. When source access gates permit capture, each page can be archived individually using the allowlisted `--request-url` option, for example:
+
+```sh
+python scripts/capture_source.py --source-id village-of-mokena-events \\
+  --request-url 'https://mokenail.municipalone.com/calendarView.aspx?cid=30642' \\
+  --page-role detail --archive-dir data/captures
+```
+
+The actual Village source is still `review_required`, so this example does not authorize or enable a network request. The source policy allowlist limits the host and exact path; it does not override source eligibility or consent gates. For a real manifest, `expected_page_count` and `observed_page_count` must both equal the number of supplied page records. Listing pages provide `discovered_detail_ids`; detail pages provide the publisher IDs actually parsed.
 
 For a single ICS feed, use one `feed` page record and include its parsed publisher IDs in `source_event_ids`. A single response is not automatically complete: the source policy must allow it and the manifest must confirm successful capture and parsing.
 
@@ -126,4 +134,4 @@ The resulting `snapshot` object is attached to the normalized document and can b
 
 ## Current implementation boundary
 
-The Village parser can identify explicit `rel="next"` links, and the manifest validator can verify a fully enumerated page set. CivicCal does not yet automatically crawl those next-page links or fetch all detail URLs. Page capture remains a controlled, one-shot operation. The next implementation step is a source-policy-driven page capture coordinator, after the actual pagination and allowed host/path patterns have been verified from saved publisher pages.
+The Village parser can identify explicit `rel="next"` links, and the manifest validator can verify a fully enumerated page set. CivicCal does not yet automatically crawl those next-page links or fetch all detail URLs. Page capture remains a controlled, one-shot operation, but the capture command can now archive an explicitly allowlisted page URL from the same source profile. The next implementation step is a source-policy-driven page capture coordinator, after the actual pagination and allowed host/path patterns have been verified from saved publisher pages.

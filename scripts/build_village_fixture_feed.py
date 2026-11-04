@@ -10,6 +10,11 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from scripts.parse_village import parse_html
 from scripts.normalize_events import normalize_document
@@ -17,7 +22,6 @@ from scripts.track_event_identity import process_normalized
 from scripts.publish_ics import build_calendar
 
 
-ROOT = Path(__file__).resolve().parents[1]
 SOURCE_ID = "village-of-mokena-events"
 EVENT_URL = (
     "https://www.mokena.gov/calendarView.aspx"

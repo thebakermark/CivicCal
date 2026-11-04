@@ -139,7 +139,7 @@ A missing observation is not a cancellation. Explicit source status changes are 
 
 ### Unkeyed observation and identity conflict
 
-Keep events without stable publisher IDs and same-capture identity collisions as first-class review records. Preserve their original normalized event JSON, source ID, capture key, observation time, and review reason. Do not silently discard, merge, or invent an identity for them.
+Keep events without stable publisher IDs and same-capture identity collisions as first-class review records. Preserve their original normalized event JSON, source ID, capture key, observation time, and review reason. Do not silently discard, merge, or invent an identity for them. **Current-state limitation:** the JSON tracker persists unkeyed observations in `unkeyed_observations`, but same-capture identity conflicts are currently returned in the processing result and are not appended to the identity-state file. The database must persist conflicts for future ingestions. A migration can import historical conflicts only from separately retained processing reports; it must not claim that conflicts can be reconstructed from the identity-state JSON.
 
 ### Lifecycle transition
 
@@ -244,8 +244,8 @@ Migration must be deterministic, repeatable, and non-destructive.
 2. **Validate before import.** Check schema versions, unique organization/source/event/observation IDs, valid source references, event ownership, unique revision numbers, valid approval references, and processed-capture token uniqueness. Fail closed on ambiguity; produce a report rather than guessing.
 3. **Initialize an empty database.** Apply versioned schema migrations in order and enable foreign-key enforcement.
 4. **Import organizations and sources.** Preserve every stable ID and configuration field. Validate each source references exactly one organization where applicable.
-5. **Import captures and receipts.** Import capture metadata when available. Preserve the existing processed-capture token exactly; do not invent capture rows for tokens with no recoverable metadata.
-6. **Import source events and history.** Preserve event IDs, identity keys, current JSON, fingerprints, timestamps, revisions, observation IDs, unkeyed records, conflicts, presence history, and lifecycle history. Preserve array order where it represents history.
+5. **Import captures and receipts.** Import capture metadata when available. Preserve each existing processed-capture token exactly; do not invent capture rows for tokens with no recoverable metadata. The current state stores tokens but not their result payloads, so a migration must not invent historical processing results.
+6. **Import source events and history.** Preserve event IDs, identity keys, current JSON, fingerprints, timestamps, revisions, observation IDs, unkeyed records, presence history, and lifecycle history. Preserve array order where it represents history. Import identity conflicts only from retained processing reports; the identity-state file alone does not contain them.
 7. **Import publication state.** Resolve every approved event to exactly one event and its exact source. Import current approvals only. Do not fabricate past approval audit actions.
 8. **Reconcile counts and hashes.** Compare source counts, IDs, fingerprints, revisions, observations, unkeyed records, processed tokens, presence records, and approved source/event pairs. Produce a machine-readable migration report.
 9. **Parity test while read-only.** Run the same API query and source-specific ICS generation against the JSON snapshot and database adapter. Compare normalized JSON objects and ICS semantic content; account for intentional serialization ordering only, not event differences.

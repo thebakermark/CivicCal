@@ -22,7 +22,7 @@ A single organization can have multiple sources. A school district may publish d
 One attempt to retrieve a source. Stores timestamps, request/response metadata, outcome, payload hash, and raw payload reference.
 
 ### Source observation
-The event as represented in one captured source. This preserves source-specific identifiers and original values.
+The event as represented in one captured source. This preserves source-specific identifiers and original values. Each newly processed capture contributes an observation, even when the event is unchanged; observations are distinct from material event revisions.
 
 ### Canonical event
 The normalized CivicCal event record. It may be linked to one or more source observations, but those links do not imply automatic merging.
@@ -94,7 +94,7 @@ This supports later parser improvements and makes corrections traceable.
 ## Lifecycle
 
 - Explicit source cancellation may update event status with provenance.
-- A missing event in a later capture is a missing observation, not a cancellation.
+- A missing event in a later capture is not currently interpreted as a lifecycle transition or cancellation. Any future absence detector must first establish that the source capture is a complete snapshot.
 - A source deletion or 404 does not cancel every previously published event.
 - Rescheduled events retain history and stable identity when source evidence supports continuity.
 - Past events remain available according to a documented retention policy.

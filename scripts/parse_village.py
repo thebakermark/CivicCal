@@ -27,6 +27,7 @@ class VillagePageParser(HTMLParser):
         self.headings: list[str] = []
         self.links: list[dict[str, str]] = []
         self.pagination_links: list[str] = []
+        self.last_page_links: list[str] = []
         self._anchor_rel: str | None = None
         self._heading_tag: str | None = None
         self._heading_parts: list[str] = []
@@ -65,8 +66,11 @@ class VillagePageParser(HTMLParser):
             parsed = urlparse(href)
             if DETAIL_PATH.search(parsed.path) and parse_qs(parsed.query).get("cid"):
                 self.links.append({"title": label, "url": href})
-            if self._anchor_rel and "next" in self._anchor_rel.casefold().split():
+            rel_tokens = self._anchor_rel.casefold().split() if self._anchor_rel else []
+            if "next" in rel_tokens:
                 self.pagination_links.append(href)
+            if "last" in rel_tokens:
+                self.last_page_links.append(href)
             self._anchor_href = None
             self._anchor_rel = None
             self._anchor_parts = []
@@ -158,12 +162,13 @@ def parse_html(html: str, page_url: str = SOURCE_URL) -> dict:
         "pagination": {
             "strategy": "rel_next",
             "next_page_urls": list(dict.fromkeys(parser.pagination_links)),
-            "terminal_page_confirmed": False,
+            "last_page_urls": list(dict.fromkeys(parser.last_page_links)),
+            "terminal_page_confirmed": page_url in set(parser.last_page_links),
             "completeness": "unknown",
             "evidence": (
-                "A rel=next link was found; subsequent pages must be captured and checked."
-                if parser.pagination_links else
-                "No rel=next link was found; this does not prove the listing has no other pages."
+                "The publisher's rel=last link identifies this page as the terminal listing page."
+                if page_url in set(parser.last_page_links) else
+                "No explicit rel=last confirmation identifies this page as the terminal page."
             ),
         },
         "warnings": [

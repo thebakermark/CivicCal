@@ -227,6 +227,7 @@ def normalize_event(event: dict, source_id: str, capture: dict | None = None) ->
         "description": _description(event),
         "start": start,
         "end": end,
+        "end_exclusive": event.get("end_exclusive") if isinstance(event.get("end_exclusive"), bool) else None,
         "all_day": all_day,
         "time_status": start_status,
         "timezone": start.get("timezone") if start else None,

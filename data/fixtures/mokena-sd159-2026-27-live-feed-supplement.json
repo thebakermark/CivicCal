@@ -1,0 +1,148 @@
+{
+  "format": "civiccal.school-year-live-feed-supplement.v1",
+  "organization": "Mokena School District 159",
+  "school_year": "2026-2027",
+  "reviewed_at": "2026-11-04",
+  "purpose": "Supplemental official district live-feed evidence for schedule dates missing from the user-provided iCalendar snapshot, which begins 2026-11-03. This file is separate from the iCalendar-derived fixture because these records have no iCalendar UIDs.",
+  "source_policy": "Use only the district's own school-site live feeds and linked district-created graphics. Preserve the original wording. Do not infer dismissal times or school scope when not stated.",
+  "sources": [
+    {
+      "id": "mis-live-feed-page-2",
+      "url": "https://mes.mokena159.org/o/mis/live-feed?page_no=2",
+      "description": "Official Mokena Intermediate School live-feed archive, including the September dates graphic and Labor Day/early-dismissal notices."
+    },
+    {
+      "id": "mis-live-feed-page-1",
+      "url": "https://mes.mokena159.org/o/mis/live-feed",
+      "description": "Official Mokena Intermediate School live-feed archive, including the October district dates graphic and explicit October 9–13 no-school/return notice."
+    },
+    {
+      "id": "september-district-dates-graphic",
+      "url": "https://core-docs.s3.amazonaws.com/mokena_school_district_159_ar/live_feed_image/image/29325072/large_DIstrict_Dates__10_.png",
+      "description": "District-created September 2026 dates graphic."
+    },
+    {
+      "id": "october-district-dates-graphic",
+      "url": "https://core-docs.s3.amazonaws.com/mokena_school_district_159_ar/live_feed_image/image/30848899/large_DIstrict_Dates__14_.png",
+      "description": "District-created October 2026 dates graphic."
+    },
+    {
+      "id": "october-no-school-reminder-graphic",
+      "url": "https://core-docs.s3.amazonaws.com/mokena_school_district_159_ar/live_feed_image/image/30662630/large_No_School__7_.png",
+      "description": "District-created no-school reminder graphic confirming October 9 and October 12."
+    },
+    {
+      "id": "early-dismissal-times-graphic",
+      "url": "https://core-docs.s3.amazonaws.com/mokena_school_district_159_ar/live_feed_image/image/29454822/large_Pink_and_White_Cute_Bordered_Clock_Leave_the_Office_Early_Day_Social_Media_Graphic__2_.png",
+      "description": "District-created graphic giving dismissal times for an early-dismissal day; linked to the September early-dismissal notice, but date association requires caution."
+    }
+  ],
+  "events": [
+    {
+      "title": "First day of 2026–2027 school year",
+      "start_date": "2026-08-19",
+      "end_date_inclusive": "2026-08-19",
+      "schedule_type": "school_resumes",
+      "student_attendance": "school_in_session",
+      "school_scope": "All three district schools; district live-feed wording says students were welcomed at all schools.",
+      "source_text": "What a great morning at all of our schools as we welcomed our students to the 2026-2027 school year!",
+      "evidence": [
+        "mis-live-feed-page-2"
+      ],
+      "date_basis": "Official district post identifies the first day; date corroborated by the district's dated live-feed record."
+    },
+    {
+      "title": "Early release day",
+      "start_date": "2026-09-04",
+      "end_date_inclusive": "2026-09-04",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "District dates graphic; applies district-wide unless a school-specific notice states otherwise.",
+      "source_text": "04 FRI. EARLY RELEASE DAY",
+      "evidence": [
+        "september-district-dates-graphic"
+      ],
+      "dismissal_time": null
+    },
+    {
+      "title": "Labor Day — no school",
+      "start_date": "2026-09-07",
+      "end_date_inclusive": "2026-09-07",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "school_scope": "District-wide.",
+      "source_text": "07 MON. NO SCHOOL–LABOR DAY; live-feed reminder: There is no school on Monday due to Labor Day.",
+      "evidence": [
+        "september-district-dates-graphic",
+        "mis-live-feed-page-2"
+      ]
+    },
+    {
+      "title": "Teachers Institute Day — no school",
+      "start_date": "2026-10-09",
+      "end_date_inclusive": "2026-10-09",
+      "schedule_type": "teacher_institute",
+      "student_attendance": "no_school",
+      "school_scope": "District-wide.",
+      "source_text": "NO SCHOOL TEACHERS INSTITUTE; live-feed reminder: there is no school on Friday, October 9th due to Teachers Institute.",
+      "evidence": [
+        "october-district-dates-graphic",
+        "october-no-school-reminder-graphic",
+        "mis-live-feed-page-1"
+      ]
+    },
+    {
+      "title": "School holiday — no school",
+      "start_date": "2026-10-12",
+      "end_date_inclusive": "2026-10-12",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "school_scope": "District-wide.",
+      "source_text": "NO SCHOOL SCHOOL HOLIDAY; live-feed reminder: Monday, October 12th due to a school holiday.",
+      "evidence": [
+        "october-district-dates-graphic",
+        "october-no-school-reminder-graphic",
+        "mis-live-feed-page-1"
+      ]
+    },
+    {
+      "title": "Students return after October school holiday",
+      "start_date": "2026-10-13",
+      "end_date_inclusive": "2026-10-13",
+      "schedule_type": "school_resumes",
+      "student_attendance": "school_in_session",
+      "school_scope": "District-wide.",
+      "source_text": "We will see everyone back on Tuesday, October 13th!",
+      "evidence": [
+        "mis-live-feed-page-1"
+      ]
+    },
+    {
+      "title": "Early dismissal day",
+      "start_date": "2026-10-30",
+      "end_date_inclusive": "2026-10-30",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "District dates graphic; district-wide.",
+      "source_text": "30 FRI. EARLY DISMISSAL DAY",
+      "evidence": [
+        "october-district-dates-graphic"
+      ],
+      "dismissal_time": null
+    }
+  ],
+  "excluded_or_unresolved": [
+    {
+      "date_range": "2026-08-17 to 2026-08-18",
+      "claim": "Teacher Institute Days",
+      "status": "not included",
+      "reason": "Third-party calendar index lists these dates, but no readable official district source confirming student attendance status was found in this review."
+    },
+    {
+      "date": "2026-09-04",
+      "claim": "Exact dismissal times by school",
+      "status": "not included",
+      "reason": "A separate district graphic lists MJHS 10:55 AM, MIS 11:30 AM, MES 12:00 PM, but the accessible post context did not conclusively establish that this graphic belongs to the September 4 event. Do not attach these times without stronger linkage."
+    }
+  ]
+}

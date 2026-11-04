@@ -14,24 +14,24 @@ from pathlib import Path
 from typing import Any
 
 RULES = (
-    ("school_break", re.compile(r"\b(thanksgiving|winter|spring|summer|fall) break\b", re.I),
+    ("school_break", re.compile(r"\\b(thanksgiving|winter|spring|summer|fall|holiday) break\\b", re.I),
      "no_school", "Named school break"),
-    ("no_school", re.compile(
-        r"\b(no school|no student attendance|students? (?:do not|will not) attend|"
-        r"school (?:is )?closed|schools? closed|school not in session|"
-        r"non[- ]attendance day)\b", re.I),
-     "no_school", "Explicit no-school or closure wording"),
-    ("early_dismissal", re.compile(r"\b(early dismissal|early release|early out|early student dismissal)\b", re.I),
-     "shortened_day", "Explicit early dismissal/release wording"),
-    ("half_day", re.compile(r"\b(half[- ]day|1/2 day|½ day)\b", re.I),
-     "shortened_day", "Explicit half-day wording"),
-    ("late_start", re.compile(r"\b(late start|delayed start|late arrival)\b", re.I),
-     "delayed_start", "Explicit delayed-start wording"),
     ("teacher_institute", re.compile(
-        r"\b(teacher institute|institute day|teacher in[- ]service|"
+        r"\\b(teacher institute|institute day|teacher in[- ]service|"
         r"professional development|staff development|teacher workday|"
-        r"teacher work day)\b", re.I),
-     "no_school", "Staff training/workday wording; student attendance should be checked"),
+        r"teacher work day)\\b", re.I),
+     "no_school", "Staff training/workday wording; confirm the district's student schedule"),
+    ("no_school", re.compile(
+        r"\\b(no school|no student attendance|students? (?:do not|will not) attend|"
+        r"school (?:is )?closed|schools? closed|school not in session|"
+        r"non[- ]attendance day)\\b", re.I),
+     "no_school", "Explicit no-school or closure wording"),
+    ("early_dismissal", re.compile(r"\\b(early dismissal|early release|early out|early student dismissal)\\b", re.I),
+     "shortened_day", "Explicit early dismissal/release wording"),
+    ("half_day", re.compile(r"\\b(half[- ]day|1/2 day|½ day)\\b", re.I),
+     "shortened_day", "Explicit half-day wording"),
+    ("late_start", re.compile(r"\\b(late start|delayed start|late arrival)\\b", re.I),
+     "delayed_start", "Explicit delayed-start wording"),
 )
 
 FORMAT = "civiccal.school-schedule.v1"

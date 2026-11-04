@@ -18,7 +18,8 @@ from typing import Any
 
 FORMATS = {"civiccal.parse-result.v1", "civiccal.normalized-events.v1"}
 DATE_FORMATS = ("%Y-%m-%d", "%B %d, %Y", "%b %d, %Y",
-                "%A, %B %d, %Y", "%A, %b %d, %Y")
+                "%A, %B %d, %Y", "%A, %b %d, %Y",
+                "%A %B %d, %Y", "%A %b %d, %Y")
 TIME_RANGE = re.compile(
     r"^\s*(\d{1,2}(?::\d{2})?\s*[AP]M)\s*(?:-|–|—|to)\s*"
     r"(\d{1,2}(?::\d{2})?\s*[AP]M)\s*$", re.IGNORECASE

@@ -56,6 +56,16 @@ class CaptureSourceTests(unittest.TestCase):
             with self.assertRaisesRegex(CaptureError, "not approved"):
                 load_source(path, "sample-feed")
 
+    def test_loading_source_authorization_is_read_only(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = self.registry(folder, self.source(
+                consent_required=True, consent_granted=False,
+            ))
+            original = path.read_bytes()
+            with self.assertRaisesRegex(CaptureError, "consent_granted=true"):
+                load_source(path, "sample-feed")
+            self.assertEqual(path.read_bytes(), original)
+
     def test_registry_gate_rejects_unreviewed_terms(self):
         with tempfile.TemporaryDirectory() as folder:
             path = self.registry(folder, self.source(terms_reviewed=False))

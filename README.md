@@ -28,7 +28,7 @@ The initial source registry is in [data/sources.json](data/sources.json). Entrie
 
 ## Development status
 
-Early foundation. A guarded, one-shot HTTP capture utility is available at [scripts/capture_source.py](scripts/capture_source.py). The [HTML page coordinator](scripts/capture_coordinator.py) and [single-feed iCalendar coordinator](scripts/capture_ics_source.py) connect capture, parsing, normalization, and source-completeness validation for their respective source types. The offline [capture-to-parser handoff](scripts/parse_capture.py) verifies archived payloads and dispatches them to existing parsers. [Event normalization](scripts/normalize_events.py) maps parser output into common event records while preserving every original source record and flagging incomplete data. The new [school schedule classifier](scripts/classify_school_schedule.py) labels explicit no-school days, school breaks, early dismissals, half days, late starts, and teacher institute days without changing source records or guessing at ambiguous events. [Source completeness validation](scripts/validate_snapshot.py) checks page coverage and pagination evidence before any absence observation can be recorded. [Source-scoped event identity and revision tracking](scripts/track_event_identity.py) assigns stable IDs only when a publisher supplies a stable event ID, and records material changes without cross-source merging. Identity state is written through a replaceable storage interface with an atomic JSON-file backend; database selection is deferred until laptop review. The new [offline iCalendar publisher](scripts/publish_ics.py) generates deterministic RFC 5545 feeds from an explicit publication approval manifest and identity state. The [offline JSON query engine](scripts/query_events.py) builds filtered, paginated public event projections from the same approved set, excluding internal capture payloads. The [local read-only HTTP service](scripts/serve_api.py) now exposes the approved JSON query and community ICS feed on loopback only, with ETag caching. It is a development harness, not a public deployment; automated ingestion and remote access remain disabled.
+Early foundation. A guarded, one-shot HTTP capture utility is available at [scripts/capture_source.py](scripts/capture_source.py). The [HTML page coordinator](scripts/capture_coordinator.py) and [single-feed iCalendar coordinator](scripts/capture_ics_source.py) connect capture, parsing, normalization, and source-completeness validation for their respective source types. The offline [capture-to-parser handoff](scripts/parse_capture.py) verifies archived payloads and dispatches them to existing parsers. The new [archived capture ingestion command](scripts/ingest_capture.py) runs parsing, normalization, source-scoped identity/revision tracking, and atomic JSON-state persistence as one offline operation; publication approval remains separate. [Event normalization](scripts/normalize_events.py) maps parser output into common event records while preserving every original source record and flagging incomplete data. The new [school schedule classifier](scripts/classify_school_schedule.py) labels explicit no-school days, school breaks, early dismissals, half days, late starts, and teacher institute days without changing source records or guessing at ambiguous events. [Source completeness validation](scripts/validate_snapshot.py) checks page coverage and pagination evidence before any absence observation can be recorded. [Source-scoped event identity and revision tracking](scripts/track_event_identity.py) assigns stable IDs only when a publisher supplies a stable event ID, and records material changes without cross-source merging. Identity state is written through a replaceable storage interface with an atomic JSON-file backend; database selection is deferred until laptop review. The new [offline iCalendar publisher](scripts/publish_ics.py) generates deterministic RFC 5545 feeds from an explicit publication approval manifest and identity state. The [offline JSON query engine](scripts/query_events.py) builds filtered, paginated public event projections from the same approved set, excluding internal capture payloads. The [local read-only HTTP service](scripts/serve_api.py) now exposes the approved JSON query and community ICS feed on loopback only, with ETag caching. It is a development harness, not a public deployment; automated ingestion and remote access remain disabled.
 
 Example manual capture (only for a source whose registry gates permit network access):
 
@@ -46,6 +46,18 @@ python scripts/capture_source.py --source-id village-of-mokena-events \
   --request-url 'https://mokenail.municipalone.com/calendarView.aspx?cid=30642' \
   --page-role detail --archive-dir data/captures
 ```
+
+Archived capture ingestion (offline after a permitted capture):
+
+```sh
+python scripts/ingest_capture.py \\
+  --source-id example-source \\
+  --capture-metadata data/captures/example-source/capture-<timestamp>-<hash>.json \\
+  --adapter auto \\
+  --state data/identity/state.json
+```
+
+See [archived capture ingestion](docs/archived-capture-ingestion.md) for the handoff contract and limits.
 
 Normalization and school-schedule classification (both offline):
 
@@ -80,6 +92,7 @@ The project blueprint is documented before expanding the implementation:
 - [One-shot iCalendar capture coordinator](docs/ics-capture-coordinator.md)
 - [Summit Hill iCalendar request contract](docs/research/summit-hill-ical-request.md)
 - [Capture-to-parser handoff](docs/capture-to-parser.md)
+- [Archived capture ingestion](docs/archived-capture-ingestion.md)
 - [Canonical event data model](docs/event-data-model.md)
 - [Event identity and revision tracking](docs/event-identity-revisions.md)
 - [Processing pipeline](docs/processing-pipeline.md)

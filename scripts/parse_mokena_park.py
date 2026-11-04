@@ -14,7 +14,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin
 
-SOURCE_ID = "mokena-park-district-upcoming-events"
+SOURCE_ID = "mokena-park-district-events"
 SOURCE_URL = "https://www.mokenapark.com/upcoming-events-2/"
 DATE_HINT = re.compile(
     r"\b(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)?\s*,?\s*"

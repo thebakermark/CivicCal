@@ -32,7 +32,7 @@ That flag does not override `allow_complete_snapshot: false` in the source polic
 
 ## Summit Hill SD 161 request URL
 
-The official Download .ICS link for District Events resolves to `https://www.summithill.org/apps/events/ical/?id=0`. Keep this stable URL in the source registry. A separately shared URL included a `cb` query parameter that resembles a cache-buster, but the official link does not include it and its necessity has not been demonstrated. Do not store timestamped cache-busters in source identity. See [the request-contract research note](research/summit-hill-ical-request.md).
+The official Download .ICS link for District Events resolves to `https://www.summithill.org/apps/events/ical/?id=0`. The official Google Calendar subscription link wraps the same feed in a `webcal://` URL and dynamically adds a `cb` timestamp. Keep the stable URL in the source registry and never store that generated value as source identity. Add a fresh cache-buster to individual requests only if direct HTTP testing shows it is needed; otherwise preserve ordinary ETag/Last-Modified behavior. See [the request-contract research note](research/summit-hill-ical-request.md).
 
 ## Workflow
 

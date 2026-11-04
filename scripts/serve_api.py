@@ -181,16 +181,28 @@ def make_handler(state_path: Path, manifest_path: Path, registry_path: Path | No
                         self._json(404, {"error": "source_not_found"})
                         return
                     approved = manifest.get("approved_event_ids")
-                    if not isinstance(approved, list):
-                        raise FeedError("approved_event_ids must be an array.")
-                    records = state.get("events", {}) if isinstance(state, dict) else {}
-                    records_by_id = {
-                        record.get("event_id"): record for record in records.values()
-                        if isinstance(record, dict) and isinstance(record.get("event_id"), str)
-                    }
+                    if (not isinstance(approved, list)
+                            or any(not isinstance(item, str) or not item for item in approved)):
+                        raise FeedError("approved_event_ids must be an array of non-empty event IDs.")
+                    if len(set(approved)) != len(approved):
+                        raise FeedError("Publication manifest contains duplicate event IDs.")
+                    records = state.get("events") if isinstance(state, dict) else None
+                    if not isinstance(records, dict):
+                        raise FeedError("Identity state events must be an object.")
+                    records_by_id = {}
+                    for record in records.values():
+                        if not isinstance(record, dict) or not isinstance(record.get("event_id"), str):
+                            continue
+                        event_id = record["event_id"]
+                        if event_id in records_by_id:
+                            raise FeedError("Identity state contains duplicate event IDs.")
+                        records_by_id[event_id] = record
+                    missing = [event_id for event_id in approved if event_id not in records_by_id]
+                    if missing:
+                        raise FeedError("Approved event IDs are missing from identity state.")
                     approved_for_source = [
                         event_id for event_id in approved
-                        if event_id in records_by_id and records_by_id[event_id].get("source_id") == source_id
+                        if records_by_id[event_id].get("source_id") == source_id
                     ]
                     source_manifest = dict(manifest)
                     source_manifest["approved_event_ids"] = approved_for_source

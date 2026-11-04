@@ -254,6 +254,54 @@
       "robots_reviewed": false,
       "event_access": "mixed",
       "notes": "Official Mary Drew Early Learning Center Events page on the district's MDELC subdomain exposes Subscribe > Download .ICS, resolving to this endpoint. Its calendar page identifies the site as Mary Drew Early Learning Center and shows a single local calendar named Events. This is a separate school-site calendar endpoint, not the district's default id=0 endpoint. Feed payload has not been inspected; the web reader rejects text/calendar. Terms/robots review and comparison against visible school events required before automated retrieval. Discovered 2026-11-03."
+    },
+    {
+      "id": "summit-hill-indian-trail-events-ical",
+      "organization_id": "summit-hill-school-district-161",
+      "source_type": "ics",
+      "url": "https://www.summithill.org/apps/events/ical/?id=3",
+      "access_status": "review_required",
+      "polling_enabled": false,
+      "terms_reviewed": false,
+      "robots_reviewed": false,
+      "event_access": "mixed",
+      "notes": "Official Summit Hill School District 161 Events page for Indian Trail School Events exposes Subscribe > Download .ICS, resolving to this exact endpoint. The calendar ID and displayed calendar label were verified on the official district Events page on 2026-11-03; the Download .ICS link was followed to confirm the endpoint. Feed payload has not been inspected; the web reader rejects text/calendar. Terms/robots review and comparison against visible school events required before automated retrieval. Polling remains disabled."
+    },
+    {
+      "id": "summit-hill-dr-julian-rogus-events-ical",
+      "organization_id": "summit-hill-school-district-161",
+      "source_type": "ics",
+      "url": "https://www.summithill.org/apps/events/ical/?id=4",
+      "access_status": "review_required",
+      "polling_enabled": false,
+      "terms_reviewed": false,
+      "robots_reviewed": false,
+      "event_access": "mixed",
+      "notes": "Official Summit Hill School District 161 Events page for Dr. Julian Rogus School Events exposes Subscribe > Download .ICS, resolving to this exact endpoint. The calendar ID and displayed calendar label were verified on the official district Events page on 2026-11-03; the Download .ICS link was followed to confirm the endpoint. Feed payload has not been inspected; the web reader rejects text/calendar. Terms/robots review and comparison against visible school events required before automated retrieval. Polling remains disabled."
+    },
+    {
+      "id": "summit-hill-hilda-walker-events-ical",
+      "organization_id": "summit-hill-school-district-161",
+      "source_type": "ics",
+      "url": "https://www.summithill.org/apps/events/ical/?id=5",
+      "access_status": "review_required",
+      "polling_enabled": false,
+      "terms_reviewed": false,
+      "robots_reviewed": false,
+      "event_access": "mixed",
+      "notes": "Official Summit Hill School District 161 Events page for Hilda Walker Intermediate School Events exposes Subscribe > Download .ICS, resolving to this exact endpoint. The calendar ID and displayed calendar label were verified on the official district Events page on 2026-11-03; the Download .ICS link was followed to confirm the endpoint. Feed payload has not been inspected; the web reader rejects text/calendar. Terms/robots review and comparison against visible school events required before automated retrieval. Polling remains disabled."
+    },
+    {
+      "id": "summit-hill-summit-hill-jr-high-events-ical",
+      "organization_id": "summit-hill-school-district-161",
+      "source_type": "ics",
+      "url": "https://www.summithill.org/apps/events/ical/?id=6",
+      "access_status": "review_required",
+      "polling_enabled": false,
+      "terms_reviewed": false,
+      "robots_reviewed": false,
+      "event_access": "mixed",
+      "notes": "Official Summit Hill School District 161 Events page for Summit Hill Jr. High School Events exposes Subscribe > Download .ICS, resolving to this exact endpoint. The calendar ID and displayed calendar label were verified on the official district Events page on 2026-11-03; the Download .ICS link was followed to confirm the endpoint. Feed payload has not been inspected; the web reader rejects text/calendar. Terms/robots review and comparison against visible school events required before automated retrieval. Polling remains disabled."
     }
   ],
   "verification_policy": {

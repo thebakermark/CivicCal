@@ -49,7 +49,7 @@ Example:
 python scripts/capture_source.py --source-id example-source --archive-dir data/captures
 ```
 
-For a later capture, pass the previous metadata file with `--previous-metadata`; CivicCal sends its ETag and Last-Modified values as conditional request headers. A 304 response is recorded as an unchanged capture and does not create a payload file.
+For a later capture, pass the previous metadata file with `--previous-metadata`; CivicCal sends its ETag and Last-Modified values as conditional request headers. A 304 response is recorded as an unchanged capture and does not create a payload file. For a paginated listing or linked detail page, `--request-url` may be used only when the requested HTTPS host and exact path appear in that source's `data/source-completeness.json` allowlist. Set `--page-role` to `listing`, `detail`, or `feed` so the archived capture can be audited and entered into a snapshot manifest. This is still one page per command; it is not an automatic crawler.
 
 Successful response bodies are stored by SHA-256 under `<archive>/<source-id>/`, with a JSON metadata sidecar. The tool enforces HTTPS, blocks non-HTTPS redirect targets before following them, rejects credential-bearing URLs, applies a 20 MiB response limit, and uses a bounded request timeout. Existing source eligibility and the explicit written-consent switch are preserved. This is not a polling worker.
 

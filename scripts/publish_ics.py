@@ -93,9 +93,20 @@ def _temporal(value: Any, time_status: str, field: str, tzid: str | None = None)
             return "", parsed.astimezone(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         if time_status == "zoned" and tzid:
             try:
-                ZoneInfo(tzid)
+                zone = ZoneInfo(tzid)
             except (ZoneInfoNotFoundError, ValueError) as exc:
                 raise FeedError(f"{field} has unknown IANA timezone {tzid!r}.") from exc
+            first = parsed.replace(tzinfo=zone, fold=0)
+            second = parsed.replace(tzinfo=zone, fold=1)
+            first_valid = first.astimezone(timezone.utc).astimezone(zone).replace(tzinfo=None) == parsed
+            second_valid = second.astimezone(timezone.utc).astimezone(zone).replace(tzinfo=None) == parsed
+            if not first_valid and not second_valid:
+                raise FeedError(f"{field} is a nonexistent local time in {tzid!r}.")
+            if first.utcoffset() != second.utcoffset():
+                raise FeedError(
+                    f"{field} is ambiguous during a daylight-saving transition in {tzid!r}; "
+                    "an explicit UTC offset is required."
+                )
             return f"TZID={tzid}", parsed.strftime("%Y%m%dT%H%M%S")
         raise FeedError(f"{field} is zoned but has no explicit UTC offset or valid IANA timezone.")
     raise FeedError(f"{field} has unsupported time status {time_status!r}.")
@@ -161,8 +172,8 @@ def _timezone_component(tzid: str, years: set[int]) -> list[str]:
         lines.extend([
             f"BEGIN:{kind}",
             f"DTSTART:{dates[0].strftime('%Y%m%dT%H%M%S')}",
-            f"TZOFFSETFROM:{_offset_text(old)}",
-            f"TZOFFSETTO:{_offset_text(new)}",
+            f"TZOFFSETFROM:{old}",
+            f"TZOFFSETTO:{new}",
             f"TZNAME:{_escape(name)}",
         ])
         if len(dates) > 1:

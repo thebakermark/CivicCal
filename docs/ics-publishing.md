@@ -21,7 +21,7 @@ Example publication manifest:
 }
 ```
 
-Only event IDs named in `approved_event_ids` are included. An event's presence in identity state, a source registry entry, or a parser output does not imply publication approval. The publisher never edits the manifest or identity state. Every identity record must have a unique non-empty `event_id` and a non-empty `source_id`; malformed or duplicate identities fail closed rather than allowing one record to shadow another.
+Only event IDs named in `approved_event_ids` are included. An event's presence in identity state, a source registry entry, or a parser output does not imply publication approval. The publisher never edits the manifest or identity state. Every identity record must have a unique non-empty `event_id` and a non-empty `source_id`; malformed or duplicate identities fail closed rather than allowing one record to shadow another. Operators can add or revoke one event with `scripts/set_publication.py`; see [manual event publication approval](manual-publication-approval.md). The command verifies the registered source and exact event ownership before changing only the manifest.
 
 ## Command
 

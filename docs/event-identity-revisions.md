@@ -25,11 +25,11 @@ The material revision fingerprint includes normalized title, description, start/
 Capture metadata and unmapped source-record details are excluded from the material fingerprint. They remain preserved in the current event record and can be reviewed without creating a false material revision.
 
 - First observation creates revision 1 (`created`).
-- Same source identity and same material fingerprint in a new capture updates last-seen/observation history but creates no revision.
+- Same source identity and same material fingerprint in a new capture appends a source observation and updates last-seen, but creates no material revision.
 - Same source identity with changed material fields appends a revision and preserves the previous revision.
 - Reprocessing the same capture is idempotent.
 - Duplicate source identities within one capture are reported as conflicts and are not written over one another.
-- Missing events are not cancelled or deleted. Absence tracking is deliberately deferred until source adapters can assert complete snapshots.
+- Missing events are not cancelled or deleted. Absence is not currently interpreted as a lifecycle transition; a future missing-observation detector must require an explicit complete-snapshot guarantee from that adapter.
 - Cross-source matching and merging are not performed.
 
 ## Recurrence
@@ -55,6 +55,8 @@ The state file is created on first use and updated on each new capture through t
 ## State model
 
 The prototype state stores:
+- Append-only source observations for every keyed event in every newly processed capture, including unchanged observations.
+- A separate lifecycle history recording creation and explicit publisher status transitions.
 
 - Source-scoped stable event identity.
 - Current normalized event.
@@ -64,7 +66,7 @@ The prototype state stores:
 - Unkeyed observations and source-identity conflicts.
 - Processed capture keys for idempotency.
 
-This JSON shape is a prototype contract, not the final SQLite schema. The storage implementation should preserve these semantics.
+This JSON shape is a prototype contract, not a database schema. The storage implementation should preserve these semantics.
 
 ## Safety boundaries
 

@@ -3,7 +3,6 @@ import tempfile
 import unittest
 from email.message import Message
 from pathlib import Path
-from unittest.mock import patch
 from urllib.error import HTTPError
 
 from scripts.capture_source import CaptureError, SafeHTTPSRedirectHandler, capture_url, load_source, write_capture
@@ -101,8 +100,9 @@ class CaptureSourceTests(unittest.TestCase):
         self.assertEqual(len(metadata["content_sha256"]), 64)
         with tempfile.TemporaryDirectory() as folder:
             meta_path = write_capture("sample-feed", body, metadata, Path(folder))
-            self.assertEqual(meta_path.with_suffix(".bin").read_bytes(), body)
-            self.assertEqual(json.loads(meta_path.read_text())["outcome"], "captured")
+            saved_metadata = json.loads(meta_path.read_text())
+            self.assertEqual((meta_path.parent / saved_metadata["raw_payload_file"]).read_bytes(), body)
+            self.assertEqual(saved_metadata["outcome"], "captured")
 
     def test_conditional_headers_are_sent(self):
         response = FakeResponse()
@@ -136,6 +136,12 @@ class CaptureSourceTests(unittest.TestCase):
         request = __import__("urllib.request", fromlist=["Request"]).Request("https://example.org/feed")
         with self.assertRaisesRegex(CaptureError, "unsafe URL"):
             handler.redirect_request(request, None, 302, "Found", {}, "http://example.org/redirected")
+
+    def test_archive_rejects_unsafe_source_ids(self):
+        with tempfile.TemporaryDirectory() as folder:
+            with self.assertRaisesRegex(CaptureError, "unsafe for an archive path"):
+                write_capture("../outside", b"x", {"captured_at": "2026-11-04T12:00:00+00:00",
+                    "content_sha256": "abc"}, Path(folder))
 
     def test_source_types_outside_http_capture_are_rejected(self):
         with tempfile.TemporaryDirectory() as folder:

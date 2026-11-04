@@ -1,6 +1,6 @@
 # CivicCal
 
- A personal-use calendar aggregator for Mokena, Illinois and nearby communities.
+A personal-use calendar aggregator for Mokena, Illinois and nearby communities.
 
 CivicCal reads free, publicly available event information published by public entities—such as the Village, library, park district, and school districts—normalizes it, stores it locally, and provides iCalendar subscription feeds for the user's own calendar apps. It does not access private accounts, nonpublic information, or restricted systems.
 

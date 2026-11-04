@@ -36,6 +36,7 @@ It is not limited to a consumer-facing calendar website. Its primary product is 
 
 ### 0. Blueprint and reuse assessment
 - Document source lifecycle, event model, processing, storage, API, ICS, webhooks, operations, and reuse strategy.
+- Define open-standard boundaries and the future MeaningWire adapter boundary in [Semantic Interoperability](semantic-interoperability.md).
 - Inspect candidate projects' code, tests, dependencies, licenses, and architecture before copying code.
 - Record decisions and unresolved questions.
 
@@ -58,7 +59,7 @@ It is not limited to a consumer-facing calendar website. Its primary product is 
 **Complete when:** a capture run is repeatable, auditable, bounded, and cannot silently bypass source settings.
 
 ### 3. Parsing and normalization
-- Parse ICS, JSON-LD Event, RSS/Atom, JSON APIs, and adapter-specific HTML.
+- Parse ICS, RSS/Atom, JSON APIs, and adapter-specific HTML. Treat Schema.org Event/JSON-LD as an input vocabulary where encountered, preserving source provenance; use the explicit [semantic interoperability mapping](semantic-interoperability.md) rather than treating it as the internal event schema.
 - Preserve original text and source values alongside normalized fields.
 - Handle timezones, floating times, all-day events, recurrence, exceptions, cancellations, and registration deadlines.
 - Emit structured warnings instead of guessing.

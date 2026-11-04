@@ -37,12 +37,3 @@
 - No source in this initial set is enabled for automated polling.
 
 
-## SD 159 / Apptegy access-policy review (2026-11-03)
-
-The district's official Events page exposes a **Click to Download Calendar** link to an iCalendar export. That establishes that the district makes a calendar download available to visitors; it does not, by itself, authorize automated collection.
-
-The feed is served from the Thrillshare/Apptegy service. Apptegy's Terms of Use, last updated September 1, 2026, apply to visitors using public portions of its services (section 1). Section 3 expressly prohibits use of automated means, including bots, scrapers, and spiders, to access the Services without Apptegy's prior written consent. The terms are published at https://www.apptegy.com/terms-of-use/.
-
-The feed host's robots.txt could not be retrieved during this review, and no district-specific written permission overriding the Apptegy restriction was located. Therefore the CivicCal source record is now **blocked**, with polling disabled. Do not use the network importer for this endpoint unless Apptegy's prior written consent is obtained and the host's access rules are rechecked. The district's public download link should not be treated as a blanket scraping license.
-
-This restriction concerns automated access to the hosted service. It does not prevent CivicCal from processing a calendar file that a user has independently downloaded and supplied, provided the file is handled locally and not fetched from the service by CivicCal.

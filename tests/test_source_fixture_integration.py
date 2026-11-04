@@ -1,5 +1,9 @@
+import json
 import tempfile
+import threading
 import unittest
+from http.server import ThreadingHTTPServer
+from urllib.request import urlopen
 from pathlib import Path
 
 from scripts.validate_source_fixtures import validate_fixtures
@@ -10,6 +14,7 @@ from scripts.storage import JsonFileIdentityStateStore
 from scripts.query_events import query_events
 from scripts.publish_ics import build_calendar
 from scripts.parse_ics import parse_ics
+from scripts.serve_api import make_handler
 
 
 class SourceFixtureIntegrationTests(unittest.TestCase):
@@ -58,7 +63,8 @@ class SourceFixtureIntegrationTests(unittest.TestCase):
         self.assertEqual(normalized["events"][0]["time_status"], "floating")
 
         with tempfile.TemporaryDirectory() as directory:
-            store = JsonFileIdentityStateStore(Path(directory) / "identity-state.json")
+            state_path = Path(directory) / "identity-state.json"
+            store = JsonFileIdentityStateStore(state_path)
             result, state = process_normalized(
                 normalized, store.load_identity_state(),
                 observed_at="2026-11-04T12:00:00Z",
@@ -91,6 +97,36 @@ class SourceFixtureIntegrationTests(unittest.TestCase):
             self.assertEqual(round_trip["event_count"], 1)
             self.assertEqual(round_trip["events"][0]["start"]["value"], "2026-09-16T16:00:00")
             self.assertFalse(round_trip["events"][0]["start"]["utc"])
+
+            # Exercise the persisted HTML-derived event through its stable source relay.
+            manifest_path = Path(directory) / "publication.json"
+            manifest_path.write_text(json.dumps(publication), encoding="utf-8")
+            registry_path = Path(directory) / "sources.json"
+            registry_path.write_text(json.dumps({
+                "source_records": [{"id": source_id, "name": "Village of Mokena Events"}]
+            }), encoding="utf-8")
+            server = ThreadingHTTPServer(
+                ("127.0.0.1", 0),
+                make_handler(state_path, manifest_path, registry_path),
+            )
+            thread = threading.Thread(target=server.serve_forever, daemon=True)
+            thread.start()
+            try:
+                base = f"http://127.0.0.1:{server.server_port}"
+                with urlopen(base + f"/calendars/sources/{source_id}.ics") as response:
+                    relay_text = response.read().decode("utf-8")
+                    self.assertEqual(response.headers.get_content_type(), "text/calendar")
+                self.assertIn(f"UID:{event_id}@civiccal", relay_text)
+                self.assertIn("SUMMARY:Village of Mokena's Food Trucks on Front", relay_text)
+                with urlopen(base + f"/api/v1/events?source_id={source_id}") as response:
+                    relay_json = json.loads(response.read())
+                self.assertEqual(
+                    [item["event_id"] for item in relay_json["events"]], [event_id]
+                )
+            finally:
+                server.shutdown()
+                server.server_close()
+                thread.join(timeout=2)
 
     def test_report_includes_warnings_instead_of_hiding_them(self):
         report = validate_fixtures(Path(__file__).resolve().parents[1])

@@ -69,6 +69,19 @@ class PublishICSTests(unittest.TestCase):
         text, _ = build_calendar(state_with(identity_record(status="cancelled")), manifest("evt_123"))
         self.assertIn("STATUS:CANCELLED\r\n", text)
 
+
+    def test_explicit_utc_semantics_with_normalized_naive_value_emit_z(self):
+        record = identity_record()
+        record["current"].update({
+            "start": {"value": "2026-11-04T18:00:00", "kind": "date-time", "timezone": None},
+            "end": {"value": "2026-11-04T19:00:00", "kind": "date-time", "timezone": None},
+            "time_status": "utc",
+            "timezone": None,
+        })
+        text, _ = build_calendar(state_with(record), manifest("evt_123"))
+        self.assertIn("DTSTART:20261104T180000Z", text)
+        self.assertIn("DTEND:20261104T190000Z", text)
+
     def test_floating_time_is_not_assigned_a_timezone(self):
         record = identity_record()
         record["current"]["start"] = {"value": "2026-11-04T18:00:00", "kind": "date-time"}

@@ -101,6 +101,48 @@ class NormalizeEventsTests(unittest.TestCase):
         self.assertEqual(result["event_count"], 0)
         self.assertEqual(result["parser_warnings"], ["detail links need fetching"])
 
+
+    def test_normalizes_manual_public_page_snapshot(self):
+        document = {
+            "format": "civiccal.manual-events.v1",
+            "source_id": "mokena-library-events",
+            "source_url": "https://mokena.librarycalendar.com/events/list",
+            "observed_at": "2026-11-04T16:00:00Z",
+            "events": [{
+                "title": "One-On-One Technology Help",
+                "start": "2026-11-04T10:00:00",
+                "end": "2026-11-04T11:00:00",
+                "event_url": "https://mokena.librarycalendar.com/event/one-one-technology-help-48014",
+                "location": {"name": "Study Room 1", "branch": "Mokena Public Library"},
+                "age_groups": ["Adults"],
+                "program_types": ["Educational", "Technology Class", "Workshop"],
+                "categories": ["Educational", "Technology Class", "Workshop"],
+                "registration_required": True,
+                "registration_status": "closed",
+                "description": "One on one meeting with a librarian."
+            }]
+        }
+        result = normalize_document(document)
+        event = result["events"][0]
+        self.assertEqual(result["capture"]["capture_method"], "manual-public-page-review")
+        self.assertEqual(event["time_status"], "floating")
+        self.assertIsNone(event["timezone"])
+        self.assertEqual(event["registration_status"], "closed")
+        self.assertTrue(event["registration_required"])
+        self.assertEqual(event["audience"], ["Adults"])
+        self.assertEqual(event["categories"], ["Educational", "Technology Class", "Workshop"])
+        self.assertEqual(event["event_url"], document["events"][0]["event_url"])
+
+    def test_manual_snapshot_requires_observation_provenance(self):
+        document = {
+            "format": "civiccal.manual-events.v1",
+            "source_id": "mokena-library-events",
+            "source_url": "https://mokena.librarycalendar.com/events/list",
+            "events": []
+        }
+        with self.assertRaises(NormalizationError):
+            normalize_document(document)
+
     def test_unsupported_format_rejected(self):
         with self.assertRaises(NormalizationError):
             normalize_document({"format": "unknown", "events": []})

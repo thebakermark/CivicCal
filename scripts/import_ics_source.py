@@ -42,10 +42,17 @@ def load_source(registry_path: Path, source_id: str) -> dict:
     source = matches[0]
     if source.get("source_type") != "ics":
         raise ImportErrorSafe(f"Source {source_id!r} is not an ICS source.")
-    if source.get("access_status") != "approved":
-        raise ImportErrorSafe(f"Source {source_id!r} is not approved; current status is {source.get('access_status')!r}.")
-    if source.get("terms_reviewed") is not True or source.get("robots_reviewed") is not True:
-        raise ImportErrorSafe("Source must have terms_reviewed=true and robots_reviewed=true before fetching.")
+    if source.get("consent_required") is True:
+        if source.get("consent_granted") is not True:
+            raise ImportErrorSafe(
+                f"Source {source_id!r} requires written consent; set consent_granted=true "
+                "in data/sources.json after written consent is received."
+            )
+    else:
+        if source.get("access_status") != "approved":
+            raise ImportErrorSafe(f"Source {source_id!r} is not approved; current status is {source.get('access_status')!r}.")
+        if source.get("terms_reviewed") is not True or source.get("robots_reviewed") is not True:
+            raise ImportErrorSafe("Source must have terms_reviewed=true and robots_reviewed=true before fetching.")
     parsed = urlparse(source.get("url", ""))
     if parsed.scheme != "https" or not parsed.netloc or parsed.username or parsed.password:
         raise ImportErrorSafe("ICS source URL must be a credential-free HTTPS URL.")

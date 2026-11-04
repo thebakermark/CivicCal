@@ -132,9 +132,9 @@ Webhooks, advanced search, user-created custom feeds, and a full web UI follow a
 
 ## Current project baseline
 
-Already present in the repository: source registry schema/validator, source onboarding docs, dependency-free ICS parser, HTML/JSON-LD extraction foundation, Mokena Park District and Village adapters, duplicate-candidate detection, manual ICS source importer, fixture validation, CI checks, an offline RFC 5545 feed generator, and a read-only JSON query projection, both driven by an explicit publication approval manifest.
+Already present in the repository: source registry schema/validator, source onboarding docs, dependency-free ICS parser, HTML/JSON-LD extraction foundation, Mokena Park District and Village adapters, duplicate-candidate detection, manual ICS source importer, fixture validation, CI checks, an offline RFC 5545 feed generator, a read-only JSON query projection, and a loopback-only HTTP integration server, all driven by an explicit publication approval manifest.
 
-Not yet implemented as a complete service: canonical persistent event database, general scheduled capture engine, HTTP API server, network-served ICS endpoints with caching, recurrence/timezone-complete production feed projection, webhook delivery, and operations/backup service.
+Not yet implemented as a complete service: canonical persistent event database, general scheduled capture engine, public deployment and remote API access, organization/source-specific feed routes, recurrence-aware ICS publication, webhook delivery, and operations/backup service. A loopback-only read-only HTTP integration server with ETag caching is implemented for local testing.
 
 The checked-in fixtures for the Park District and Village are representative fixtures, not proof that complete live source pages have been captured and validated. The SD 159 uploaded ICS has been inspected locally but is not yet integrated as a complete persistent dataset.
 

@@ -91,6 +91,30 @@ class TrackEventIdentityTests(unittest.TestCase):
         self.assertEqual(result["new_events"], 1)
         self.assertEqual(len(state["events"]), 2)
 
+    def test_every_capture_is_retained_as_source_observation(self):
+        _, state = process_normalized(normalized([event()], capture="capture-1"),
+                                      observed_at="2026-11-04T12:00:00Z")
+        result, state = process_normalized(normalized([event()], capture="capture-2"),
+                                            state, observed_at="2026-11-04T13:00:00Z")
+        self.assertEqual(result["unchanged_events"], 1)
+        self.assertEqual(len(state["observations"]), 2)
+        self.assertEqual(state["observations"][0]["event"]["title"], "Town meeting")
+        self.assertEqual(state["observations"][1]["capture_key"], "capture-2")
+        self.assertEqual(len(next(iter(state["events"].values()))["revisions"]), 1)
+
+    def test_explicit_source_cancellation_is_lifecycle_transition(self):
+        _, state = process_normalized(normalized([event()], capture="capture-1"))
+        result, state = process_normalized(
+            normalized([event(status="cancelled")], capture="capture-2"), state,
+            observed_at="2026-11-04T14:00:00Z")
+        current = next(iter(state["events"].values()))
+        self.assertEqual(result["new_revisions"], 1)
+        self.assertEqual(current["lifecycle_status"], "cancelled")
+        self.assertEqual(current["lifecycle_history"][-1]["transition"],
+                         "explicit_source_status_change")
+        self.assertEqual(current["lifecycle_history"][-1]["from_status"], "scheduled")
+        self.assertEqual(current["lifecycle_history"][-1]["to_status"], "cancelled")
+
     def test_missing_source_id_is_unkeyed_and_retained(self):
         value = event(uid=None)
         result, state = process_normalized(normalized([value]))

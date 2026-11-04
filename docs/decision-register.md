@@ -22,8 +22,9 @@ Durable record of accepted product decisions. New decisions are appended with an
 | DEC-014 | 2026-11-04 | No deployment, public remote access, installs, spending, or paid services without explicit approval. | Accepted |
 | DEC-015 | 2026-11-04 | Preserve source provenance, raw evidence, observation/revision history, temporal semantics, uncertainty, and explicit status evidence. | Accepted |
 | DEC-016 | 2026-11-04 | Missing from a later snapshot is not cancellation; only explicit publisher evidence can establish cancellation. | Accepted |
-| DEC-017 | 2026-11-04 | CivicCal is community information infrastructure, not a household-only calendar. | Accepted |
+| DEC-017 | 2026-11-04 | CivicCal is community information infrastructure, not a household-only calendar. | Superseded by DEC-019 |
 | DEC-018 | 2026-11-04 | Email/mailbox ingestion is not an MVP dependency; it requires separate explicit scope and authorization. | Deferred |
+| DEC-019 | 2026-11-04 | CivicCal is for the user's personal use. The user chooses which organizations and event calendars to include; source discovery is a collaborative operator workflow, not a public resident-facing directory or community service. | Accepted |
 
 ## Superseded or conflicting legacy design
 

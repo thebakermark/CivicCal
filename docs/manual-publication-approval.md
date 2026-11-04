@@ -30,7 +30,7 @@ Before changing the manifest, the command verifies:
 - The event ID exists exactly once in identity state.
 - The event's stored `source_id` exactly matches the requested source ID.
 - Identity records have unique event IDs and non-empty source ownership.
-- The manifest has the expected format and contains no duplicate or invalid IDs.
+- The manifest has the expected format, contains no duplicate IDs, and every existing approval still resolves to a stored event whose source remains registered exactly once.
 
 Unknown sources, unknown events, ambiguous identities, source mismatches, and malformed manifests are rejected without writing. Approve and revoke are idempotent. Writes use a temporary file and atomic replacement; the command changes only the manifest.
 

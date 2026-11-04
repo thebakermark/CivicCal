@@ -56,6 +56,17 @@ class VillageParserTests(unittest.TestCase):
         self.assertFalse(result["pagination"]["terminal_page_confirmed"])
         self.assertIn("does not prove", result["pagination"]["evidence"])
 
+    def test_rel_last_confirms_terminal_page_only_when_current_url_matches(self):
+        html = """<html><body>
+        <a rel="last" href="calendar.aspx?page=3">Last</a>
+        </body></html>"""
+        terminal = parse_html(html, "https://www.mokena.gov/calendar.aspx?page=3")
+        self.assertEqual(terminal["pagination"]["last_page_urls"],
+                         ["https://www.mokena.gov/calendar.aspx?page=3"])
+        self.assertTrue(terminal["pagination"]["terminal_page_confirmed"])
+        earlier = parse_html(html, "https://www.mokena.gov/calendar.aspx?page=2")
+        self.assertFalse(earlier["pagination"]["terminal_page_confirmed"])
+
     def test_unrelated_links_are_ignored(self):
         html = '<a href="/about">About</a><a href="calendarView.aspx?cid=123">Event</a>'
         result = parse_html(html, "https://www.mokena.gov/calendar.aspx")

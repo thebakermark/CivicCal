@@ -134,6 +134,19 @@ class PublishICSTests(unittest.TestCase):
         self.assertIn("DTEND;TZID=America/Chicago:20270314T100000", text)
 
 
+
+    def test_fixed_offset_iana_zone_emits_standard_observance(self):
+        record = identity_record()
+        record["current"].update({
+            "start": {"value": "2027-03-14T09:00:00", "kind": "date-time"},
+            "time_status": "zoned",
+            "timezone": "Etc/GMT+5",
+        })
+        text, _ = build_calendar(state_with(record), manifest("evt_123"))
+        self.assertIn("BEGIN:STANDARD", text)
+        self.assertIn("TZOFFSETFROM:-0500", text)
+        self.assertIn("TZOFFSETTO:-0500", text)
+
     def test_nonexistent_daylight_saving_wall_time_is_rejected(self):
         record = identity_record()
         record["current"].update({

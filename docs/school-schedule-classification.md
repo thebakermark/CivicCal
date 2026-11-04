@@ -81,4 +81,4 @@ The calendar summary records 176 student attendance days, four teacher institute
 
 The approved calendar explicitly states: “MES, MIS will be in session, MJHS E-Learning Day 11/3, 4/6.” CivicCal represents November 3 and April 6 as mixed-by-school learning schedules, not district-wide closures. The November 3 entry is also present in the iCalendar-derived fixture; April 6 is newly added from the approved calendar transcription.
 
-The calendar image does not provide exact dismissal times. Times are retained only where independently explicit in the district iCalendar source. This transcription is a reference fixture, not an automated PDF parser or a live capture.
+The calendar image does not provide exact dismissal times. September 4 school-specific times are recorded in the live-feed supplement: the attached district graphic lists MJHS 10:55 AM, MIS 11:30 AM, and MES 12:00 PM; its date is cross-checked using the post announcing tomorrow as the first early-dismissal day and the approved calendar's September 4 marker. Do not infer times for October 30. This transcription is a reference fixture, not an automated PDF parser or a live capture.

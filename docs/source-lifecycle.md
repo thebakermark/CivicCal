@@ -41,6 +41,18 @@ Do not infer an endpoint ID from a neighboring ID. Do not treat a visible page a
 
 ## Capture interface
 
+The first implementation is `scripts/capture_source.py`. It is a manual, one-source-at-a-time HTTP capture command. It supports the registry's HTTP source types (ICS, RSS, Atom, JSON API, and HTML) and deliberately does not parse events, update the registry, publish content, or schedule polling.
+
+Example:
+
+```sh
+python scripts/capture_source.py --source-id example-source --archive-dir data/captures
+```
+
+For a later capture, pass the previous metadata file with `--previous-metadata`; CivicCal sends its ETag and Last-Modified values as conditional request headers. A 304 response is recorded as an unchanged capture and does not create a payload file.
+
+Successful response bodies are stored by SHA-256 under `<archive>/<source-id>/`, with a JSON metadata sidecar. The tool enforces HTTPS, blocks non-HTTPS redirect targets before following them, rejects credential-bearing URLs, applies a 20 MiB response limit, and uses a bounded request timeout. Existing source eligibility and the explicit written-consent switch are preserved. This is not a polling worker.
+
 A capture adapter should accept a source record and a capture context and return:
 
 - Raw response bytes or a durable raw-payload reference.
@@ -101,4 +113,4 @@ Email is optional and must be explicitly scoped. Register the mailbox/folder and
 
 ## Existing CivicCal behavior
 
-The current registry, ICS importer, and HTML adapters provide foundations, not a complete general-purpose capture engine. The current importer has source-specific gates and a manual one-shot path. Preserve those controls when building the generalized interface.
+The source registry, ICS importer, HTML adapters, and one-shot capture command provide the current foundation. Capture and parsing remain separate. The capture command has automated unit tests for eligibility gates, written consent, conditional headers, HTTP 304, content hashing, raw archive writes, and unsafe redirects. Scheduled polling, retries/backoff, per-host rate limiting, database-backed source health, and retention management are not implemented.

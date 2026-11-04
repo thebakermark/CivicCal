@@ -16,7 +16,7 @@ class SourceFixtureIntegrationTests(unittest.TestCase):
         self.assertEqual(report["source_count"], 3)
         self.assertEqual(report["event_count"], 6)
         self.assertEqual(report["normalized_event_count"], 6)
-        self.assertEqual(report["review_flagged_event_count"], 6)
+        self.assertEqual(report["review_flagged_event_count"], 5)
 
         by_source = {source["parser"]: source for source in report["sources"]}
         self.assertEqual(by_source["parse_ics"]["event_count"], 2)

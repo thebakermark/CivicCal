@@ -68,7 +68,7 @@ https://mokena.librarycalendar.com/node/45947/export.ics
 
 The web reader rejects the response as `text/calendar`, which is not evidence that the export is broken. This verifies an event-specific iCalendar export route for at least one event. The underlying node ID differs from the numeric suffix used in the public event slug, so do not assume the suffix can be substituted into the `/node/{id}/export.ics` route.
 
-This is not yet a combined calendar feed. Library Market's public product documentation says LibraryCalendar can expose RSS, XML, iCal, or JSON feeds to external websites/services, with configurable query parameters. That confirms the platform supports such feeds in principle, but does not prove Mokena has enabled one or disclose its URL.
+This is not yet a combined calendar feed. Library Market's public product documentation says LibraryCalendar can expose RSS, XML, iCal, or JSON feeds to external websites/services, with configurable query parameters. That confirms the platform supports such feeds in principle, but does not prove Mokena has enabled one or disclose its URL. Search indexing also surfaced other LibraryMarket tenant sites using a route shaped like `/events/feed/html?_wrapper_format=lc_calendar_feed`; this is evidence of a vendor feed mechanism on other tenants only. Do not construct or request the analogous Mokena URL as though it were verified. Ask the library or Library Market for the actual Mokena feed URL and supported format.
 
 Relevant product documentation:
 - https://www.librarymarket.com/blog/calendar-built-for-libraries
@@ -93,5 +93,6 @@ Relevant product documentation:
 - Example event detail: https://mokena.librarycalendar.com/event/sensory-storytime-40613
 - Event-specific iCal page: https://mokena.librarycalendar.com/node/45947/add_to_calendar
 - Library Market product documentation: https://www.librarymarket.com/blog/calendar-built-for-libraries
+- Example of a LibraryMarket tenant exposing an HTML calendar-feed route (not Mokena): https://ccpl.librarymarket.com/events/feed/html?_wrapper_format=lc_calendar_feed&adjust_range=1&current_date=2026-11-23&form_id=lc_calendar_upcoming_form&ongoing_events=hide&page=47
 
 The rendered web pages support source discovery and schema planning. They are not raw captures and do not grant permission for automated retrieval.

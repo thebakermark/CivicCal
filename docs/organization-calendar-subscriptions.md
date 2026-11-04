@@ -1,59 +1,52 @@
-# Organization calendar subscriptions
+# Independent source calendar relays
 
 ## Purpose
 
-Provide one stable iCalendar subscription URL per registered organization, alongside the combined community calendar. Organization feeds are projections of the same approved event set; they are not separate ingestion pipelines.
+Provide one stable iCalendar subscription URL for each registered source. Each relay is independent: it contains only events originating from that exact source. CivicCal does not need to produce a combined community calendar or organization-level aggregation.
 
-## Ownership rule
+## Source identity and isolation
 
-For the first implementation, organization membership is derived from the source registry:
+An event's `source_id` identifies the source that supplied it. A source relay includes an event only when:
 
-`source_records[].id -> source_records[].organization_id`
+1. The event ID is present in the explicit publication approval manifest.
+2. Its `source_id` resolves to exactly one source record in the registry.
+3. The resolved source ID exactly matches the requested relay.
 
-An identity record's `source_id` identifies its originating source. The organization feed includes an event only when:
+Do not infer source ownership from event titles, locations, descriptions, organizers, or partner relationships. An event listed by two publishers remains two source observations and may appear in each publisher's separate relay if independently approved. Cross-source duplicate detection may identify review candidates, but must not merge or delete records.
 
-1. Its event ID is present in the global `approved_event_ids` publication manifest.
-2. Its `source_id` resolves to exactly one source record.
-3. That source record has the requested `organization_id`.
-
-This is **source ownership**, not a claim that the organization is the event host or organizer. For example, a partner event listed on the Village calendar remains attributable to the Village source in this first version. CivicCal must not infer event ownership from titles, locations, descriptions, or organizer-like text.
-
-Unknown source IDs, duplicate source IDs, missing organization IDs, and unknown organization IDs fail closed. An event with no unambiguous source-to-organization mapping is omitted from organization feeds, but may remain in the combined community feed if it is explicitly approved there.
-
-## Publication approval
-
-The global publication manifest remains the single approval boundary. Organization feeds must be a strict subset of the globally approved event IDs; an organization route must never broaden publication approval or include an event simply because its source belongs to that organization.
-
-The first implementation should derive organization membership at request time from the current source registry and identity state. This avoids duplicating event approval lists across manifests and keeps database choice independent.
+Unknown or duplicate source IDs, malformed registry entries, and events without an unambiguous source mapping fail closed. An unknown requested source returns 404. A known source with no approved events returns a valid empty calendar.
 
 ## Proposed routes
 
-- `GET /calendars/community.ics` — all globally approved events.
-- `GET /calendars/organizations/{organization_id}.ics` — approved events attributed to the organization's registered sources.
-- `GET /api/v1/events?organization_id={organization_id}` — organization-filtered JSON results.
+- `GET /calendars/sources/{source_id}.ics` — approved events from exactly one registered source.
+- `GET /api/v1/events?source_id={source_id}` — source-filtered JSON results.
 
-Organization IDs are stable registry IDs, not display names. Unknown IDs return 404. A known organization with no approved events returns a valid empty calendar / empty result, not an error.
+Source IDs are stable registry identifiers, not display names. Organization records remain useful for discovery and administration, but do not determine calendar relay membership.
+
+## Publication approval
+
+The existing explicit approval manifest remains the publication boundary. A source relay is a strict subset of approved event IDs; registering a source or capturing an event never automatically approves publication.
 
 ## Consistency and caching
 
-- JSON and iCalendar projections must apply identical organization membership and approval rules.
-- ETags must be calculated from the actual filtered representation.
-- Last-Modified must be calculated only from approved records in that filtered result.
+- JSON and iCalendar projections must apply identical source filtering and approval rules.
+- ETags must be calculated from the actual source-filtered representation.
+- Last-Modified must be calculated only from approved events in that source relay.
 - Keep the existing loopback-only service boundary. This design does not authorize remote hosting or deployment.
-- Feed URLs are read-only subscriptions. Webhook delivery, subscriber accounts, private calendars, and per-user filtering remain out of scope.
+- Feed URLs are read-only subscriptions. Subscriber accounts, private feeds, and webhook delivery remain separate future capabilities.
 
-## Tests required before implementation is considered complete
+## Tests required before implementation is complete
 
-- Organization feed includes only globally approved events from sources mapped to that organization.
-- An approved event from another organization is excluded.
-- An unapproved event from the requested organization's source is excluded.
-- Unknown source mapping is excluded rather than guessed.
+- A source relay includes only globally approved events from the exact requested source.
+- Approved events from other sources are excluded.
+- Unapproved events from the requested source are excluded.
+- Unknown event source mappings are excluded rather than guessed.
 - Duplicate source IDs or invalid registry structure fail closed.
-- Unknown organization ID returns 404; known organization with no events returns an empty valid feed.
-- Organization JSON and ICS results contain the same event IDs.
+- Unknown source ID returns 404; known source with no events returns a valid empty feed.
+- Source-filtered JSON and ICS contain the same event IDs.
 - ETag and Last-Modified are scoped to the filtered representation.
-- Existing community feed behavior remains unchanged.
+- One source's changes do not alter another source's feed validators.
 
-## Deliberate limitation
+## Product boundary
 
-Source-to-organization attribution is not the same as event organizer attribution. If a future product requirement calls for an event to appear under multiple organizations, add an explicit, reviewed event-to-organization relationship with provenance; do not infer it or silently change the meaning of source ownership.
+Each source is its own calendar relay. There is no community-wide combined calendar and no organization-wide calendar aggregation in the MVP.

@@ -89,6 +89,7 @@ The project blueprint is documented before expanding the implementation:
 - [Public JSON API specification](docs/api-specification.md)
 - [Offline JSON query engine](docs/api-query-engine.md)
 - [Local read-only HTTP service](docs/local-http-service.md)
+- [Offline source health report](docs/source-health-report.md)
 - [iCalendar feed publishing design](docs/calendar-feeds.md)
 - [Offline iCalendar feed generation](docs/ics-publishing.md)
 - [Webhook specification](docs/webhook-specification.md)

@@ -134,6 +134,38 @@ class SnapshotValidationTests(unittest.TestCase):
         self.assertEqual(result["completeness"], "complete")
         self.assertTrue(result["empty_snapshot_confirmed"])
 
+    def test_page_host_and_path_must_match_source_allowlist(self):
+        profile = self.profile(
+            allowed_hosts=["example.test"],
+            allowed_paths=["/events.ics"],
+        )
+        result = validate_manifest(self.manifest(pages=[self.page(
+            url="https://other.example/events.ics",
+        )]), profile)
+        self.assertEqual(result["completeness"], "partial")
+        self.assertTrue(any("host is outside" in x for x in result["blockers"]))
+        result = validate_manifest(self.manifest(pages=[self.page(
+            url="https://example.test/private",
+        )]), profile)
+        self.assertTrue(any("path is outside" in x for x in result["blockers"]))
+
+    def test_explicitly_confirmed_empty_village_listing_can_be_complete(self):
+        profile = self.profile(
+            pagination_strategy="rel_next",
+            required_page_roles=["listing", "detail"],
+            require_detail_link_reconciliation=True,
+        )
+        manifest = self.manifest(
+            empty_snapshot_confirmed=True,
+            pagination={
+                "strategy": "rel_next", "expected_page_count": 1,
+                "observed_page_count": 1, "terminal_page_confirmed": True,
+                "pending_next_urls": [],
+            },
+            pages=[self.page(role="listing", source_event_ids=[], discovered_detail_ids=[])],
+        )
+        self.assertEqual(validate_manifest(manifest, profile)["completeness"], "complete")
+
     def test_attach_snapshot_preserves_normalized_document(self):
         normalized = {
             "format": "civiccal.normalized-events.v1",

@@ -41,3 +41,6 @@
 
 
 Additional library source: `mokena-library-board-meetings` at https://mokenalibrary.org/library-board. This is a separate public Board of Trustees schedule; its December 2026 date is unresolved (schedule says Dec 15; agendas/minutes list Dec 22).
+## Library ingestion fallback
+
+The library-wide calendar feed is not a dependency. CivicCal's fallback is to ingest the public LibraryCalendar List/Upcoming views and linked detail pages from verified offline HTML snapshots, supplement selected events with their individual iCalendar exports, and accept manually transcribed source-linked JSON snapshots when raw HTML is unavailable. This remains an offline preparation path until source access review and genuine HTML fixtures are complete. See [Mokena library calendar source research](mokena-library-calendar-source.md) for field mapping and duplicate rules.

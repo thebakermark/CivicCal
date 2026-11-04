@@ -42,7 +42,7 @@ The supplemental evidence is recorded separately in:
 
 This is intentionally separate from the iCalendar-derived fixture. These live-feed records have no iCalendar UIDs, and CivicCal must not fabricate UIDs or merge these records into the source-feed identity history. The supplement preserves each statement and links it to the district page or graphic that supports it.
 
-A district-created graphic also gives dismissal times of MJHS 10:55 AM, MIS 11:30 AM, and MES 12:00 PM. However, the accessible post context does not conclusively establish that this graphic belongs to September 4, so those times are deliberately not assigned to that date.
+The September early-dismissal times are now resolved: the official live-feed post says tomorrow is the first Early Dismissal Day and includes a district-created graphic listing MJHS 10:55 AM, MIS 11:30 AM, and MES 12:00 PM. The approved calendar identifies September 4 as the first early-dismissal date, linking the post and graphic to September 4. These times are recorded in the live-feed supplement. October 30 remains without verified times.
 
 ## Calendar PDF candidate rejected
 
@@ -92,4 +92,4 @@ Key reconciliation results:
 - The nine school-improvement/early-dismissal dates are September 4, October 30, November 20, December 18, January 15, February 12, March 12, April 16, and May 28.
 - The calendar explicitly states that MES and MIS are in session while MJHS has e-learning on November 3 and April 6.
 - The calendar summary lists 176 student attendance days and five emergency days (June 1–4 and June 7, 2027). Emergency days are contingency dates, not scheduled attendance days unless activated.
-- Exact dismissal times are not printed in the calendar image. Do not infer them; retain only times independently stated in the district iCalendar records.
+- Exact dismissal times are not printed in the calendar image. September 4 times are supported by the district live-feed post and its attached times graphic; October 30 times remain unknown. Retain only source-backed times.

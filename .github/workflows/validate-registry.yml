@@ -24,6 +24,9 @@ on:
       - "docs/mokena-park-adapter.md"
       - "docs/village-calendar-adapter.md"
       - "docs/school-schedule-classification.md"
+      - "docs/ics-publishing.md"
+      - "docs/local-http-service.md"
+      - "docs/source-health-report.md"
       - ".github/workflows/validate-registry.yml"
   pull_request:
     paths:
@@ -40,6 +43,9 @@ on:
       - "docs/source-completeness.md"
       - "docs/capture-coordinator.md"
       - "docs/school-schedule-classification.md"
+      - "docs/ics-publishing.md"
+      - "docs/local-http-service.md"
+      - "docs/source-health-report.md"
       - ".github/workflows/validate-registry.yml"
   workflow_dispatch:
 

@@ -80,11 +80,25 @@ Adapters should not write canonical events directly. Capture and parsing are sep
 - Distinguish transient errors, permanent errors, malformed content, and policy-disabled sources.
 - Do not retry indefinitely.
 
-## Scheduling
+## Scheduling and configuration-change monitoring
 
-The initial design uses a simple scheduler (systemd timer or cron) that invokes a worker, processes due sources, records results, and exits.
+The source registry is desired configuration, not an execution queue. CivicCal must monitor changes to operational flags and reconcile the desired source state against completed prerequisites and current operational state.
 
-Polling interval is source-specific and should reflect publisher update frequency and server load. Manual one-shot capture must remain distinct from scheduled polling.
+A deterministic reconciler runs after registry changes and on a periodic safety interval. Registry edits must be detected by a stable configuration fingerprint; where registry edits pass through an application command/API, that write path should enqueue reconciliation immediately. A filesystem watcher may improve responsiveness but must not be the sole mechanism because watcher events can be missed.
+
+The reconciler evaluates each source independently and creates durable, idempotent tasks when a newly satisfied condition requires work. It must not perform network capture itself. A separate task worker executes eligible tasks and rechecks every policy gate immediately before network access. A task created earlier must become blocked or cancelled if consent, approval, or polling is withdrawn before execution.
+
+Examples:
+- A source becomes eligible for one-time live capture: create a `capture_once` task, if no equivalent successful capture exists for the current configuration.
+- `polling_enabled` changes to true: create a `polling_enable_check` task. Enablement is effective only after all readiness checks pass and the scheduler has accepted the source.
+- `polling_enabled` changes to false, or access/consent is withdrawn: suspend future polling, cancel queued capture/poll tasks, and prevent new network requests. Do not delete archived captures or published event history automatically.
+- A source parser, endpoint, or completeness profile changes: create the appropriate validation/recapture task rather than silently treating old validation as current.
+
+Tasks need a stable task ID, source ID, action type, triggering configuration fingerprint, creation time, status, attempt count, timestamps, and structured result/error. Suggested statuses are `pending`, `running`, `blocked`, `succeeded`, `failed`, `cancelled`, and `superseded`. Enforce a unique idempotency key based on source, action, and relevant configuration fingerprint so repeated reconciliation does not create duplicate work.
+
+The reconciler must explain missing prerequisites as actionable blockers. It must not guess, approve a source, grant consent, or turn on polling. Human-controlled approval flags remain explicit. A task worker must never bypass the capture script's eligibility checks.
+
+The initial scheduler may be systemd timer or cron, but it should invoke the reconciler and task worker separately from due-source polling. Source polling itself remains source-specific, interval-controlled, and bounded by per-host rate limits. Manual one-shot capture remains distinct from scheduled polling.
 
 No polling is enabled merely because a source is registered or has been tested.
 

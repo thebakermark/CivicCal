@@ -242,6 +242,18 @@
       "robots_reviewed": false,
       "event_access": "mixed",
       "notes": "Official district Events page exposes a Download .ICS link resolving to this endpoint. The visible default page lists District Events; the page also exposes separate selectable calendars for Indian Trail, Dr. Julian Rogus, Hilda Walker Intermediate, Summit Hill Jr. High, and Mary Drew Early Learning Center. The exact scope returned by id=0 has not yet been verified; treat it as the default district calendar only until compared with school-specific calendar exports. Endpoint responds as text/calendar (web text viewer cannot parse it). Terms/robots review and scope review required before automated retrieval. Discovered 2026-11-03."
+    },
+    {
+      "id": "summit-hill-mary-drew-events-ical",
+      "organization_id": "summit-hill-school-district-161",
+      "source_type": "ics",
+      "url": "https://mdelc.summithill.org/apps/events/ical/?id=0",
+      "access_status": "review_required",
+      "polling_enabled": false,
+      "terms_reviewed": false,
+      "robots_reviewed": false,
+      "event_access": "mixed",
+      "notes": "Official Mary Drew Early Learning Center Events page on the district's MDELC subdomain exposes Subscribe > Download .ICS, resolving to this endpoint. Its calendar page identifies the site as Mary Drew Early Learning Center and shows a single local calendar named Events. This is a separate school-site calendar endpoint, not the district's default id=0 endpoint. Feed payload has not been inspected; the web reader rejects text/calendar. Terms/robots review and comparison against visible school events required before automated retrieval. Discovered 2026-11-03."
     }
   ],
   "verification_policy": {

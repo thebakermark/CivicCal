@@ -81,11 +81,21 @@ See [event normalization and validation](docs/event-normalization.md) and [schoo
 
 To be selected before public contributions or reuse are encouraged.
 
-## Product control documents\n\nThese are the authoritative project records:\n\n- [Product requirements and MVP acceptance criteria](docs/product-requirements.md)\n- [Accepted decision register](docs/decision-register.md)\n- [Feature register and implementation evidence](docs/feature-register.md)\n- [Project assessment](docs/project-assessment-2026-11-04.md)\n\n## Architecture and implementation roadmap
+## Product control documents
+
+These are the authoritative project records:
+
+- [Product requirements and MVP acceptance criteria](docs/product-requirements.md)
+- [Accepted decision register](docs/decision-register.md)
+- [Feature register and implementation evidence](docs/feature-register.md)
+- [Project assessment](docs/project-assessment-2026-11-04.md)
+
+## Architecture and implementation roadmap
 
 The project blueprint is documented before expanding the implementation:
 
-- [Roadmap and milestones](docs/roadmap.md)\n- [Architecture](docs/architecture.md)
+- [Roadmap and milestones](docs/roadmap.md)
+- [Architecture](docs/architecture.md)
 - [Source lifecycle and capture contract](docs/source-lifecycle.md)
 - [Source completeness and pagination](docs/source-completeness.md)
 - [One-shot HTML capture coordinator](docs/capture-coordinator.md)

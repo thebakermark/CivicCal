@@ -5,7 +5,7 @@
 **Calendar platform:** LibraryCalendar by Library Market  
 **Registry source ID:** `mokena-library-events`
 
-This is source discovery based on official publisher pages and rendered calendar views. No raw source response was captured, no event was imported, and no polling, database write, or publication was performed.
+This research is based on official publisher pages and rendered calendar views. No raw source response was captured. Two events were manually transcribed into `data/fixtures/mokena-library-manual-snapshot-2026-11-04.json` as a small provenance-aware ingestion fixture; it is not a complete snapshot. No automated polling, database write, or publication was performed.
 
 ## Publisher link and calendar views
 

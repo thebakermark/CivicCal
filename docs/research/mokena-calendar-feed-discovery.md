@@ -1,6 +1,6 @@
 # Mokena calendar feed discovery
 
-**Checked:** 2026-11-03  
+**Checked:** 2026-11-04  
 **Purpose:** Record whether the Village of Mokena and Mokena Community Park District publish an obvious calendar feed that could replace HTML extraction.
 
 This is discovery evidence, not an access approval. No automated fetch, polling, database write, or publication was performed.
@@ -14,6 +14,18 @@ This is discovery evidence, not an access approval. No automated fetch, polling,
 - A search result surfaced a MunicipalOne-hosted calendar at https://mokenail.municipalone.com/calendar.aspx. It resembles the Village calendar, but the canonical Village site did not establish that as an official feed or supported integration endpoint. Do not switch the registered source to this host without confirming the relationship.
 
 **Finding:** No public iCal/RSS feed was identified from the rendered public calendar and notification pages. This is not proof that no feed or vendor API exists; raw response headers/source and vendor documentation were not available in this review.
+
+The current rendered calendar page also exposes quick-range views (Next 7 Days, Next 30 Days, Next 3 Months, Next 6 Months, Next Year) and a month view. The calendar page's visible text does not establish how those controls are represented in raw HTML or whether the existing parser's `rel=next` / `rel=last` pagination assumptions match the live markup.
+
+Representative official detail pages reviewed on 2026-11-04:
+
+- Chamber of Commerce Parade of Lights & Village Tree Lighting Ceremony — November 21, 2026, 5:00 PM, Front Street: https://www.mokena.gov/calendarView.aspx?catid=0&cid=28236&id=0
+- Village Board Work Session — November 16, 2026, 6:00 PM, Village Hall: https://www.mokena.gov/calendarView.aspx?catid=0&cid=30732&id=0
+- CPR Class with Mokena Fire Protection District — November 2, 2026, 5:30–9:00 PM, Mokena Fire Station #1: https://www.mokena.gov/calendarView.aspx?cid=30604
+
+The CPR detail is a useful edge case: it represents one dated calendar occurrence but its description also lists multiple CPR class dates for the year. The parser should retain that description without automatically expanding it into additional events. The Village calendar also lists partner events (including Park District events), so cross-source duplicates are expected and must remain review candidates.
+
+The rendered detail pages expose the expected labels `Event Date`, `Event Time`, `Location`, and `Details`, consistent with the current adapter's intended field mapping. This is rendered-page confirmation only, not a substitute for a raw HTML capture and parser regression fixture.
 
 ## Mokena Community Park District
 

@@ -12,7 +12,7 @@ from scripts.capture_coordinator import (
 
 
 LISTING_ONE = b"""<html><body>
-<a href="calendarView.aspx?cid=1001">Community Day</a>
+<a href="https://mokenail.municipalone.com/calendarView.aspx?cid=1001">Community Day</a>
 <a rel="next" href="calendar.aspx?page=2">Next</a>
 </body></html>"""
 LISTING_TWO = b"""<html><body>

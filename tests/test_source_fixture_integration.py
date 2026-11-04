@@ -103,13 +103,13 @@ class SourceFixtureIntegrationTests(unittest.TestCase):
             calendar_text, summary = build_calendar(persisted, publication)
             self.assertEqual(summary["published_count"], 1)
             self.assertIn(f"UID:{event_id}@civiccal", calendar_text)
-            self.assertIn("SUMMARY:Village of Mokena's Food Trucks on Front", calendar_text)
-            self.assertIn("DTSTART:20260916T160000", calendar_text)
-            self.assertIn("DTEND:20260916T200000", calendar_text)
+            self.assertIn("SUMMARY:Chamber of Commerce Parade of Lights & Village Tree Lighting Ceremony", calendar_text)
+            self.assertIn("DTSTART:20261121T170000", calendar_text)
+            self.assertIn("DTEND:20261121T200000", calendar_text)
 
             round_trip = parse_ics(calendar_text, source_id="calendar-round-trip")
             self.assertEqual(round_trip["event_count"], 1)
-            self.assertEqual(round_trip["events"][0]["start"]["value"], "2026-09-16T16:00:00")
+            self.assertEqual(round_trip["events"][0]["start"]["value"], "2026-11-21T17:00:00")
             self.assertFalse(round_trip["events"][0]["start"]["utc"])
 
             # Exercise the persisted HTML-derived event through its stable source relay.

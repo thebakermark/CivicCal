@@ -173,7 +173,9 @@ def main() -> int:
 
     print(
         f"Validated {report['source_count']} source fixtures; "
-        f"{report['event_count']} events; "
+        f"{report['event_count']} parsed events; "
+        f"{report['normalized_event_count']} normalized events; "
+        f"{report['review_flagged_event_count']} flagged for review; "
         f"{report['warning_count']} parser warnings."
     )
     for source in report["sources"]:

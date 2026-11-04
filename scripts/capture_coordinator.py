@@ -99,6 +99,7 @@ def coordinate_village_capture(source: dict, policies_path: Path, archive_dir: P
     page_limit_hit = False
     detail_limit_hit = False
     pagination_cycle = False
+    terminal_page_seen = False
 
     def capture_page(url: str, role: str) -> tuple[bytes, dict, Path]:
         allowed_url = validate_request_url(source, url, policies_path)
@@ -151,7 +152,13 @@ def coordinate_village_capture(source: dict, policies_path: Path, archive_dir: P
                 "metadata_file": str(metadata_path),
                 "parser_output": parsed,
             })
-            for next_url in parsed.get("pagination", {}).get("next_page_urls", []):
+            page_pagination = parsed.get("pagination", {})
+            if page_pagination.get("terminal_page_confirmed") is True:
+                if page_pagination.get("next_page_urls"):
+                    warnings.append(f"Page {url} claims to be terminal but also advertises a next page.")
+                else:
+                    terminal_page_seen = True
+            for next_url in page_pagination.get("next_page_urls", []):
                 validate_request_url(source, next_url, policies_path)
                 if next_url in seen_listing_urls:
                     pagination_cycle = True
@@ -215,7 +222,7 @@ def coordinate_village_capture(source: dict, policies_path: Path, archive_dir: P
             "strategy": profile.get("pagination_strategy"),
             "expected_page_count": len(pages),
             "observed_page_count": len(pages),
-            "terminal_page_confirmed": not listing_queue and not page_limit_hit and not pagination_cycle,
+            "terminal_page_confirmed": terminal_page_seen and not listing_queue and not page_limit_hit and not pagination_cycle,
             "pending_next_urls": pending_urls,
         },
         "pages": pages,

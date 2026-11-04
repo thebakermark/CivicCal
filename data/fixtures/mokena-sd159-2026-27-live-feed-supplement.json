@@ -34,7 +34,7 @@
     {
       "id": "early-dismissal-times-graphic",
       "url": "https://core-docs.s3.amazonaws.com/mokena_school_district_159_ar/live_feed_image/image/29454822/large_Pink_and_White_Cute_Bordered_Clock_Leave_the_Office_Early_Day_Social_Media_Graphic__2_.png",
-      "description": "District-created graphic giving dismissal times for an early-dismissal day; linked to the September early-dismissal notice, but date association requires caution."
+      "description": "District-created graphic attached to the official live-feed post saying tomorrow is the first Early Dismissal Day. The approved calendar identifies September 4 as the first early-dismissal date, resolving the graphic's date association."
     },
     {
       "id": "august-chalk-the-walk-live-feed",
@@ -65,9 +65,17 @@
       "school_scope": "District dates graphic; applies district-wide unless a school-specific notice states otherwise.",
       "source_text": "04 FRI. EARLY RELEASE DAY",
       "evidence": [
-        "september-district-dates-graphic"
+        "september-district-dates-graphic",
+        "early-dismissal-times-graphic",
+        "mis-live-feed-page-2"
       ],
-      "dismissal_time": null
+      "dismissal_time": null,
+      "dismissal_times_by_school": {
+        "MJHS": "10:55 AM",
+        "MIS": "11:30 AM",
+        "MES": "12:00 PM"
+      },
+      "date_basis": "The district live-feed post says tomorrow is the first Early Dismissal Day and includes this times graphic; the approved calendar identifies September 4 as the first early-dismissal date."
     },
     {
       "title": "Labor Day — no school",
@@ -137,12 +145,6 @@
     }
   ],
   "excluded_or_unresolved": [
-    {
-      "date": "2026-09-04",
-      "claim": "Exact dismissal times by school",
-      "status": "not included",
-      "reason": "A separate district graphic lists MJHS 10:55 AM, MIS 11:30 AM, MES 12:00 PM, but the accessible post context did not conclusively establish that this graphic belongs to the September 4 event. Do not attach these times without stronger linkage."
-    },
     {
       "date_range": "2026-08-17 to 2026-08-18",
       "claim": "Chalk the Walk activity at MES",

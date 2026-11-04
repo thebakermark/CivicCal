@@ -67,6 +67,8 @@
           "enum": ["discovered", "review_required", "approved", "blocked", "retired"]
         },
         "polling_enabled": { "type": "boolean" },
+        "consent_required": { "type": "boolean" },
+        "consent_granted": { "type": "boolean" },
         "poll_interval_minutes": { "type": "integer", "minimum": 5 },
         "last_verified_at": { "type": "string", "format": "date-time" },
         "terms_reviewed": { "type": "boolean" },

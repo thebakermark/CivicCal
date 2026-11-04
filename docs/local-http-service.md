@@ -9,8 +9,8 @@
 ```sh
 python scripts/serve_api.py \
   --state data/state/identity.json \
-  --manifest data/publication/source.json \\
-  --registry data/sources.json \\
+  --manifest data/publication/source.json \
+  --registry data/sources.json \
   --host 127.0.0.1 \
   --port 8765
 ```

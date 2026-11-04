@@ -10,6 +10,24 @@ The largest documentation risk was architecture drift: the old architecture desc
 
 Discover public-interest organizations and their independent event sources, capture and preserve trustworthy event information, store it with provenance/history in a database, and provide a stable iCalendar subscription URL for each source plus a read-only API.
 
+## Registry coverage snapshot
+
+The checked-in source registry currently contains **24 organization records and 12 independent source records**.
+
+Organization verification status:
+- 5 official sites identified.
+- 1 feed verification required.
+- 18 organization identities/channels still require verification.
+
+Registered sources:
+- Village of Mokena events.
+- Mokena Community Public Library events and library board meetings.
+- Mokena Community Park District events and board meetings.
+- Mokena SD 159 events feed.
+- Summit Hill SD 161 district events, Indian Trail, Dr. Julian Rogus, Hilda Walker, Summit Hill Jr. High, and Mary Drew calendars.
+
+Current source authorization state: 11 sources are review_required and 1 source (Mokena SD159) is blocked. All 12 have polling_enabled=false. This is the correct conservative state; source records being present does not mean capture permission has been granted.
+
 ## Assessment
 
 | Capability | Assessment | Reason |

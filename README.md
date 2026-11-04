@@ -1,6 +1,6 @@
 # CivicCal
 
-A personal-use calendar aggregator for Mokena, Illinois and nearby communities.
+Community event discovery and independent calendar subscription infrastructure for Mokena, Illinois and nearby communities.
 
 CivicCal reads free, publicly available event information published by public entities—such as the Village, library, park district, and school districts—normalizes it, stores it locally, and provides iCalendar subscription feeds for the user's own calendar apps. It does not access private accounts, nonpublic information, or restricted systems.
 
@@ -81,11 +81,11 @@ See [event normalization and validation](docs/event-normalization.md) and [schoo
 
 To be selected before public contributions or reuse are encouraged.
 
-## Architecture and implementation roadmap
+## Product control documents\n\nThese are the authoritative project records:\n\n- [Product requirements and MVP acceptance criteria](docs/product-requirements.md)\n- [Accepted decision register](docs/decision-register.md)\n- [Feature register and implementation evidence](docs/feature-register.md)\n- [Project assessment](docs/project-assessment-2026-11-04.md)\n\n## Architecture and implementation roadmap
 
 The project blueprint is documented before expanding the implementation:
 
-- [Roadmap and milestones](docs/roadmap.md)
+- [Roadmap and milestones](docs/roadmap.md)\n- [Architecture](docs/architecture.md)
 - [Source lifecycle and capture contract](docs/source-lifecycle.md)
 - [Source completeness and pagination](docs/source-completeness.md)
 - [One-shot HTML capture coordinator](docs/capture-coordinator.md)
@@ -108,4 +108,4 @@ The project blueprint is documented before expanding the implementation:
 - [Webhook specification](docs/webhook-specification.md)
 - [Open-source reuse assessment](docs/open-source-reuse.md)
 
-The current implementation is an offline/local development tool. The JSON storage backend is in use; database selection and any always-on hosting can wait until the basic personal calendar workflow is running.
+The current implementation is an offline/local development foundation. JSON storage is in use; the MVP requires a persistent database, but implementation/migration remain deferred until target-environment review. Public deployment and unattended polling are not authorized.

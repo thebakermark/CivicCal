@@ -40,7 +40,7 @@ CivicCal maintains the information relay. It does not replace calendar apps or e
 | CC-015 | Keep publication approval separate from ingestion | Capture never publishes automatically; source-scoped event approval is explicit |
 | CC-016 | Show source health and operational outcomes | Operator identifies capture/parse/validation failures and inspects provenance |
 | CC-017 | Back up and restore database and raw archive | Documented, tested recovery from backup |
-| CC-018 | Document future webhook interoperability | Stable event-change envelope and delivery contract specified; actual delivery is post-MVP |
+| CC-018 | Document future webhook interoperability | Stable event-change envelope and delivery contract specified; actual delivery is post-MVP |\n| CC-019 | Let residents discover organizations, independent sources, and their subscription URLs | Read-only organization/source directory endpoints expose public-safe metadata and each source's ICS URL; no internal authorization flags or private configuration leak |
 
 ## 4. Operational and safety invariants
 

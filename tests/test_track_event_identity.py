@@ -115,6 +115,22 @@ class TrackEventIdentityTests(unittest.TestCase):
         self.assertEqual(current["lifecycle_history"][-1]["from_status"], "scheduled")
         self.assertEqual(current["lifecycle_history"][-1]["to_status"], "cancelled")
 
+
+    def test_registration_state_change_creates_material_revision(self):
+        first_event = event()
+        first_event["registration_status"] = "open"
+        first_event["registration_required"] = True
+        _, state = process_normalized(normalized([first_event], capture="registration-1"))
+        updated = event()
+        updated["registration_status"] = "full"
+        updated["registration_required"] = True
+        result, state = process_normalized(
+            normalized([updated], capture="registration-2"), state,
+            observed_at="2026-11-04T16:00:00Z")
+        current = next(iter(state["events"].values()))
+        self.assertEqual(result["new_revisions"], 1)
+        self.assertEqual(current["current"]["registration_status"], "full")
+
     def test_missing_source_id_is_unkeyed_and_retained(self):
         value = event(uid=None)
         result, state = process_normalized(normalized([value]))

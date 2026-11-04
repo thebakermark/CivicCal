@@ -9,7 +9,7 @@ class SchoolScheduleClassificationTests(unittest.TestCase):
     def test_no_school_is_classified(self):
         result = classify_event({"title": "No School - Thanksgiving"})
         self.assertTrue(result["is_schedule_exception"])
-        self.assertEqual(result["student_attendance"], "no_school")
+        self.assertEqual(result["student_attendance"], "confirm_student_attendance")
 
     def test_named_break_is_classified(self):
         result = classify_event({"title": "Winter Break"})

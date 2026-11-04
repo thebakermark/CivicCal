@@ -12,6 +12,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_POLICIES = ROOT / "data" / "source-completeness.json"
@@ -77,7 +78,7 @@ def validate_manifest(manifest: dict, profile: dict) -> dict:
     if not isinstance(pending, list) or pending:
         blockers.append("One or more next-page URLs remain unprocessed.")
 
-    required_roles = profile.get("required_page_roles", [])
+    required_roles = set(profile.get("required_page_roles", []))
     roles = set()
     page_urls = set()
     discovered_detail_ids: set[str] = set()
@@ -90,12 +91,25 @@ def validate_manifest(manifest: dict, profile: dict) -> dict:
         role = page.get("role")
         roles.add(role)
         url = page.get("url")
-        if not isinstance(url, str) or not url.startswith("https://"):
+        if not isinstance(url, str):
             blockers.append(f"Page {index + 1} has no HTTPS URL.")
-        elif url in page_urls:
-            blockers.append(f"Page {index + 1} duplicates a page URL.")
         else:
-            page_urls.add(url)
+            parsed_page_url = urlparse(url)
+            if (parsed_page_url.scheme != "https" or not parsed_page_url.hostname
+                    or parsed_page_url.username or parsed_page_url.password
+                    or parsed_page_url.port not in (None, 443)):
+                blockers.append(f"Page {index + 1} has an unsafe or non-HTTPS URL.")
+            else:
+                allowed_hosts = set(profile.get("allowed_hosts", []))
+                allowed_paths = set(profile.get("allowed_paths", []))
+                if allowed_hosts and parsed_page_url.hostname not in allowed_hosts:
+                    blockers.append(f"Page {index + 1} host is outside the source allowlist.")
+                if allowed_paths and parsed_page_url.path not in allowed_paths:
+                    blockers.append(f"Page {index + 1} path is outside the source allowlist.")
+            if url in page_urls:
+                blockers.append(f"Page {index + 1} duplicates a page URL.")
+            else:
+                page_urls.add(url)
         if page.get("capture_outcome") != "captured" or page.get("http_status") != 200:
             blockers.append(f"Page {index + 1} was not captured successfully with HTTP 200.")
         if page.get("parse_status") != "success":
@@ -115,7 +129,11 @@ def validate_manifest(manifest: dict, profile: dict) -> dict:
         if role == "detail":
             parsed_detail_ids.update(ids)
 
-    missing_roles = set(required_roles) - roles
+    empty_confirmed = manifest.get("empty_snapshot_confirmed") is True
+    if (profile.get("require_detail_link_reconciliation") is True
+            and empty_confirmed and not discovered_detail_ids):
+        required_roles.discard("detail")
+    missing_roles = required_roles - roles
     if missing_roles:
         blockers.append("Required page roles are missing: " + ", ".join(sorted(missing_roles)) + ".")
 
@@ -128,7 +146,6 @@ def validate_manifest(manifest: dict, profile: dict) -> dict:
             if unexpected:
                 blockers.append("Detail pages contain IDs not present in listing pages: " + ", ".join(unexpected[:20]) + ".")
 
-    empty_confirmed = manifest.get("empty_snapshot_confirmed") is True
     if not event_ids and not empty_confirmed:
         blockers.append("No event IDs were observed; an explicit empty-snapshot confirmation is required.")
 

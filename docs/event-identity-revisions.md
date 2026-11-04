@@ -4,7 +4,7 @@
 
 `scripts/track_event_identity.py` adds a deterministic, offline reconciliation step after normalization. It tracks an event across captures from the same registered source and records material revisions without merging records across sources.
 
-It writes a portable JSON state snapshot as a prototype for the later SQLite repository. No database is created or deployed.
+It writes state through the replaceable IdentityStateStore interface. The current backend is an atomic JSON file; database selection is deferred. No database is created or deployed.
 
 ## Stable identity
 
@@ -50,7 +50,7 @@ Then process the normalized result using a JSON state file:
 python scripts/track_event_identity.py normalized.json --state data/identity/state.json --output identity-result.json
 ```
 
-The state file is created on first use and updated on each new capture. For a dry review, pass a separate path with `--state-output` so the prior state remains unchanged.
+The state file is created on first use and updated on each new capture through the JSON backend documented in [Storage Interface](storage-interface.md). For a dry review, pass a separate path with `--state-output` so the prior state remains unchanged.
 
 ## State model
 

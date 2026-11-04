@@ -8,7 +8,7 @@ The largest documentation risk was architecture drift: the old architecture desc
 
 ## Intended product
 
-Discover public-interest organizations and their independent event sources, capture and preserve trustworthy event information, store it with provenance/history in a database, and provide a stable iCalendar subscription URL for each source plus a read-only API.
+The user selects organizations and desired event calendars; CivicCal helps identify and verify their official sources, captures and preserves permitted event information, stores it with provenance/history in a database, and provides a stable iCalendar subscription URL for each selected source plus a private read-only API.
 
 ## Registry coverage snapshot
 

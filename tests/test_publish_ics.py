@@ -155,6 +155,7 @@ class PublishICSTests(unittest.TestCase):
         record = identity_record()
         record["current"].update({
             "start": {"value": "2027-03-14T09:00:00", "kind": "date-time"},
+            "end": {"value": "2027-03-14T10:00:00", "kind": "date-time"},
             "time_status": "zoned",
             "timezone": "Etc/GMT+5",
         })

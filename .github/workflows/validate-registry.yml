@@ -11,6 +11,7 @@ on:
       - "docs/source-fixture-validation.md"
       - "docs/capture-to-parser.md"
       - "docs/event-normalization.md"
+      - "docs/event-identity-revisions.md"
       - "docs/processing-pipeline.md"
       - "docs/html-normalization.md"
       - "docs/mokena-park-adapter.md"

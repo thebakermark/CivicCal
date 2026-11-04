@@ -63,7 +63,8 @@ def _capture_history(source_id: str, archive: Path) -> tuple[list[dict], list[st
         outcome = metadata.get("outcome")
         payload_name = metadata.get("raw_payload_file")
         if outcome == "captured":
-            if not isinstance(payload_name, str) or Path(payload_name).name != payload_name:
+            if (not isinstance(payload_name, str) or Path(payload_name).name != payload_name
+                    or "/" in payload_name or "\\" in payload_name):
                 warnings.append(f"{source_id}: unsafe or missing payload reference in {metadata_path.name}.")
             else:
                 payload_path = folder / payload_name

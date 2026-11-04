@@ -1,4 +1,6 @@
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -87,6 +89,35 @@ class SetPublicationTests(unittest.TestCase):
         with self.assertRaisesRegex(PublicationApprovalError, "duplicate event IDs"):
             update_publication(source_registry("village"), state(event()), invalid,
                                "village", "evt-a", "approve")
+
+    def test_cli_approves_event_and_changes_only_manifest(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            registry_path = root / "sources.json"
+            state_path = root / "identity.json"
+            manifest_path = root / "publication.json"
+            registry = source_registry("village")
+            identity = state(event())
+            publication = manifest()
+            registry_path.write_text(json.dumps(registry), encoding="utf-8")
+            state_path.write_text(json.dumps(identity), encoding="utf-8")
+            manifest_path.write_text(json.dumps(publication), encoding="utf-8")
+
+            command = [
+                sys.executable, str(Path(__file__).resolve().parents[1] / "scripts" / "set_publication.py"),
+                "--registry", str(registry_path),
+                "--identity-state", str(state_path),
+                "--manifest", str(manifest_path),
+                "--source-id", "village",
+                "--event-id", "evt-a",
+                "--action", "approve",
+            ]
+            result = subprocess.run(command, capture_output=True, text=True, check=False)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertTrue(json.loads(result.stdout)["currently_approved"])
+            self.assertEqual(json.loads(manifest_path.read_text(encoding="utf-8"))["approved_event_ids"], ["evt-a"])
+            self.assertEqual(json.loads(registry_path.read_text(encoding="utf-8")), registry)
+            self.assertEqual(json.loads(state_path.read_text(encoding="utf-8")), identity)
 
     def test_atomic_writer_preserves_complete_json(self):
         with tempfile.TemporaryDirectory() as directory:

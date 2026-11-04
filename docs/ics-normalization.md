@@ -98,3 +98,7 @@ The current Mokena SD 159 calendar source is still marked
 `review_required`. The importer intentionally refuses to fetch it until the
 source review is completed and the registry is updated accordingly. No live
 fetch or scheduled polling is performed by the tests or CI.
+
+### SD 159 manual-import consent switch
+
+The SD 159 source record has `consent_required: true` and `consent_granted: false` in `data/sources.json`. Keep it false until written consent for automated access is received. After receiving written consent, change only `consent_granted` to `true` to enable the existing one-shot manual importer. The importer does not schedule polling; `polling_enabled` remains false. Set `consent_granted` back to `false` to disable network imports again. This switch does not publish the source or enable recurring fetches.

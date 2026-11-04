@@ -13,8 +13,12 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
-from publish_ics import FeedError, build_calendar
-from query_events import QueryError, query_events
+try:
+    from .publish_ics import FeedError, build_calendar
+    from .query_events import QueryError, query_events
+except ImportError:  # direct script execution
+    from publish_ics import FeedError, build_calendar
+    from query_events import QueryError, query_events
 
 
 OPENAPI = {
@@ -51,12 +55,16 @@ class ServiceInputError(Exception):
     pass
 
 
+class DataUnavailable(Exception):
+    pass
+
+
 def _load_documents(state_path: Path, manifest_path: Path) -> tuple[dict, dict]:
     try:
         state = json.loads(state_path.read_text(encoding="utf-8"))
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        raise ServiceInputError("CivicCal data files are unavailable or invalid.") from exc
+        raise DataUnavailable("CivicCal data files are unavailable or invalid.") from exc
     return state, manifest
 
 
@@ -174,7 +182,7 @@ def make_handler(state_path: Path, manifest_path: Path):
                 self._json(200, result, last_modified=last_modified)
             except (FeedError, QueryError, ServiceInputError) as exc:
                 self._json(400, {"error": "invalid_request", "message": str(exc)})
-            except ServiceInputError:
+            except DataUnavailable:
                 self._json(503, {"error": "service_unavailable"})
             except Exception:
                 self._json(500, {"error": "internal_error"})

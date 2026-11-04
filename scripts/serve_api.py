@@ -218,7 +218,7 @@ def main() -> int:
         print(f"CivicCal read-only API listening on http://{args.host}:{args.port}")
         server.serve_forever()
         return 0
-    except (ValueError, OSError, ServiceInputError) as exc:
+    except (ValueError, OSError, ServiceInputError, DataUnavailable) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
 

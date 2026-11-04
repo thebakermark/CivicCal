@@ -144,6 +144,60 @@ class TrackEventIdentityTests(unittest.TestCase):
         self.assertEqual(len(state["events"]), 1)
         self.assertEqual(result["new_events"], 0)
 
+
+    def test_complete_snapshot_records_absence_without_cancelling_or_deleting(self):
+        _, state = process_normalized(normalized([event()], capture="capture-1"))
+        doc = normalized([], capture="capture-2")
+        doc["snapshot"] = {"completeness": "complete",
+                           "evidence": "Adapter verified every page of the publisher listing.",
+                           "empty_snapshot_confirmed": True}
+        result, state = process_normalized(doc, state, observed_at="2026-11-04T13:00:00Z")
+        current = next(iter(state["events"].values()))
+        self.assertEqual(result["missing_events"], 1)
+        self.assertEqual(current["presence_status"], "missing")
+        self.assertEqual(current["lifecycle_status"], "scheduled")
+        self.assertEqual(len(current["revisions"]), 1)
+        self.assertEqual(len(state["events"]), 1)
+
+    def test_partial_unknown_and_unasserted_empty_snapshots_do_not_mark_missing(self):
+        for snapshot in ({"completeness": "partial", "evidence": "Only page one."},
+                         {"completeness": "unknown", "evidence": "Not established."},
+                         {"completeness": "complete", "evidence": "Page parsed."}):
+            _, state = process_normalized(normalized([event()], capture="seed"))
+            doc = normalized([], capture="next")
+            doc["snapshot"] = snapshot
+            result, state = process_normalized(doc, state)
+            self.assertEqual(result["missing_events"], 0)
+            self.assertNotIn("presence_status", next(iter(state["events"].values())))
+
+    def test_reappearance_does_not_override_explicit_cancellation(self):
+        _, state = process_normalized(normalized([event(status="cancelled")], capture="seed"))
+        absent = normalized([], capture="absent")
+        absent["snapshot"] = {"completeness": "complete", "evidence": "Complete source export.",
+                              "empty_snapshot_confirmed": True}
+        _, state = process_normalized(absent, state)
+        result, state = process_normalized(normalized([event(status="cancelled")], capture="back"),
+                                           state, observed_at="2026-11-04T15:00:00Z")
+        current = next(iter(state["events"].values()))
+        self.assertEqual(result["missing_events"], 0)
+        self.assertEqual(current["presence_status"], "present")
+        self.assertEqual(current["lifecycle_status"], "cancelled")
+        self.assertEqual(current["missing_snapshot_count"], 0)
+        self.assertEqual(current["missing_observation_history"][-1]["transition"], "reappeared")
+
+    def test_nonempty_complete_snapshot_records_missing_and_repeated_absence(self):
+        _, state = process_normalized(normalized([event(), event(uid="publisher-2")], capture="seed"))
+        doc = normalized([event()], capture="complete-1")
+        doc["snapshot"] = {"completeness": "complete", "evidence": "All pages fetched and parsed."}
+        result, state = process_normalized(doc, state)
+        self.assertEqual(result["missing_events"], 1)
+        doc2 = normalized([event()], capture="complete-2")
+        doc2["snapshot"] = doc["snapshot"]
+        result, state = process_normalized(doc2, state)
+        missing = [e for e in state["events"].values() if e["source_event_id"] == "publisher-2"][0]
+        self.assertEqual(result["missing_events"], 1)
+        self.assertEqual(missing["missing_snapshot_count"], 2)
+
     def test_nonmaterial_source_record_change_does_not_create_revision(self):
         original = event()
         _, state = process_normalized(normalized([original], capture="capture-1"))

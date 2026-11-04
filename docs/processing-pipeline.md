@@ -75,14 +75,14 @@ Compare new observations with prior observations for the same source:
 - Unchanged event.
 - Material update.
 - Explicit publisher status transition (for example, scheduled to cancelled).
-- Missing from current capture (record as absence only when snapshot completeness is established; never infer cancellation).
+- Missing from current capture (record presence-only absence when an adapter explicitly asserts a complete snapshot with evidence; require an additional confirmation for empty snapshots).
 - Ambiguous identity or possible duplicate.
 
 Use stable source identifiers first. Fallback matching must be deterministic and produce review candidates when uncertain.
 
 ## Stage 6: Persist
 
-Retain every source observation, including unchanged observations, separately from material event revisions. Record explicit lifecycle status transitions with provenance. Write source observations, canonical event changes, revisions, and audit records transactionally when a persistent backend is selected. Reprocessing the same capture should be idempotent.
+Retain every source observation, including unchanged observations, separately from material event revisions. Record explicit lifecycle status transitions with provenance. Keep publisher lifecycle status separate from presence; missing observations never imply cancellation or deletion, and reappearance does not override an explicit publisher cancellation. Write source observations, canonical event changes, revisions, and audit records transactionally when a persistent backend is selected. Reprocessing the same capture should be idempotent.
 
 ## Stage 7: Publish
 

@@ -79,7 +79,7 @@ def _page_text(parser: VillagePageParser) -> str:
         text = text.rsplit(marker, 1)[-1]
     footer = "Show All Calendar Events"
     if footer in text:
-        text = text.split(footer, 1)[0] + footer
+        text = text.split(footer, 1)[0]
     return text
 
 

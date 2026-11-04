@@ -35,6 +35,11 @@
       "id": "early-dismissal-times-graphic",
       "url": "https://core-docs.s3.amazonaws.com/mokena_school_district_159_ar/live_feed_image/image/29454822/large_Pink_and_White_Cute_Bordered_Clock_Leave_the_Office_Early_Day_Social_Media_Graphic__2_.png",
       "description": "District-created graphic giving dismissal times for an early-dismissal day; linked to the September early-dismissal notice, but date association requires caution."
+    },
+    {
+      "id": "august-chalk-the-walk-live-feed",
+      "url": "https://mes.mokena159.org/o/mes/live-feed?page_no=2",
+      "description": "Official district live-feed post states MES students, parents, and staff could visit on August 17 and 18 for Chalk the Walk; this does not establish whether classes were in session."
     }
   ],
   "events": [
@@ -143,6 +148,12 @@
       "claim": "Exact dismissal times by school",
       "status": "not included",
       "reason": "A separate district graphic lists MJHS 10:55 AM, MIS 11:30 AM, MES 12:00 PM, but the accessible post context did not conclusively establish that this graphic belongs to the September 4 event. Do not attach these times without stronger linkage."
+    },
+    {
+      "date_range": "2026-08-17 to 2026-08-18",
+      "claim": "Chalk the Walk activity at MES",
+      "status": "source context added; school attendance unresolved",
+      "reason": "District live-feed post invites students, parents, and staff to visit school on these dates, but an on-campus activity does not establish that these were student attendance days or teacher institute days."
     }
   ]
 }

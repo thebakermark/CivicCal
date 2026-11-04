@@ -191,7 +191,7 @@
       "terms_reviewed": false,
       "robots_reviewed": false,
       "event_access": "mixed",
-      "notes": "Official Village calendar page on current mokena.gov domain. Calendar view includes municipal meetings, closures, recycling days, election/voting notices, and community events submitted by partner organizations, including Park District events. Because partner events may also arrive from their originating organization, preserve source provenance and create duplicate candidates rather than silently merging. HTML calendar has date-range/category controls; determine stable event-detail URLs and pagination/query behavior before building the adapter. Polling remains disabled pending terms/robots and parser review."
+      "notes": "Official Village calendar page on current mokena.gov domain. Calendar view includes municipal meetings, closures, recycling days, election/voting notices, and community events submitted by partner organizations, including Park District events. Individual event detail pages use the MunicipalCMS calendarView.aspx route with a cid query parameter; detail pages expose Event Date, Event Time, Location, and Details. Preserve source provenance and create duplicate candidates rather than silently merging partner events. Listing and detail parsing are implemented offline in scripts/parse_village.py. Terms/robots review and parser verification against saved real HTML are still required; polling remains disabled."
     },
     {
       "id": "mokena-library-events",

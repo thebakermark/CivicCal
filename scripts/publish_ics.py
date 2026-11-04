@@ -314,7 +314,7 @@ def build_calendar(identity_state: dict, manifest: dict) -> tuple[str, dict]:
         start = current.get("start")
         raw_start = start.get("value") if isinstance(start, dict) else None
         has_explicit_offset = isinstance(raw_start, str) and (
-            raw_start.endswith("Z") or bool(re.search(r"[+-]\\d{2}:?\\d{2}$", raw_start))
+            raw_start.endswith("Z") or bool(re.search(r"[+-]\d{2}:?\d{2}$", raw_start))
         )
         if current.get("time_status") == "zoned" and isinstance(tzid, str) and tzid and not has_explicit_offset:
             year = _event_year(start)

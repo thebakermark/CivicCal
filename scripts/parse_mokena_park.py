@@ -63,6 +63,7 @@ class ParkEventsParser(HTMLParser):
             "date_text": None,
             "event_date_year_known": False,
             "description": [],
+            "content": [],
             "registration_deadline_text": [],
             "location_text": [],
             "fee_text": [],

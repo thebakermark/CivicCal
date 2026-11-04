@@ -67,5 +67,40 @@ class SchoolScheduleClassificationTests(unittest.TestCase):
                              source_event["title"])
 
 
+    def test_e_learning_day_is_remote_learning_not_no_school(self):
+        result = classify_event({
+            "title": "Election Day - E-Learning Day",
+            "description": "MES and MIS will be in session. MJHS will have an E-Learning Day."
+        })
+        self.assertTrue(result["is_schedule_exception"])
+        self.assertEqual(result["schedule_type"], "e_learning")
+        self.assertEqual(result["student_attendance"], "remote_learning")
+
+    def test_mokena_sd159_fixture_preserves_school_specific_e_learning(self):
+        path = Path(__file__).parents[1] / "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json"
+        fixture = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(fixture["school_year"], "2026-2027")
+        self.assertEqual(len(fixture["events"]), 17)
+        election_day = fixture["events"][0]
+        self.assertEqual(election_day["start_date"], "2026-11-03")
+        self.assertEqual(election_day["school_scope"]["remote_learning"],
+                         ["Mokena Junior High School"])
+        self.assertEqual(election_day["school_scope"]["in_person"],
+                         ["Mokena Elementary School", "Mokena Intermediate School"])
+        classified = classify_event({"title": election_day["title"]})
+        self.assertEqual(classified["schedule_type"], "e_learning")
+        self.assertEqual(classified["student_attendance"], "remote_learning")
+
+    def test_mokena_sd159_fixture_retains_provenance_and_coverage_limits(self):
+        path = Path(__file__).parents[1] / "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json"
+        fixture = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(fixture["source"]["coverage_start"], "2026-11-03")
+        self.assertEqual(fixture["source"]["vevent_count"], 5936)
+        self.assertTrue(all(event["source_event_uids"] for event in fixture["events"]))
+        spring_break = next(event for event in fixture["events"]
+                            if event["schedule_type"] == "school_break"
+                            and event["start_date"] == "2027-03-26")
+        self.assertEqual(spring_break["end_date_inclusive"], "2027-04-02")
+
 if __name__ == "__main__":
     unittest.main()

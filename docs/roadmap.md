@@ -91,7 +91,7 @@ It is not limited to a consumer-facing calendar website. Its primary product is 
 
 ### 7. iCalendar distribution
 - Generate valid RFC 5545 feeds with stable UIDs and correct update/cancellation semantics.
-- Offer community-wide, organization-specific, source-specific, and curated filtered feeds. Organization membership is derived from source registry ownership; see [organization subscription model](organization-calendar-subscriptions.md).
+- Offer one stable source-specific feed per registered source. Each relay contains only events originating from that source; there is no combined community feed.
 - Include feed caching and stable subscription URLs.
 - Validate generated feeds with independent calendar parsers.
 
@@ -120,7 +120,7 @@ It is not limited to a consumer-facing calendar website. Its primary product is 
 
 ## MVP outcome (the product we are building)
 
-The MVP is a working end-to-end public event discovery and calendar subscription service—not merely an API prototype or a set of feed generators.
+The MVP is a working end-to-end public event discovery and independent source-relay service—not merely an API prototype or a set of feed generators.
 
 A user must be able to:
 
@@ -129,7 +129,7 @@ A user must be able to:
 3. Parse and normalize those records into a consistent CivicCal event model while preserving source provenance and uncertainty.
 4. Store organizations, sources, events, source observations, and update history in a persistent database.
 5. Retrieve the stored events through a read-only API.
-6. Subscribe to a stable community-wide iCalendar URL and organization-specific iCalendar URLs in Apple Calendar, Google Calendar, Outlook, and other compatible calendar apps.
+6. Subscribe to a stable, independent iCalendar relay URL for each registered source in Apple Calendar, Google Calendar, Outlook, and other compatible calendar apps. No combined community calendar is required.
 7. Refresh event data from sources through a controlled capture process, recording changes without treating a missing event as automatically cancelled.
 
 **MVP acceptance test:** Starting from a clean installation, an operator can register an organization/source, ingest a representative source fixture (and later a permitted live capture), persist its events in the database, query them, and generate a valid `.ics` subscription feed from the same stored records. A calendar client can subscribe to that feed and receive subsequent approved updates without duplicate churn.
@@ -141,7 +141,7 @@ Prioritize:
 1. Source registry and deterministic capture.
 2. ICS + existing HTML adapters.
 3. Canonical event storage and revision history.
-4. Combined community ICS feed and per-organization feeds.
+4. Independent per-source ICS relays.
 5. Read-only JSON API.
 6. Basic source health and backup/restore.
 
@@ -151,7 +151,7 @@ Webhooks, advanced search, user-created custom feeds, and a full web UI follow a
 
 Already present in the repository: source registry schema/validator, source onboarding docs, dependency-free ICS parser, HTML/JSON-LD extraction foundation, Mokena Park District and Village adapters, duplicate-candidate detection, manual ICS source importer, fixture validation, CI checks, an offline RFC 5545 feed generator, a read-only JSON query projection, and a loopback-only HTTP integration server, all driven by an explicit publication approval manifest.
 
-Not yet implemented as a complete service: canonical persistent event database, general scheduled capture engine, public deployment and remote API access, organization/source-specific feed routes (design documented; implementation pending), recurrence-aware ICS publication, webhook delivery, and operations/backup service. A loopback-only read-only HTTP integration server with ETag caching and an offline source health/integrity report are implemented for local testing.
+Not yet implemented as a complete service: canonical persistent event database, general scheduled capture engine, public deployment and remote API access, source-specific feed routes (design documented; implementation pending), recurrence-aware ICS publication, webhook delivery, and operations/backup service. A loopback-only read-only HTTP integration server with ETag caching and an offline source health/integrity report are implemented for local testing.
 
 The checked-in fixtures for the Park District and Village are representative fixtures, not proof that complete live source pages have been captured and validated. The SD 159 uploaded ICS has been inspected locally but is not yet integrated as a complete persistent dataset.
 

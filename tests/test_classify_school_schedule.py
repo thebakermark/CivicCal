@@ -141,8 +141,8 @@ class SchoolScheduleClassificationTests(unittest.TestCase):
             "MES": "12:00 PM"
         })
         self.assertIn("early-dismissal-times-graphic", sep4["evidence"])
-        self.assertTrue(any(item["claim"] != "Exact dismissal times by school"
-                            for item in fixture["excluded_or_unresolved"]))
+        self.assertFalse(any(item["claim"] == "Exact dismissal times by school"
+                             for item in fixture["excluded_or_unresolved"]))
 
 if __name__ == "__main__":
     unittest.main()

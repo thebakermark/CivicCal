@@ -51,7 +51,7 @@ The output is UTF-8 `text/calendar` with CRLF line endings, RFC 5545 text escapi
 
 The publisher fails closed for approved records with unresolved temporal values, zoned local times lacking both an explicit UTC offset and a valid IANA timezone, or recurrence metadata. Recurrence rules, exceptions, and detached overrides are not yet emitted. Ambiguous repeated wall times and nonexistent spring-forward wall times fail closed unless the source supplies an explicit UTC offset. The generated `VTIMEZONE` covers a bounded window around each event year; this is appropriate for the currently supported non-recurring events, not a promise of indefinite recurring-series support.
 
-The publisher script remains a file-based projection. The loopback-only HTTP service exposes source-specific feed routes with ETag and Last-Modified headers; it is not a public endpoint. Source-specific relay routes, access controls, subscription management, remote hosting, and automatic refresh remain future work and are independent of the database decision.
+The publisher script remains a file-based projection. The loopback-only HTTP service exposes `GET /calendars/sources/{source_id}.ics`, reading the registered source list and filtering strictly by exact source ID plus the global approval manifest. ETag and Last-Modified are scoped to that source's approved records. This is not a public endpoint; remote hosting and automatic refresh remain future work.
 
 ## Validation
 

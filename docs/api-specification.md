@@ -1,12 +1,12 @@
-# Public JSON API Specification
+# Private Read-only JSON API Specification
 
 ## Status
 
-Design baseline. This document defines the intended contract; it is not a claim that a public API is already deployed.
+Design baseline for the user's own CivicCal instance and connected calendar/tools. This is not a public community API and is not a claim that an externally reachable API is deployed.
 
 ## Principles
 
-- Read-only API for published event information, with source-filtered access.
+- Read-only API for the user's approved event information, with source-filtered access.
 - Version paths explicitly (initially `/api/v1`).
 - Stable CivicCal identifiers.
 - ISO 8601/RFC 3339 date-time representations where an instant is known.
@@ -18,14 +18,11 @@ Design baseline. This document defines the intended contract; it is not a claim 
 
 - `GET /api/v1/events` — search published events.
 - `GET /api/v1/events/{event_id}` — retrieve one event.
-- `GET /api/v1/organizations` — list organizations.
-- `GET /api/v1/organizations/{organization_id}` — organization details.
-- `GET /api/v1/sources` — public source metadata, excluding private configuration.
 - `GET /api/v1/categories` — category vocabulary.
 - `GET /api/v1/changes` — incremental changes after a cursor or timestamp.
 - `GET /api/v1/openapi.json` — machine-readable API description.
 
-The current loopback implementation provides `/health`, `/api/v1/events`, `/calendars/sources/{source_id}.ics`, and `/api/v1/openapi.json`. Event detail, categories, incremental changes, geography filters, and remote deployment remain future work. The `source_id` event filter and source relay route preserve source boundaries; there is no combined community calendar.
+The current loopback implementation provides `/health`, `/api/v1/events`, `/calendars/sources/{source_id}.ics`, and `/api/v1/openapi.json`. Event detail, categories, incremental changes, geography filters, and remote access remain future work. The `source_id` event filter and source relay route preserve source boundaries; there is no combined community calendar.
 
 ## Event query parameters
 
@@ -61,7 +58,7 @@ Support ETag and Last-Modified on stable resources and collection queries where 
 
 ## Rate limits and access
 
-Public read endpoints may be anonymous. Administrative endpoints are out of scope for the initial public API. If rate limiting is introduced, document limits and return standard retry guidance. Never expose webhook secrets, mailbox details, credentials, or internal capture payload locations.
+The local instance is for the user's own use. Do not assume anonymous public access. Any remote access requires a separate security and deployment decision. Never expose authorization flags, private source configuration, webhook secrets, mailbox details, credentials, or internal capture payload locations.
 
 ## OpenAPI
 

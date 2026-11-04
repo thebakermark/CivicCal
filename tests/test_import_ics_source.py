@@ -41,6 +41,37 @@ class ImporterTests(unittest.TestCase):
         value.update(overrides)
         return value
 
+    def test_consent_required_source_is_blocked_until_consent_flag_is_true(self):
+        with tempfile.TemporaryDirectory() as directory:
+            registry = self.write_registry(
+                directory,
+                self.source(
+                    access_status="blocked",
+                    consent_required=True,
+                    consent_granted=False,
+                    terms_reviewed=True,
+                    robots_reviewed=False,
+                ),
+            )
+            with self.assertRaisesRegex(ImportErrorSafe, "consent_granted=true"):
+                load_source(registry, "approved-calendar")
+
+    def test_consent_flag_enables_one_shot_manual_import_without_enabling_polling(self):
+        with tempfile.TemporaryDirectory() as directory:
+            registry = self.write_registry(
+                directory,
+                self.source(
+                    access_status="blocked",
+                    consent_required=True,
+                    consent_granted=True,
+                    terms_reviewed=True,
+                    robots_reviewed=False,
+                ),
+            )
+            source = load_source(registry, "approved-calendar")
+            self.assertTrue(source["consent_granted"])
+            self.assertFalse(source["polling_enabled"])
+
     def test_manual_fetch_requires_approved_source_even_when_polling_is_off(self):
         with tempfile.TemporaryDirectory() as directory:
             registry = self.write_registry(directory, self.source(access_status="review_required"))

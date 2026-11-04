@@ -1,15 +1,15 @@
 # CivicCal
 
-Community event discovery and independent calendar subscription infrastructure for Mokena, Illinois and nearby communities.
+Personal calendar-source collection and independent calendar subscription tool.
 
-CivicCal reads free, publicly available event information published by public entities—such as the Village, library, park district, and school districts—normalizes it, stores it locally, and provides independent iCalendar subscription feeds for residents' calendar apps. It does not access private accounts, nonpublic information, or restricted systems.
+CivicCal is for personal use. The user chooses which organizations' events matter; we work together to find and verify their official calendar sources. CivicCal captures permitted public event information, preserves its source history, and provides a separate iCalendar subscription feed for each selected source so the user can subscribe from their own calendar app. It does not access private accounts, nonpublic information, or restricted systems.
 
 ## Project goals
 
-- Collect free, publicly viewable event information from public entities.
+- Help the user find and verify official event calendars for organizations they choose.
 - Convert different calendar and event-page formats into one consistent event format.
 - Store events locally in a simple, replaceable data store.
-- Provide a separate iCalendar (ICS) subscription feed for each source.
+- Provide a separate iCalendar (ICS) subscription feed for each selected source.
 - Preserve the original event link and source attribution.
 - Use only public information; never log in, access private data, or bypass access controls.
 - Keep the core free, portable, and self-hostable; no paid services without explicit approval.
@@ -24,7 +24,7 @@ See [docs/architecture.md](docs/architecture.md).
 
 ## Source registry
 
-The initial source registry is in [data/sources.json](data/sources.json). Entries identify public calendar sources to process for personal use. They are not endorsements or claims that an organization has supplied a custom feed.
+The initial source registry is in [data/sources.json](data/sources.json). Entries identify organizations and independent calendar sources the user has chosen to investigate or use. They are not endorsements or claims that an organization has supplied a custom feed.
 
 ## Development status
 
@@ -109,7 +109,7 @@ The project blueprint is documented before expanding the implementation:
 - [School schedule exception classification](docs/school-schedule-classification.md)
 - [Storage interface (database deferred)](docs/storage-interface.md)
 - [Future storage architecture](docs/storage-architecture.md)
-- [Public JSON API specification](docs/api-specification.md)
+- [Private JSON API specification](docs/api-specification.md)
 - [Offline JSON query engine](docs/api-query-engine.md)
 - [Local read-only HTTP service](docs/local-http-service.md)
 - [Offline source health report](docs/source-health-report.md)
@@ -118,4 +118,4 @@ The project blueprint is documented before expanding the implementation:
 - [Webhook specification](docs/webhook-specification.md)
 - [Open-source reuse assessment](docs/open-source-reuse.md)
 
-The current implementation is an offline/local development foundation. JSON storage is in use; the MVP requires a persistent database, but implementation/migration remain deferred until target-environment review. Public deployment and unattended polling are not authorized.
+The current implementation is an offline/local development foundation. JSON storage is in use; the MVP requires a persistent database, but implementation/migration remain deferred until target-environment review. Public deployment and unattended polling are not authorized or required for this personal-use project.

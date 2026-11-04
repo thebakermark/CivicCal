@@ -1,0 +1,70 @@
+{
+  "format": "civiccal.manual-events.v1",
+  "source_id": "mokena-library-events",
+  "source_url": "https://mokena.librarycalendar.com/events/list",
+  "observed_at": "2026-11-04",
+  "observation_note": "Manual review of the public LibraryCalendar list and linked event detail pages. No raw HTML response was archived.",
+  "events": [
+    {
+      "title": "One-On-One Technology Help",
+      "start": "2026-11-04T10:00:00",
+      "end": "2026-11-04T11:00:00",
+      "event_url": "https://mokena.librarycalendar.com/event/one-one-technology-help-48014",
+      "location": {
+        "name": "Study Room 1",
+        "branch": "Mokena Public Library",
+        "address": "11327 195th St, Mokena, IL 60448"
+      },
+      "age_groups": [
+        "Adults"
+      ],
+      "program_types": [
+        "Educational",
+        "Technology Class",
+        "Workshop"
+      ],
+      "categories": [
+        "Educational",
+        "Technology Class",
+        "Workshop"
+      ],
+      "registration_required": true,
+      "registration_status": "closed",
+      "description": "One on one meeting with a librarian to review basic technology skills, including computer, internet, iPhone help, and library digital materials.",
+      "eligibility_notes": null,
+      "extraction_method": "manual-public-page-review"
+    },
+    {
+      "title": "Sensory Storytime: Falling Leaves & Cozy Reads",
+      "start": "2026-11-04T18:30:00",
+      "end": "2026-11-04T19:15:00",
+      "event_url": "https://mokena.librarycalendar.com/event/sensory-storytime-40613",
+      "location": {
+        "name": "Program Room",
+        "branch": "Mokena Public Library",
+        "address": "11327 195th St, Mokena, IL 60448"
+      },
+      "age_groups": [
+        "Babies",
+        "Toddlers",
+        "Preschool",
+        "Grades K - 2nd",
+        "Grades 3rd - 5th",
+        "Neurodiversity"
+      ],
+      "program_types": [
+        "Sensory",
+        "Storytime"
+      ],
+      "categories": [
+        "Sensory",
+        "Storytime"
+      ],
+      "registration_required": true,
+      "registration_status": "closed",
+      "description": "Get cozy with stories, songs, and sensory activities inspired by the sights, sounds, and textures of fall.",
+      "eligibility_notes": "Children must attend with an engaged accompanying adult; drop-off is not permitted.",
+      "extraction_method": "manual-public-page-review"
+    }
+  ]
+}

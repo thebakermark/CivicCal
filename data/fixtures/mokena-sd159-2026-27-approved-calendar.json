@@ -1,0 +1,339 @@
+{
+  "format": "civiccal.school-year-approved-calendar.v1",
+  "organization": "Mokena School District 159",
+  "school_year": "2026-2027",
+  "reviewed_at": "2026-11-04",
+  "source": {
+    "title": "Mokena D159 School Calendar 26.27.pdf",
+    "url": "https://drive.google.com/file/d/10XU79esFWvZ8pJ-IhHGh0w-TVtgkoUdq/view",
+    "announcement_url": "https://www.mokena159.org/article/2775307",
+    "announcement_published": "2026-03-19",
+    "verification": "The district's March 19, 2026 announcement states that the Board approved the 2026-2027 school-year calendar and links this PDF. The public Google Drive viewer rendered the approved one-page calendar as an image; this fixture is a manual transcription of its labels, color legend, and date markers.",
+    "transcription_policy": "Preserve the published calendar categories. Do not infer dismissal times from color markers. Keep school-specific attendance exceptions distinct from district-wide closures."
+  },
+  "calendar_summary": {
+    "student_attendance_days": 176,
+    "teacher_institute_days": 4,
+    "school_improvement_early_dismissal_days": 9,
+    "emergency_days": 5,
+    "first_day_of_school": "2026-08-19",
+    "last_day_of_school": "2027-05-28",
+    "emergency_day_dates": [
+      "2027-06-01",
+      "2027-06-02",
+      "2027-06-03",
+      "2027-06-04",
+      "2027-06-07"
+    ],
+    "end_of_trimester": {
+      "MES": [
+        {
+          "trimester": 1,
+          "date": "2026-11-13",
+          "student_days": 59
+        },
+        {
+          "trimester": 2,
+          "date": "2027-02-26",
+          "student_days": 58
+        },
+        {
+          "trimester": 3,
+          "date": "2027-05-28",
+          "student_days": 59
+        }
+      ]
+    },
+    "end_of_quarter": {
+      "MIS and MJHS": [
+        {
+          "quarter": 1,
+          "date": "2026-10-23",
+          "student_days": 45
+        },
+        {
+          "quarter": 2,
+          "date": "2027-01-15",
+          "student_days": 44
+        },
+        {
+          "quarter": 3,
+          "date": "2027-03-19",
+          "student_days": 43
+        },
+        {
+          "quarter": 4,
+          "date": "2027-05-28",
+          "student_days": 44
+        }
+      ]
+    }
+  },
+  "events": [
+    {
+      "title": "Teacher Institute Days",
+      "start_date": "2026-08-17",
+      "end_date_inclusive": "2026-08-18",
+      "schedule_type": "teacher_institute",
+      "student_attendance": "no_school",
+      "school_scope": "District-wide",
+      "source_text": "Calendar legend: Teacher Institute Days (4); August 17 and 18 are marked as teacher institute days. First day of school is August 19.",
+      "attendance_basis": "The approved calendar separately counts 176 student attendance days and four teacher institute days; the first student day is August 19.",
+      "dismissal_time": null
+    },
+    {
+      "title": "First day of school",
+      "start_date": "2026-08-19",
+      "end_date_inclusive": "2026-08-19",
+      "schedule_type": "school_resumes",
+      "student_attendance": "school_in_session",
+      "school_scope": "District-wide",
+      "source_text": "First Day of School"
+    },
+    {
+      "title": "School improvement / early dismissal day",
+      "start_date": "2026-09-04",
+      "end_date_inclusive": "2026-09-04",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "District-wide",
+      "source_text": "School Improvement/Early Dismissal Days (9)",
+      "dismissal_time": null
+    },
+    {
+      "title": "Labor Day — school holiday",
+      "start_date": "2026-09-07",
+      "end_date_inclusive": "2026-09-07",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "school_scope": "District-wide",
+      "source_text": "School Holiday - Offices Closed"
+    },
+    {
+      "title": "Teacher Institute Day",
+      "start_date": "2026-10-09",
+      "end_date_inclusive": "2026-10-09",
+      "schedule_type": "teacher_institute",
+      "student_attendance": "no_school",
+      "school_scope": "District-wide",
+      "source_text": "Teacher Institute Days (4)",
+      "attendance_basis": "The district's official live-feed reminder independently states there is no school on Friday, October 9 due to Teachers Institute."
+    },
+    {
+      "title": "School holiday",
+      "start_date": "2026-10-12",
+      "end_date_inclusive": "2026-10-12",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "school_scope": "District-wide",
+      "source_text": "School Holiday - Offices Closed"
+    },
+    {
+      "title": "School improvement / early dismissal day",
+      "start_date": "2026-10-30",
+      "end_date_inclusive": "2026-10-30",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "District-wide",
+      "source_text": "School Improvement/Early Dismissal Days (9)",
+      "dismissal_time": null
+    },
+    {
+      "title": "School-specific learning schedule",
+      "start_date": "2026-11-03",
+      "end_date_inclusive": "2026-11-03",
+      "schedule_type": "e_learning",
+      "student_attendance": "mixed_by_school",
+      "school_scope": {
+        "in_person": [
+          "Mokena Elementary School",
+          "Mokena Intermediate School"
+        ],
+        "remote_learning": [
+          "Mokena Junior High School"
+        ]
+      },
+      "source_text": "MES, MIS will be in session, MJHS E-Learning Day 11/3, 4/6.",
+      "additional_note": "The district iCalendar fixture independently preserves the same school-specific Election Day learning arrangement."
+    },
+    {
+      "title": "Parent/Teacher Conference Day",
+      "start_date": "2026-11-12",
+      "end_date_inclusive": "2026-11-12",
+      "schedule_type": "parent_teacher_conference",
+      "student_attendance": "no_school",
+      "school_scope": "District calendar; no-student-attendance status independently recorded in district iCalendar fixture.",
+      "source_text": "Parent/Teacher Conference Day",
+      "attendance_basis": "District iCalendar fixture records 'No School - Parent/Teacher Conferences 2:00-8:00 PM'."
+    },
+    {
+      "title": "Parent/Teacher Conference Day",
+      "start_date": "2026-11-13",
+      "end_date_inclusive": "2026-11-13",
+      "schedule_type": "parent_teacher_conference",
+      "student_attendance": "no_school",
+      "school_scope": "District calendar; no-student-attendance status independently recorded in district iCalendar fixture.",
+      "source_text": "Parent/Teacher Conference Day",
+      "attendance_basis": "District iCalendar fixture records 'No School - Parent/Teacher Conferences 8:00 AM-1:00 PM'."
+    },
+    {
+      "title": "School improvement / early dismissal day",
+      "start_date": "2026-11-20",
+      "end_date_inclusive": "2026-11-20",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "District-wide calendar marker; MES-specific 12:00 PM dismissal appears in district iCalendar fixture.",
+      "source_text": "School Improvement/Early Dismissal Days (9)",
+      "dismissal_time": null
+    },
+    {
+      "title": "Thanksgiving break",
+      "start_date": "2026-11-23",
+      "end_date_inclusive": "2026-11-27",
+      "schedule_type": "school_break",
+      "student_attendance": "no_school",
+      "school_scope": "District-wide",
+      "source_text": "No Student Attendance - Holiday Break/Election; School Holiday - Offices Closed"
+    },
+    {
+      "title": "School improvement / early dismissal day",
+      "start_date": "2026-12-18",
+      "end_date_inclusive": "2026-12-18",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "District-wide calendar marker; MES-specific 12:00 PM dismissal appears in district iCalendar fixture.",
+      "source_text": "School Improvement/Early Dismissal Days (9)",
+      "dismissal_time": null
+    },
+    {
+      "title": "Winter break",
+      "start_date": "2026-12-21",
+      "end_date_inclusive": "2027-01-01",
+      "schedule_type": "school_break",
+      "student_attendance": "no_school",
+      "school_scope": "District-wide",
+      "source_text": "No Student Attendance - Holiday Break/Election; School Holiday - Offices Closed"
+    },
+    {
+      "title": "Teacher Institute Day",
+      "start_date": "2027-01-04",
+      "end_date_inclusive": "2027-01-04",
+      "schedule_type": "teacher_institute",
+      "student_attendance": "no_school",
+      "school_scope": "District-wide",
+      "source_text": "Teacher Institute Days (4)",
+      "attendance_basis": "District iCalendar fixture explicitly records Teacher Institute Day - No School."
+    },
+    {
+      "title": "School improvement / early dismissal day",
+      "start_date": "2027-01-15",
+      "end_date_inclusive": "2027-01-15",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "District-wide calendar marker; MES-specific 12:00 PM dismissal appears in district iCalendar fixture.",
+      "source_text": "School Improvement/Early Dismissal Days (9)",
+      "dismissal_time": null
+    },
+    {
+      "title": "Martin Luther King Jr. Day — school holiday",
+      "start_date": "2027-01-18",
+      "end_date_inclusive": "2027-01-18",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "school_scope": "District-wide",
+      "source_text": "School Holiday - Offices Closed"
+    },
+    {
+      "title": "School improvement / early dismissal day",
+      "start_date": "2027-02-12",
+      "end_date_inclusive": "2027-02-12",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "District-wide calendar marker; MES-specific 12:00 PM dismissal appears in district iCalendar fixture.",
+      "source_text": "School Improvement/Early Dismissal Days (9)",
+      "dismissal_time": null
+    },
+    {
+      "title": "Presidents' Day — school holiday",
+      "start_date": "2027-02-15",
+      "end_date_inclusive": "2027-02-15",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "school_scope": "District-wide",
+      "source_text": "School Holiday - Offices Closed"
+    },
+    {
+      "title": "School improvement / early dismissal day",
+      "start_date": "2027-03-12",
+      "end_date_inclusive": "2027-03-12",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "District-wide calendar marker; MES-specific 12:00 PM dismissal appears in district iCalendar fixture.",
+      "source_text": "School Improvement/Early Dismissal Days (9)",
+      "dismissal_time": null
+    },
+    {
+      "title": "Spring break",
+      "start_date": "2027-03-26",
+      "end_date_inclusive": "2027-04-02",
+      "schedule_type": "school_break",
+      "student_attendance": "no_school",
+      "school_scope": "District-wide",
+      "source_text": "No Student Attendance - Holiday Break/Election; School Holiday - Offices Closed"
+    },
+    {
+      "title": "School-specific learning schedule",
+      "start_date": "2027-04-06",
+      "end_date_inclusive": "2027-04-06",
+      "schedule_type": "e_learning",
+      "student_attendance": "mixed_by_school",
+      "school_scope": {
+        "in_person": [
+          "Mokena Elementary School",
+          "Mokena Intermediate School"
+        ],
+        "remote_learning": [
+          "Mokena Junior High School"
+        ]
+      },
+      "source_text": "MES, MIS will be in session, MJHS E-Learning Day 11/3, 4/6."
+    },
+    {
+      "title": "School improvement / early dismissal day",
+      "start_date": "2027-04-16",
+      "end_date_inclusive": "2027-04-16",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "District-wide calendar marker; district iCalendar entries do not explicitly identify school scope.",
+      "source_text": "School Improvement/Early Dismissal Days (9)",
+      "dismissal_time": null
+    },
+    {
+      "title": "Last day of school — early dismissal",
+      "start_date": "2027-05-28",
+      "end_date_inclusive": "2027-05-28",
+      "schedule_type": "early_dismissal",
+      "student_attendance": "shortened_day",
+      "school_scope": "District-wide; MES-specific 12:00 PM dismissal appears in district iCalendar fixture.",
+      "source_text": "Last day of school; School Improvement/Early Dismissal Days (9)",
+      "dismissal_time": null
+    },
+    {
+      "title": "Memorial Day — school holiday",
+      "start_date": "2027-05-31",
+      "end_date_inclusive": "2027-05-31",
+      "schedule_type": "no_school",
+      "student_attendance": "no_school",
+      "school_scope": "District-wide",
+      "source_text": "School Holiday - Offices Closed"
+    }
+  ],
+  "reconciliation_notes": [
+    "The approved calendar confirms August 17-18 as Teacher Institute Days and August 19 as the first day of school.",
+    "The approved calendar legend counts four Teacher Institute Days: August 17-18, October 9, and January 4.",
+    "The approved calendar legend counts nine School Improvement/Early Dismissal Days: September 4, October 30, November 20, December 18, January 15, February 12, March 12, April 16, and May 28.",
+    "The approved calendar explicitly identifies the school-specific e-learning arrangement for November 3 and April 6: MES and MIS in session; MJHS e-learning.",
+    "Early-dismissal times are not printed in the calendar image. Keep explicit times from the district iCalendar source as separate source-backed details; do not infer times for September 4 or October 30.",
+    "Emergency days June 1-4 and June 7, 2027 are contingency days and must not be treated as scheduled school days unless activated."
+  ]
+}

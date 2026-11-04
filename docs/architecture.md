@@ -4,7 +4,7 @@
 
 ## 1. Product shape
 
-CivicCal is one modular, portable application. It discovers organizations and their independently published event sources, captures permitted source data, normalizes and stores it with provenance/history, and provides a read-only API plus a separate iCalendar relay for each source.
+CivicCal is one modular, portable application for the user's personal use. The user selects organizations and desired calendars; the operator workflow finds and verifies official sources, captures permitted source data, normalizes and stores it with provenance/history, and provides a private read-only API plus a separate iCalendar relay for each selected source.
 
 Do not split the MVP into microservices. Keep module boundaries clear and storage/delivery replaceable.
 

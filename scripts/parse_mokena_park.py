@@ -39,12 +39,12 @@ class ParkEventsParser(HTMLParser):
         if self.capture_tag is None:
             return
         value = " ".join(" ".join(self.capture_parts).split())
-        if value and self.current is not None:
-            if self.capture_tag in {"h2", "h3", "h4"}:
-                if self.current.get("title"):
-                    self.events.append(self.current)
-                self.current = self._new_event(value)
-            elif self.capture_tag == "a":
+        if value and self.capture_tag in {"h2", "h3", "h4"}:
+            if self.current and self.current.get("title"):
+                self.events.append(self.current)
+            self.current = self._new_event(value)
+        elif value and self.current is not None:
+            if self.capture_tag == "a":
                 if self.capture_href:
                     self.current["links"].append({
                         "text": value,

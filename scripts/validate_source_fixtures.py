@@ -21,6 +21,7 @@ if str(ROOT) not in sys.path:
 from scripts.parse_ics import parse_ics
 from scripts.parse_mokena_park import parse_html as parse_park_html
 from scripts.parse_village import parse_html as parse_village_html
+from scripts.normalize_events import normalize_document
 
 
 def _read(path: Path) -> str:
@@ -61,6 +62,31 @@ def validate_fixtures(root: Path = ROOT) -> dict[str, Any]:
     assert village_events[0]["timezone"] is None
     assert village_events[0]["description"] is None
 
+    normalized_sources = [
+        normalize_document(ics),
+        normalize_document(park),
+        normalize_document(village),
+    ]
+    normalized_by_id = {item["source_id"]: item for item in normalized_sources}
+
+    # Cross-source contract checks: normalization preserves event counts,
+    # source provenance, and important date/time semantics.
+    normalized_ics = normalized_by_id[ics["source_id"]]
+    assert normalized_ics["event_count"] == 2
+    assert normalized_ics["events"][0]["start"]["timezone"] == "America/Chicago"
+    assert normalized_ics["events"][1]["status"] == "cancelled"
+
+    normalized_park = normalized_by_id[park["source_id"]]
+    assert normalized_park["event_count"] == 3
+    assert normalized_park["events"][0]["registration_deadline"] == park_events[0]["registration_deadline_text"]
+    assert normalized_park["events"][1]["start"] is None
+
+    normalized_village = normalized_by_id[village["source_id"]]
+    assert normalized_village["event_count"] == 1
+    assert normalized_village["events"][0]["start"]["value"] == "2026-09-16T16:00"
+    assert normalized_village["events"][0]["end"]["value"] == "2026-09-16T20:00"
+    assert normalized_village["events"][0]["time_status"] == "floating"
+
     sources = [
         {
             "source_id": ics["source_id"],
@@ -69,10 +95,13 @@ def validate_fixtures(root: Path = ROOT) -> dict[str, Any]:
             "event_count": ics["event_count"],
             "warning_count": len(ics["warnings"]),
             "warnings": ics["warnings"],
+            "normalized_event_count": normalized_ics["event_count"],
+            "review_flagged_count": normalized_ics["summary"]["events_with_review_flags"],
             "checks": [
                 "UID retained",
                 "America/Chicago TZID retained",
                 "CANCELLED status retained",
+                "canonical event record created",
             ],
         },
         {
@@ -82,11 +111,14 @@ def validate_fixtures(root: Path = ROOT) -> dict[str, Any]:
             "event_count": park["event_count"],
             "warning_count": len(park["warnings"]),
             "warnings": park["warnings"],
+            "normalized_event_count": normalized_park["event_count"],
+            "review_flagged_count": normalized_park["summary"]["events_with_review_flags"],
             "checks": [
                 "event cards extracted",
                 "registration deadline kept separate",
                 "judging date not promoted to event date",
                 "explicit year retained",
+                "canonical records created without dropping undated cards",
             ],
         },
         {
@@ -96,11 +128,15 @@ def validate_fixtures(root: Path = ROOT) -> dict[str, Any]:
             "event_count": village["event_count"],
             "warning_count": len(village["warnings"]),
             "warnings": village["warnings"],
+            "normalized_event_count": normalized_village["event_count"],
+            "review_flagged_count": normalized_village["summary"]["events_with_review_flags"],
             "checks": [
                 "event identifier retained",
                 "title/date/time extracted",
+                "explicit date and time normalized as floating local time",
                 "timezone not guessed",
                 "empty Details field remains empty",
+                "canonical event record created",
             ],
         },
     ]
@@ -113,6 +149,8 @@ def validate_fixtures(root: Path = ROOT) -> dict[str, Any]:
         "publication": False,
         "source_count": len(sources),
         "event_count": sum(source["event_count"] for source in sources),
+        "normalized_event_count": sum(source["normalized_event_count"] for source in sources),
+        "review_flagged_event_count": sum(source["review_flagged_count"] for source in sources),
         "warning_count": sum(source["warning_count"] for source in sources),
         "sources": sources,
     }

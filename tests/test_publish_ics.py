@@ -127,7 +127,7 @@ class PublishICSTests(unittest.TestCase):
             "timezone": "America/Chicago",
         })
         text, _ = build_calendar(state_with(record), manifest("evt_123"))
-        self.assertIn("BEGIN:VTIMEZONE\\r\\nTZID:America/Chicago", text)
+        self.assertIn("BEGIN:VTIMEZONE\r\nTZID:America/Chicago", text)
         self.assertIn("TZOFFSETFROM:-0600", text)
         self.assertIn("TZOFFSETTO:-0500", text)
         self.assertIn("DTSTART;TZID=America/Chicago:20270314T090000", text)

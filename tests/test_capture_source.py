@@ -5,7 +5,8 @@ from email.message import Message
 from pathlib import Path
 from urllib.error import HTTPError
 
-from scripts.capture_source import CaptureError, SafeHTTPSRedirectHandler, capture_url, load_source, write_capture
+from scripts.capture_source import (CaptureError, SafeHTTPSRedirectHandler, capture_url, load_source,
+                                     validate_request_url, write_capture)
 
 
 class FakeResponse:
@@ -142,6 +143,31 @@ class CaptureSourceTests(unittest.TestCase):
             with self.assertRaisesRegex(CaptureError, "unsafe for an archive path"):
                 write_capture("../outside", b"x", {"captured_at": "2026-11-04T12:00:00+00:00",
                     "content_sha256": "abc"}, Path(folder))
+
+    def test_alternate_page_url_requires_source_allowlist(self):
+        source = self.source(
+            id="village-of-mokena-events",
+            url="https://www.mokena.gov/calendar.aspx",
+        )
+        with tempfile.TemporaryDirectory() as folder:
+            policies = Path(folder) / "policies.json"
+            policies.write_text(json.dumps({"profiles": [{
+                "source_id": "village-of-mokena-events",
+                "allowed_hosts": ["www.mokena.gov", "mokenail.municipalone.com"],
+                "allowed_paths": ["/calendar.aspx", "/calendarView.aspx"],
+            }]}), encoding="utf-8")
+            url = "https://mokenail.municipalone.com/calendarView.aspx?cid=123"
+            self.assertEqual(validate_request_url(source, url, policies), url)
+            with self.assertRaisesRegex(CaptureError, "allowlist"):
+                validate_request_url(source, "https://evil.example/calendarView.aspx?cid=123", policies)
+            with self.assertRaisesRegex(CaptureError, "allowlist"):
+                validate_request_url(source, "https://www.mokena.gov/private", policies)
+            with self.assertRaisesRegex(CaptureError, "HTTPS"):
+                validate_request_url(source, "http://mokenail.municipalone.com/calendarView.aspx?cid=123", policies)
+
+    def test_canonical_source_url_needs_no_alternate_allowlist(self):
+        source = self.source()
+        self.assertEqual(validate_request_url(source, source["url"]), source["url"])
 
     def test_source_types_outside_http_capture_are_rejected(self):
         with tempfile.TemporaryDirectory() as folder:

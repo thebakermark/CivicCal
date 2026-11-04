@@ -9,11 +9,11 @@ DETAIL_URL = "https://mokenail.municipalone.com/calendarView.aspx?catid=0&cid=30
 class VillageParserTests(unittest.TestCase):
     def test_parses_event_detail_fields_without_guessing_timezone(self):
         html = """<!doctype html><html><body><nav>Home Government Residents Economic Development How Do I?</nav><main>
-        <h1>Village of Mokena's Food Trucks on Front</h1>
+        <div>Village of Mokena's Food Trucks on Front</div>
         <div>Event Date:</div><div>Wednesday September 16, 2026</div>
         <div>Event Time:</div><div>4:00 PM - 8:00 PM</div>
         <div>Location:</div><div>Front Street<br>11120 Front Street<br>Mokena IL 60448</div>
-        <div>Details:</div><div>Food trucks on Front Street.</div>
+        <div>Details:</div>
         <a href="calendar.aspx">Show All Calendar Events</a>
         </main></body></html>"""
         result = parse_html(html, DETAIL_URL)
@@ -25,6 +25,7 @@ class VillageParserTests(unittest.TestCase):
         self.assertEqual(event["time_text"], "4:00 PM - 8:00 PM")
         self.assertIn("11120 Front Street", event["location_text"])
         self.assertIsNone(event["timezone"])
+        self.assertIsNone(event["description"])
 
     def test_listing_extracts_and_deduplicates_detail_links(self):
         html = """<html><body><main>

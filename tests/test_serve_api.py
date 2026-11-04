@@ -94,14 +94,16 @@ class ServeAPITests(unittest.TestCase):
         self.assertEqual(caught.exception.code, 304)
 
     def test_invalid_query_is_a_client_error(self):
-        with urlopen(self.base + "/api/v1/events?limit=101") as response:
-            payload = json.loads(response.read())
-            self.assertEqual(response.status, 400)
+        with self.assertRaises(HTTPError) as caught:
+            urlopen(self.base + "/api/v1/events?limit=101")
+        self.assertEqual(caught.exception.code, 400)
+        payload = json.loads(caught.exception.read())
         self.assertEqual(payload["error"], "invalid_request")
 
     def test_unknown_path_is_not_found(self):
-        with urlopen(self.base + "/not-a-route") as response:
-            self.assertEqual(response.status, 404)
+        with self.assertRaises(HTTPError) as caught:
+            urlopen(self.base + "/not-a-route")
+        self.assertEqual(caught.exception.code, 404)
 
     def test_health_and_openapi_are_available(self):
         with urlopen(self.base + "/health") as response:

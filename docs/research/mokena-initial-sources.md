@@ -38,3 +38,6 @@
 - No source in this initial set is enabled for automated polling.
 
 
+
+
+Additional library source: `mokena-library-board-meetings` at https://mokenalibrary.org/library-board. This is a separate public Board of Trustees schedule; its December 2026 date is unresolved (schedule says Dec 15; agendas/minutes list Dec 22).

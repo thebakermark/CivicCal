@@ -1,114 +1,115 @@
 # CivicCal Architecture
 
-## 1. Shape of the system
+**Status:** authoritative architecture aligned to the accepted product requirements and decision register. Older hosting, aggregation, mailbox, and automation proposals are not implementation authority.
 
-Start as one modular application, not a fleet of independently deployed microservices. Keep clear module boundaries so components can be separated later if scale justifies it.
+## 1. Product shape
 
-- **Public API and feed gateway:** Cloudflare Worker (TypeScript) for read-only JSON endpoints, ICS feeds, admin endpoints, and inbound webhooks.
-- **Canonical store:** Cloudflare D1 (SQLite) for organizations, sources, events, revisions, observations, and delivery state.
-- **Scheduled ingestion:** Python jobs in GitHub Actions for source polling and normalization.
-- **Optional raw archive:** Cloudflare R2 for source snapshots and permitted attachments, subject to retention rules.
-- **Mailbox adapters:** Gmail API / Pub/Sub and Microsoft Graph subscriptions where configured; IMAP polling or IDLE as a fallback where supported.
+CivicCal is one modular, portable application. It discovers organizations and their independently published event sources, captures permitted source data, normalizes and stores it with provenance/history, and provides a read-only API plus a separate iCalendar relay for each source.
 
-Use portable interfaces around storage, queueing, and publishing so Cloudflare-specific code does not leak into parsers and normalization logic.
+Do not split the MVP into microservices. Keep module boundaries clear and storage/delivery replaceable.
 
-## 2. Logical modules
+## 2. Core pipeline
 
-1. **Organization registry** — organizations, categories, locations, public contact details, and participation status.
-2. **Source registry** — websites, ICS/RSS feeds, APIs, registered mailboxes, sender rules, polling policy, and source health.
-3. **Ingestion adapters** — ICS, RSS/Atom, JSON APIs, HTML, email, and approved attachment formats.
-4. **Normalization and reconciliation** — parse, normalize time zones, match duplicates, compare changes, and preserve provenance.
-5. **Event repository** — canonical events, source observations, revisions, and cancellation state.
-6. **Publishing gateway** — JSON API, ICS feeds, organization feeds, category feeds, and future webhooks.
+Organization registry
+→ independent source registry
+→ explicit operator-invoked one-shot capture
+→ immutable raw capture archive + metadata
+→ source-specific parser/adapter
+→ normalized source observations
+→ source-scoped identity/revision/presence/lifecycle processing
+→ persistent database
+→ explicit source-scoped publication approval
+→ read-only JSON API + exact-source iCalendar relay
 
-These are modules within the initial application, not separate deployables.
+Capture, ingestion, and publication approval are separate operations.
 
-## 3. Data model
+## 3. Organization and source boundaries
 
-Core records:
+- Organization records identify publishers and support discovery/administration.
+- A source record represents one independently subscribable publication channel.
+- An organization can have many sources.
+- Each source has its own stable source ID, authorization/configuration, capture history, event ownership, approval scope, and stable feed endpoint.
+- The district umbrella feed and each school-level feed are distinct sources.
+- Do not create community-wide or organization-wide aggregate calendars.
+- Do not merge cross-source records. Duplicate candidates remain review metadata.
 
-- `organizations`: name, type, description, website, service area, public contact, visibility, verification status.
-- `sources`: organization, source type, URL or mailbox reference, access method, polling interval, terms/robots review, last success, next poll, health state.
-- `events`: stable CivicCal ID, title, description, start/end, timezone, location, status, visibility, access notes.
-- `event_source_links`: links canonical events to all originating sources.
-- `source_observations`: immutable observation of what a source reported and when it was observed.
-- `event_revisions`: meaningful canonical event changes over time.
-- `jobs`: scheduled work, retries, and outcomes.
-- `outbox`: transactional publication work, enabling reliable downstream delivery.
-- `mailbox_sources`: registered mailbox/provider references and subscribed folders or labels.
-- `mailbox_sender_rules`: approved sender/domain and message handling rules.
-- `received_messages`: provider message ID, sender, received time, processing status, and safe metadata.
-- `message_event_links`: extracted event relationships and review state.
+## 4. Source authorization and capture
 
-Credentials and tokens belong in the platform's secret store, never in source registry records or Git.
+Authorization flags are manually edited by a human operator. Application code may read and enforce them, never change them. See Source Authorization Control Boundary and Decision Register.
 
-## 4. Event lifecycle
+Protected flags include access_status, terms_reviewed, robots_reviewed, consent_required, consent_granted, and polling_enabled.
 
-1. Fetch or receive a source observation.
-2. Preserve safe source metadata and, where permitted, a raw snapshot.
-3. Parse and normalize the event, including timezone and source URL.
-4. Match it to an existing canonical event using source IDs, UID, dates, title, and location; uncertain matches go to review.
-5. Record the observation and compare meaningful fields.
-6. Create a revision only when canonical data changes.
-7. Publish changes through the API and regenerate relevant ICS output.
-8. Treat disappearance as a possible source-side removal, not immediate cancellation. Confirm through subsequent successful fetches or an explicit cancellation signal.
+- No application API, CLI, worker, migration, or ingestion code may grant/revoke authorization or modify these fields.
+- Changing a flag itself initiates no task, network request, capture, polling, or publication.
+- A permitted one-shot capture requires a separate explicit operator invocation and rechecks all required gates.
+- Polling remains false by default and is not part of MVP.
+- No scheduler, background worker, source reconciler, or task queue in MVP.
+- No source activation, public deployment, or unattended access without separate approval.
 
-An event found on a website, email notice, and ICS feed should normally resolve to one canonical event with three provenance links.
+## 5. Parsing, normalization, and event identity
 
-## 5. Mailbox monitoring
+Supported current foundations include ICS and source-specific HTML adapters. New formats are added only when needed and verified.
 
-Mailbox monitoring is opt-in and scoped to a registered mailbox, folder/label, and approved sender rules. It is not broad scanning of a personal inbox.
+Preserve:
+- Publisher/source IDs and exact source URL.
+- Original source record and raw capture provenance.
+- Title, description, location, dates/times, links, categories, registration/eligibility/fees where supplied.
+- Date-only, floating, zoned, UTC, and unresolved temporal values without guessing.
+- Every keyed source observation, including unchanged appearances.
+- Material revisions and current event projection.
+- Missing/presence evidence separately from explicit cancellation.
+- Lifecycle transitions based on explicit source evidence.
+- Unkeyed observations and identity conflicts as reviewable records.
 
-- Gmail: OAuth-authorized Gmail API and Pub/Sub notifications, with history retrieval and periodic reconciliation.
-- Microsoft 365: Microsoft Graph change notifications, subscription renewal, and periodic reconciliation.
-- IMAP: IDLE when available, plus polling fallback.
+Stable identity remains source-scoped. Similar titles, dates, or locations do not establish identity across sources. No LLM or semantic inference controls identity, authorization, or publication.
 
-Notifications signal that a mailbox changed; they are not necessarily the full message. Retrieve the message through the authorized provider API, validate sender and message metadata, then process supported content.
+## 6. Storage
 
-Parse ICS attachments first; then supported HTML/text and selected document formats. Treat all email text and attachments as untrusted data. Never execute attachments, follow instructions embedded in messages, or automatically reply. Ambiguous events, cancellations, and conflicting details should enter a review queue.
+The current JSON/file backend is a development foundation. The MVP requires a persistent database behind backend-independent domain/storage contracts.
 
-## 6. Polite source monitoring
+The logical model includes organizations, sources, captures, source events, observations, revisions, presence observations, lifecycle transitions, unkeyed observations, identity conflicts, publication approvals, and approval audit.
 
-Use conditional requests (ETag / If-Modified-Since) and content hashes. Starting intervals are configurable defaults, not promises:
+The exact database engine/implementation remains subject to user review in the target environment. Do not install, create, migrate, or cut over the database until explicitly approved. Preserve JSON parity, raw archives, exact identifiers, ordering, and authorization values; provide rollback.
 
-- Push notifications: process promptly, then reconcile periodically.
-- ICS / RSS / stable APIs: approximately every 5–15 minutes.
-- Ordinary HTML calendars: approximately every 30–60 minutes.
-- Heavier JavaScript-driven pages: approximately every 1–4 hours.
+## 7. Publication and API
 
-Add jitter, per-domain concurrency limits, exponential backoff, and respect Retry-After. Review robots rules, site terms, and access restrictions before enabling a source. Prefer official feeds, APIs, and explicit submissions over scraping.
+Publication approval is separate from capture and ingestion. Only explicitly approved events for the exact source may be exposed.
 
-## 7. Public interface
+- JSON API is read-only and versioned.
+- iCalendar output uses RFC 5545.
+- Each registered source has one stable feed URL.
+- The feed contains only records owned by that exact source and explicitly approved for publication.
+- No community, category, or organization aggregate feed in MVP.
+- API and ICS must query the same database-backed approved record set.
+- Current loopback server is a development harness, not public deployment.
 
-Initial read endpoints:
+## 8. Standards and MeaningWire
 
-- `GET /api/v1/events`
-- `GET /api/v1/events/{id}`
-- `GET /api/v1/organizations`
-- `GET /api/v1/organizations/{id}`
-- `GET /api/v1/sources` (public-safe fields only)
-- `GET /api/v1/changes`
-- `GET /api/v1/categories`
-- `GET /health`
+- RFC 5545: calendar subscription exchange.
+- Schema.org Event: vocabulary mapping for aligned event concepts.
+- OpenAPI: API description.
+- CloudEvents: candidate envelope for future webhooks.
+- JSON-LD: optional future structured representation.
+- CivicCal domain model remains authoritative for source identity, provenance, temporal uncertainty, revisions, and approval.
+- MeaningWire may later provide a semantic adapter. CivicCal must operate fully without MeaningWire. No RDF triple store, ontology engine, or MeaningWire runtime in MVP.
 
-iCalendar endpoints:
+## 9. Deferred capabilities
 
-- `GET /feeds/community.ics`
-- `GET /feeds/categories/{category}.ics`
-- `GET /feeds/organizations/{organization_id}.ics`
+Not part of MVP:
+- Scheduled polling, source monitoring/reconciliation, task queues, and flag-triggered automation.
+- Email/mailbox ingestion.
+- Webhook delivery workers and subscriber management.
+- Public website/UI, accounts, and administration portal.
+- Cloudflare-specific or other hosting selection and public deployment.
+- Community/organization/category aggregate feeds.
+- Cross-source canonicalization/automatic merging.
 
-Public endpoints expose only public events and safe organization/source metadata. Admin operations and mailbox management require authentication. Future webhook subscriptions need per-subscriber secrets, delivery retries, and revocation.
+These require separate product decisions and must not be inferred from old design documents.
 
-## 8. Hosting target
+## 10. Canonical project controls
 
-Initial target: Cloudflare Workers + D1, optional R2, and GitHub Actions for scheduled Python ingestion. Stay within free tiers where practical, but verify current provider limits before launch. Free-tier availability and limits can change; the project must not assume a permanent $0 operating cost.
-
-## 9. First milestones
-
-1. Establish source registry and organization taxonomy.
-2. Add ICS parser and one verified school/community feed.
-3. Normalize events and publish a read-only JSON endpoint.
-4. Generate a valid community ICS feed.
-5. Add HTML adapters and change detection.
-6. Add opt-in mailbox monitoring and review workflow.
-7. Add organization-submitted events and public administration.
+- Product scope and acceptance: Product Requirements.
+- Accepted product choices: Decision Register.
+- Implementation status and evidence: Feature Register.
+- Sequence and milestones: Roadmap.
+- Current assessment: Project Assessment.

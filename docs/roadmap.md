@@ -91,7 +91,7 @@ It is not limited to a consumer-facing calendar website. Its primary product is 
 
 ### 7. iCalendar distribution
 - Generate valid RFC 5545 feeds with stable UIDs and correct update/cancellation semantics.
-- Offer community-wide, organization-specific, source-specific, and curated filtered feeds.
+- Offer community-wide, organization-specific, source-specific, and curated filtered feeds. Organization membership is derived from source registry ownership; see [organization subscription model](organization-calendar-subscriptions.md).
 - Include feed caching and stable subscription URLs.
 - Validate generated feeds with independent calendar parsers.
 
@@ -134,7 +134,7 @@ Webhooks, advanced search, user-created custom feeds, and a full web UI follow a
 
 Already present in the repository: source registry schema/validator, source onboarding docs, dependency-free ICS parser, HTML/JSON-LD extraction foundation, Mokena Park District and Village adapters, duplicate-candidate detection, manual ICS source importer, fixture validation, CI checks, an offline RFC 5545 feed generator, a read-only JSON query projection, and a loopback-only HTTP integration server, all driven by an explicit publication approval manifest.
 
-Not yet implemented as a complete service: canonical persistent event database, general scheduled capture engine, public deployment and remote API access, organization/source-specific feed routes, recurrence-aware ICS publication, webhook delivery, and operations/backup service. A loopback-only read-only HTTP integration server with ETag caching and an offline source health/integrity report are implemented for local testing.
+Not yet implemented as a complete service: canonical persistent event database, general scheduled capture engine, public deployment and remote API access, organization/source-specific feed routes (design documented; implementation pending), recurrence-aware ICS publication, webhook delivery, and operations/backup service. A loopback-only read-only HTTP integration server with ETag caching and an offline source health/integrity report are implemented for local testing.
 
 The checked-in fixtures for the Park District and Village are representative fixtures, not proof that complete live source pages have been captured and validated. The SD 159 uploaded ICS has been inspected locally but is not yet integrated as a complete persistent dataset.
 

@@ -150,7 +150,7 @@ def write_capture(source_id: str, body: bytes | None, metadata: dict, archive_di
         metadata["raw_payload_file"] = None
         metadata_stem = f"not-modified-{timestamp}"
     metadata_path = target_dir / f"{metadata_stem}.json"
-    metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return metadata_path
 
 def main() -> int:

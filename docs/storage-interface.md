@@ -6,7 +6,7 @@ CivicCal remains database-independent in runtime code until implementation is ex
 
 The current implementation has a small replaceable persistence boundary for identity state. The current backend is a local JSON file. A later backend must preserve the domain behavior without making parsing, normalization, identity, or publication logic depend on a specific database engine.
 
-See [Database Schema and JSON Migration Design](database-schema-and-migration.md) for the proposed logical entities, relationships, transaction boundaries, migration sequence, and cutover tests.
+See [Database Schema and JSON Migration Design](database-schema-and-migration.md) for the proposed logical entities, relationships, migration sequence, and cutover tests. See [Storage Contracts](storage-contracts.md) for the backend-independent application operations and transaction boundaries.
 
 ## Current contract
 
@@ -17,7 +17,7 @@ See [Database Schema and JSON Migration Design](database-schema-and-migration.md
 
 The contract intentionally exposes CivicCal state, not SQL queries, table names, or vendor-specific features. Keep domain decisions in the processing layer and persistence mechanics in the backend.
 
-This is currently a narrow identity-state boundary, not yet a complete repository interface for organizations, sources, captures, event observations, revisions, or publication approvals. The database implementation phase will need to introduce those domain operations deliberately. Do not force all database entities into this two-method interface, and do not leak SQL into pipeline code.
+This is currently a narrow identity-state boundary, not yet a complete repository interface for organizations, sources, captures, event observations, revisions, or publication approvals. The proposed future application ports are documented separately. The database implementation phase will need to introduce those domain operations deliberately. Do not force all database entities into this two-method interface, and do not leak SQL into pipeline code.
 
 ## Current backend: JSON
 

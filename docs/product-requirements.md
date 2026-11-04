@@ -4,9 +4,9 @@
 
 ## 1. User outcome
 
-A resident can find an organization's independently published calendar source and subscribe in Apple Calendar, Google Calendar, Outlook, or another iCalendar-compatible application. A developer can retrieve the same approved, stored records through a documented read-only API.
+The user can identify organizations whose events they want, work with CivicCal to find and verify the organizations' official calendar sources, decide which sources to use, and subscribe to each selected source in their own calendar application. CivicCal is a personal-use tool operated by the user; it is not a public community calendar service.
 
-CivicCal maintains the information relay. It does not replace calendar apps or edit a subscriber's personal calendar.
+CivicCal maintains the information relay. It does not replace the user's calendar app or edit the user's personal calendar.
 
 ## 2. Core product model
 
@@ -41,7 +41,7 @@ CivicCal maintains the information relay. It does not replace calendar apps or e
 | CC-016 | Show source health and operational outcomes | Operator identifies capture/parse/validation failures and inspects provenance |
 | CC-017 | Back up and restore database and raw archive | Documented, tested recovery from backup |
 | CC-018 | Document future webhook interoperability | Stable event-change envelope and delivery contract specified; actual delivery is post-MVP |
-| CC-019 | Let residents discover organizations, independent sources, and their subscription URLs | Read-only organization/source directory endpoints expose public-safe metadata and each source's ICS URL; no internal authorization flags or private configuration leak |
+
 
 ## 4. Operational and safety invariants
 
@@ -56,7 +56,7 @@ CivicCal maintains the information relay. It does not replace calendar apps or e
 9. Preserve source provenance, source IDs, source event IDs, temporal semantics, and history.
 10. Duplicate candidates are review aids, not merge instructions.
 11. No LLM or semantic inference may grant authorization, decide identity, or publish events.
-12. CivicCal is community information infrastructure, not a household-only calendar.
+12. CivicCal is a personal-use application. The user decides which organizations and event sources to include.
 
 ## 5. Standards and semantic interoperability
 
@@ -75,7 +75,7 @@ CivicCal maintains the information relay. It does not replace calendar apps or e
 - Unattended scheduled polling, source monitors, task queues, or flag-triggered actions.
 - Webhook delivery workers and subscriber administration.
 - Email/mailbox ingestion unless separately approved and specified.
-- Full public website/UI or subscriber account system.
+- Public community discovery directory, public website, subscriber accounts, or public subscription portal.
 - Cloudflare-specific hosting or any selected hosting provider until explicitly decided.
 - RDF triple store, generalized ontology engine, or MeaningWire runtime.
 - Automatic edits to users' personal calendars.

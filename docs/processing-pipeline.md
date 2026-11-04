@@ -68,6 +68,10 @@ Validation checks structural and semantic consistency:
 
 Warnings should not automatically discard useful events. Fatal parsing errors should be isolated to the affected record or capture where possible.
 
+## Stage 4a: Source completeness
+
+Before absence detection, validate the page set separately from event content. `scripts/validate_snapshot.py` checks source-specific policy, page counts, terminal-page evidence, successful capture and parsing, required page roles, and (for Village-style listings) exact reconciliation of discovered detail IDs against parsed detail IDs. The resulting `snapshot` assertion is attached to normalized JSON. Current source policies intentionally keep completeness disabled until real publisher captures have been validated. See [Source Completeness and Pagination](source-completeness.md).
+
 ## Stage 5: Reconcile
 
 Compare new observations with prior observations for the same source:

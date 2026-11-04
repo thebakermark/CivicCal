@@ -29,7 +29,10 @@ Capture metadata and unmapped source-record details are excluded from the materi
 - Same source identity with changed material fields appends a revision and preserves the previous revision.
 - Reprocessing the same capture is idempotent.
 - Duplicate source identities within one capture are reported as conflicts and are not written over one another.
-- Missing events are not cancelled or deleted. Absence is not currently interpreted as a lifecycle transition; a future missing-observation detector must require an explicit complete-snapshot guarantee from that adapter.
+- Absence is recorded only when normalized input includes `snapshot.completeness: "complete"` and a non-empty `snapshot.evidence` explanation.
+- An empty complete snapshot additionally requires `snapshot.empty_snapshot_confirmed: true`; this protects against empty parser output being mistaken for an empty publisher calendar.
+- Partial, unknown, failed, and unchanged (HTTP 304) captures cannot mark events missing. The capture-to-parser handoff currently rejects 304 payloads, so no normalized document is produced from an unchanged response.
+- A missing observation changes presence tracking only. It does not change publisher lifecycle status, create a material revision, cancel, or delete the event. Reappearance resets the current missing streak while retaining the history.
 - Cross-source matching and merging are not performed.
 
 ## Recurrence
@@ -54,8 +57,11 @@ The state file is created on first use and updated on each new capture through t
 
 ## State model
 
+The normalized input may carry a source-level `snapshot` assertion. This assertion must be supplied by a trusted source adapter only after it can establish completeness; the generic parser does not infer it.
+
 The prototype state stores:
 - Append-only source observations for every keyed event in every newly processed capture, including unchanged observations.
+- Append-only presence observations for events absent from explicitly complete snapshots, plus reappearance history.
 - A separate lifecycle history recording creation and explicit publisher status transitions.
 
 - Source-scoped stable event identity.

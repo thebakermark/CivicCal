@@ -32,7 +32,7 @@ This is the implementation tracker. Product requirements and accepted decisions 
 | F-023 | Automated polling/scheduler | Deferred; not MVP | One-shot manual capture only | Do not implement without new explicit approval |
 | F-024 | Email/mailbox ingestion | Deferred; not MVP | Old architecture references are superseded | Separate explicit decision and authorization |
 | F-025 | User-facing web UI/accounts | Deferred; not MVP | No implementation | Revisit only after core service works |
-| F-026 | MeaningWire adapter | Future-compatible only | Semantic boundary documented | Wait for MeaningWire contracts and separate approval |
+| F-026 | MeaningWire adapter | Future-compatible only | Semantic boundary documented | Wait for MeaningWire contracts and separate approval |\n| F-027 | Public organization/source directory | Planned | API spec proposes organization and source listing; current loopback server does not implement them | Add DB-backed read-only directory endpoints with public-safe fields and per-source ICS URL |
 
 ## Feature status definitions
 

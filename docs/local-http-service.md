@@ -32,7 +32,7 @@ Supported event query parameters: `start_date`, `end_date`, `source_id`, `catego
 
 - JSON uses `application/json`; calendar feeds use `text/calendar`.
 - ETags are generated from response bytes and `If-None-Match` is honored with `304 Not Modified`.
-- `Last-Modified` reflects the latest observed revision among explicitly approved events in the requested source relay (or source-filtered JSON result) when available.
+- `Last-Modified` reflects the latest observed revision among explicitly approved events in the requested source relay. For JSON, it is scoped to `source_id` when that filter is supplied; other JSON filters do not currently narrow this validator.
 - Cache policy is currently `public, max-age=60` for this local read-only prototype.
 - Invalid queries return `400`; missing or invalid data files return `503`; unknown routes return `404`.
 - Query strings are not written to the default request log.
@@ -47,4 +47,4 @@ No public bind, TLS, authentication, admin routes, individual-event retrieval, r
 
 ## Tests
 
-`tests/test_serve_api.py` exercises approved-only responses, filters, ICS output, ETag/304 behavior, invalid queries, unknown routes, health, and OpenAPI discovery.
+`tests/test_serve_api.py` exercises approved-only responses, source-filtered JSON/ICS isolation, source-specific caching, invalid and duplicate identity data, unknown routes, health, and OpenAPI discovery.

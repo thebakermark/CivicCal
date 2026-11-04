@@ -51,7 +51,6 @@ class SourceHealthReportTests(unittest.TestCase):
         import hashlib
         digest = hashlib.sha256(payload).hexdigest()
         (folder / f"{digest}.bin").write_bytes(payload)
-        (folder / "capture-20261104T120000Z-" + Path("x")).exists() if False else None
         metadata = {
             "format": "civiccal.raw-capture.v1",
             "source_id": "open",

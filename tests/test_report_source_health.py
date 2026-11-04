@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 from datetime import datetime, timezone
 
-from scripts.report_source_health import build_report
+from scripts.report_source_health import ReportError, build_report
 
 
 class SourceHealthReportTests(unittest.TestCase):
@@ -85,9 +85,34 @@ class SourceHealthReportTests(unittest.TestCase):
         report = build_report(self.registry, self.archive)
         self.assertTrue(any("payload missing" in warning for warning in report["warnings"]))
 
+
+    def test_invalid_source_id_does_not_escape_archive_root(self):
+        self.registry.write_text(json.dumps({
+            "source_records": [{"id": "../outside", "name": "Unsafe"}]
+        }), encoding="utf-8")
+        report = build_report(self.registry, self.archive)
+        self.assertTrue(any("unsafe for archive lookup" in warning for warning in report["warnings"]))
+
+    def test_not_modified_capture_needs_no_payload(self):
+        folder = self.archive / "open"
+        folder.mkdir()
+        metadata = {
+            "format": "civiccal.raw-capture.v1",
+            "source_id": "open",
+            "captured_at": "2026-11-04T13:00:00+00:00",
+            "outcome": "not_modified",
+            "http_status": 304,
+            "raw_payload_file": None,
+        }
+        (folder / "not-modified.json").write_text(json.dumps(metadata), encoding="utf-8")
+        report = build_report(self.registry, self.archive)
+        source = next(item for item in report["sources"] if item["source_id"] == "open")
+        self.assertEqual(source["latest_capture"]["outcome"], "not_modified")
+        self.assertEqual(report["warnings"], [])
+
     def test_duplicate_source_ids_are_rejected(self):
         self.registry.write_text(json.dumps({"source_records": [{"id": "same"}, {"id": "same"}]}))
-        with self.assertRaises(Exception):
+        with self.assertRaises(ReportError):
             build_report(self.registry, self.archive)
 
 

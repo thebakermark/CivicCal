@@ -55,6 +55,17 @@ class SchoolScheduleClassificationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             classify_document(document, {"park-district"})
 
+    def test_verified_summit_hill_calendar_fixture_classifies_all_exceptions(self):
+        path = Path(__file__).parents[1] / "data/fixtures/summit-hill-2026-27-school-schedule.json"
+        fixture = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(fixture["school_year"], "2026-2027")
+        self.assertEqual(len(fixture["events"]), 18)
+        for source_event in fixture["events"]:
+            actual = classify_event({"title": source_event["title"]})
+            self.assertTrue(actual["is_schedule_exception"], source_event["title"])
+            self.assertEqual(actual["schedule_type"], source_event["schedule_type"],
+                             source_event["title"])
+
 
 if __name__ == "__main__":
     unittest.main()

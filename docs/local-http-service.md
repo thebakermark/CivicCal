@@ -9,7 +9,8 @@
 ```sh
 python scripts/serve_api.py \
   --state data/state/identity.json \
-  --manifest data/publication/community.json \
+  --manifest data/publication/source.json \\
+  --registry data/sources.json \\
   --host 127.0.0.1 \
   --port 8765
 ```
@@ -22,7 +23,7 @@ The server refuses non-loopback bind addresses. It is read-only: POST, PUT, and 
 |---|---|
 | `GET /health` | Minimal service health response |
 | `GET /api/v1/events` | Approved events with date, source, category, text, and pagination filters |
-| `GET /calendars/community.ics` | Approved community iCalendar feed |
+| `GET /calendars/sources/{source_id}.ics` | Approved events from exactly one registered source |
 | `GET /api/v1/openapi.json` | Machine-readable OpenAPI document |
 
 Supported event query parameters: `start_date`, `end_date`, `source_id`, `category`, `q`, `limit` (1–100), and `offset` (zero-based). Date bounds are inclusive and apply to the event's published start date.
@@ -31,7 +32,7 @@ Supported event query parameters: `start_date`, `end_date`, `source_id`, `catego
 
 - JSON uses `application/json`; calendar feeds use `text/calendar`.
 - ETags are generated from response bytes and `If-None-Match` is honored with `304 Not Modified`.
-- `Last-Modified` reflects the latest observed revision among explicitly approved events when available.
+- `Last-Modified` reflects the latest observed revision among explicitly approved events in the requested source relay (or source-filtered JSON result) when available.
 - Cache policy is currently `public, max-age=60` for this local read-only prototype.
 - Invalid queries return `400`; missing or invalid data files return `503`; unknown routes return `404`.
 - Query strings are not written to the default request log.
@@ -42,7 +43,7 @@ Both JSON and ICS routes use the same explicit `approved_event_ids` manifest. Re
 
 ## Deliberate omissions
 
-No public bind, TLS, authentication, admin routes, organization/source feed variants, individual-event retrieval, rate limiting, webhook delivery, scheduler, or deployment configuration is included. Those require separate design and explicit approval. This server is a local integration harness for validating the API and feed contracts before selecting a database or hosting model.
+No public bind, TLS, authentication, admin routes, individual-event retrieval, rate limiting, webhook delivery, scheduler, or deployment configuration is included. Every source relay is filtered independently by the exact registered source ID. Those require separate design and explicit approval. This server is a local integration harness for validating the API and feed contracts before selecting a database or hosting model.
 
 ## Tests
 

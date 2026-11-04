@@ -6,80 +6,147 @@
       "profile_id": "village-municipalcms-listing-and-details-v1",
       "scope": "Public events represented by the configured Village calendar listing pages and their linked event-detail pages.",
       "pagination_strategy": "rel_next",
-      "required_page_roles": ["listing", "detail"],
+      "required_page_roles": [
+        "listing",
+        "detail"
+      ],
       "require_detail_link_reconciliation": true,
       "allow_complete_snapshot": false,
-      "reason_disabled": "The real listing markup, pagination behavior, and complete detail-page coverage have not yet been verified with archived live captures."
+      "reason_disabled": "The real listing markup, pagination behavior, and complete detail-page coverage have not yet been verified with archived live captures.",
+      "allowed_hosts": [
+        "www.mokena.gov",
+        "mokenail.municipalone.com"
+      ],
+      "allowed_paths": [
+        "/calendar.aspx",
+        "/calendarView.aspx"
+      ]
     },
     {
       "source_id": "mokena-park-district-events",
       "profile_id": "park-district-editorial-upcoming-v1",
       "scope": "The Park District's curated Upcoming Events editorial page only; not the full programs, classes, sports, or facility schedule.",
       "pagination_strategy": "single_page",
-      "required_page_roles": ["listing"],
+      "required_page_roles": [
+        "listing"
+      ],
       "require_detail_link_reconciliation": false,
       "allow_complete_snapshot": false,
-      "reason_disabled": "The checked-in HTML fixture is representative rather than a complete live capture, and this editorial page is not the organization's complete event calendar."
+      "reason_disabled": "The checked-in HTML fixture is representative rather than a complete live capture, and this editorial page is not the organization's complete event calendar.",
+      "allowed_hosts": [
+        "www.mokenapark.com"
+      ],
+      "allowed_paths": [
+        "/upcoming-events-2/"
+      ]
     },
     {
       "source_id": "summit-hill-sd161-events-ical",
       "profile_id": "summit-hill-district-ical-v1",
       "scope": "The District Events iCalendar export only.",
       "pagination_strategy": "single_feed",
-      "required_page_roles": ["feed"],
+      "required_page_roles": [
+        "feed"
+      ],
       "require_detail_link_reconciliation": false,
       "allow_complete_snapshot": false,
-      "reason_disabled": "The actual feed payload has not yet been archived, parsed, and compared against the publisher's visible calendar."
+      "reason_disabled": "The actual feed payload has not yet been archived, parsed, and compared against the publisher's visible calendar.",
+      "allowed_hosts": [
+        "www.summithill.org"
+      ],
+      "allowed_paths": [
+        "/apps/events/ical/"
+      ]
     },
     {
       "source_id": "summit-hill-indian-trail-events-ical",
       "profile_id": "summit-hill-indian-trail-ical-v1",
       "scope": "Indian Trail School Events iCalendar export only.",
       "pagination_strategy": "single_feed",
-      "required_page_roles": ["feed"],
+      "required_page_roles": [
+        "feed"
+      ],
       "require_detail_link_reconciliation": false,
       "allow_complete_snapshot": false,
-      "reason_disabled": "The actual feed payload has not yet been archived and validated against the visible school calendar."
+      "reason_disabled": "The actual feed payload has not yet been archived and validated against the visible school calendar.",
+      "allowed_hosts": [
+        "www.summithill.org"
+      ],
+      "allowed_paths": [
+        "/apps/events/ical/"
+      ]
     },
     {
       "source_id": "summit-hill-dr-julian-rogus-events-ical",
       "profile_id": "summit-hill-rogus-ical-v1",
       "scope": "Dr. Julian Rogus School Events iCalendar export only.",
       "pagination_strategy": "single_feed",
-      "required_page_roles": ["feed"],
+      "required_page_roles": [
+        "feed"
+      ],
       "require_detail_link_reconciliation": false,
       "allow_complete_snapshot": false,
-      "reason_disabled": "The actual feed payload has not yet been archived and validated against the visible school calendar."
+      "reason_disabled": "The actual feed payload has not yet been archived and validated against the visible school calendar.",
+      "allowed_hosts": [
+        "www.summithill.org"
+      ],
+      "allowed_paths": [
+        "/apps/events/ical/"
+      ]
     },
     {
       "source_id": "summit-hill-hilda-walker-events-ical",
       "profile_id": "summit-hill-hilda-walker-ical-v1",
       "scope": "Hilda Walker Intermediate School Events iCalendar export only.",
       "pagination_strategy": "single_feed",
-      "required_page_roles": ["feed"],
+      "required_page_roles": [
+        "feed"
+      ],
       "require_detail_link_reconciliation": false,
       "allow_complete_snapshot": false,
-      "reason_disabled": "The actual feed payload has not yet been archived and validated against the visible school calendar."
+      "reason_disabled": "The actual feed payload has not yet been archived and validated against the visible school calendar.",
+      "allowed_hosts": [
+        "www.summithill.org"
+      ],
+      "allowed_paths": [
+        "/apps/events/ical/"
+      ]
     },
     {
       "source_id": "summit-hill-summit-hill-jr-high-events-ical",
       "profile_id": "summit-hill-jr-high-ical-v1",
       "scope": "Summit Hill Jr. High School Events iCalendar export only.",
       "pagination_strategy": "single_feed",
-      "required_page_roles": ["feed"],
+      "required_page_roles": [
+        "feed"
+      ],
       "require_detail_link_reconciliation": false,
       "allow_complete_snapshot": false,
-      "reason_disabled": "The actual feed payload has not yet been archived and validated against the visible school calendar."
+      "reason_disabled": "The actual feed payload has not yet been archived and validated against the visible school calendar.",
+      "allowed_hosts": [
+        "www.summithill.org"
+      ],
+      "allowed_paths": [
+        "/apps/events/ical/"
+      ]
     },
     {
       "source_id": "summit-hill-mary-drew-events-ical",
       "profile_id": "mary-drew-ical-v1",
       "scope": "Mary Drew Early Learning Center's separate school-site Events iCalendar export only.",
       "pagination_strategy": "single_feed",
-      "required_page_roles": ["feed"],
+      "required_page_roles": [
+        "feed"
+      ],
       "require_detail_link_reconciliation": false,
       "allow_complete_snapshot": false,
-      "reason_disabled": "The actual feed payload has not yet been archived and validated against the visible school calendar."
+      "reason_disabled": "The actual feed payload has not yet been archived and validated against the visible school calendar.",
+      "allowed_hosts": [
+        "mdelc.summithill.org"
+      ],
+      "allowed_paths": [
+        "/apps/events/ical/"
+      ]
     }
   ]
 }

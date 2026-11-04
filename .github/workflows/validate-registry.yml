@@ -11,6 +11,7 @@ on:
       - "docs/ics-normalization.md"
       - "docs/source-fixture-validation.md"
       - "docs/source-completeness.md"
+      - "docs/capture-coordinator.md"
       - "docs/capture-to-parser.md"
       - "docs/event-normalization.md"
       - "docs/event-identity-revisions.md"
@@ -29,6 +30,7 @@ on:
   pull_request:
     paths:
       - "data/sources.json"
+      - "data/source-completeness.json"
       - "scripts/**"
       - "tests/**"
       - "data/fixtures/**"
@@ -37,6 +39,8 @@ on:
       - "docs/capture-to-parser.md"
       - "docs/event-normalization.md"
       - "docs/processing-pipeline.md"
+      - "docs/source-completeness.md"
+      - "docs/capture-coordinator.md"
       - ".github/workflows/validate-registry.yml"
   workflow_dispatch:
 

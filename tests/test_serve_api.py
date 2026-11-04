@@ -50,12 +50,14 @@ class ServeAPITests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         root = Path(self.temp.name)
         state, manifest = documents()
+        self.registry_path = root / "sources.json"
+        self.registry_path.write_text(json.dumps({"source_records": [{"id": "library"}]}), encoding="utf-8")
         self.state_path = root / "state.json"
         self.manifest_path = root / "manifest.json"
         self.state_path.write_text(json.dumps(state), encoding="utf-8")
         self.manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
         self.server = ThreadingHTTPServer(
-            ("127.0.0.1", 0), make_handler(self.state_path, self.manifest_path)
+            ("127.0.0.1", 0), make_handler(self.state_path, self.manifest_path, self.registry_path)
         )
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         self.thread.start()
@@ -79,7 +81,7 @@ class ServeAPITests(unittest.TestCase):
         self.assertEqual(payload["pagination"]["total"], 1)
 
     def test_ics_endpoint_returns_calendar_content(self):
-        with urlopen(self.base + "/calendars/community.ics") as response:
+        with urlopen(self.base + "/calendars/sources/library.ics") as response:
             body = response.read().decode("utf-8")
             self.assertEqual(response.headers.get_content_type(), "text/calendar")
         self.assertIn("UID:evt-public@civiccal", body)

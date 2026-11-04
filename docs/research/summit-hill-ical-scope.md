@@ -11,7 +11,7 @@ The default Events page displays October 2026 entries labelled **District Events
 
 The endpoint responds as `text/calendar`; the web reader cannot render that media type, so the feed payload itself was not inspected here.
 
-The page also lists six separately selectable calendars:
+The page lists six separately selectable calendars:
 
 1. District Events
 2. Indian Trail School Events
@@ -20,20 +20,34 @@ The page also lists six separately selectable calendars:
 5. Summit Hill Jr. High School Events
 6. Mary Drew Early Learning Center
 
-## Evidence about individual calendar IDs
+## Calendar ID mapping observed
 
-- A public calendar page with `?id=5` displayed events labelled **Hilda Walker Intermediate School Events**. Its Download .ICS link resolved to `/apps/events/ical/?id=5`.
-- A public calendar page with `?id=6` displayed events labelled **Summit Hill Jr. High School Events**.
+The following calendar pages display events under these labels:
 
-This supports the conclusion that the `id` parameter selects a calendar rather than representing a generic feed format.
+| Calendar ID | Displayed calendar |
+|---|---|
+| 0 | District Events (default page) |
+| 3 | Indian Trail School Events |
+| 4 | Dr. Julian Rogus School Events |
+| 5 | Hilda Walker Intermediate School Events |
+| 6 | Summit Hill Jr. High School Events |
+
+Evidence pages:
+- Default: https://www.summithill.org/apps/events/
+- ID 3: https://www.summithill.org/apps/events/2026/11/?id=3
+- ID 4: https://www.summithill.org/apps/events/2026/11/?id=4
+- ID 5: https://www.summithill.org/apps/events/2024/8/?id=5
+- ID 6: https://www.summithill.org/apps/events/2027/2/?id=6
+
+The Download .ICS link on an ID 5 page resolves to `/apps/events/ical/?id=5`. This supports the conclusion that the `id` parameter selects a calendar.
 
 ## Current interpretation
 
-The default `id=0` page displays only entries labelled **District Events**, so the best-supported interpretation is that `id=0` is the district-level calendar, not an aggregate of all six school calendars.
+The default `id=0` page displays entries labelled **District Events**, so the best-supported interpretation is that `id=0` is the district-level calendar, not an aggregate of all six school calendars.
 
 **Do not treat this as fully verified feed contents.** The actual ICS response for `id=0` was not readable through the web inspection tool. Before assuming complete district-wide coverage, compare a permitted downloaded response with events shown on the individual calendar pages.
 
-The IDs for Indian Trail, Dr. Julian Rogus, and Mary Drew have not been mapped in this review. Do not guess their IDs or add speculative feed URLs.
+The ID for Mary Drew Early Learning Center has not been mapped. Do not guess its ID or add a speculative feed URL.
 
 ## Implementation status
 

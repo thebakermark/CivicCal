@@ -1,5 +1,7 @@
 import copy
+import json
 import unittest
+from pathlib import Path
 
 from scripts.normalize_events import (
     NormalizationError, normalize_document, normalize_event,
@@ -142,6 +144,21 @@ class NormalizeEventsTests(unittest.TestCase):
         }
         with self.assertRaises(NormalizationError):
             normalize_document(document)
+
+
+    def test_mokena_library_manual_snapshot_fixture(self):
+        fixture_path = Path(__file__).resolve().parents[1] / "data" / "fixtures" / "mokena-library-manual-snapshot-2026-11-04.json"
+        document = json.loads(fixture_path.read_text(encoding="utf-8"))
+        result = normalize_document(document)
+        self.assertEqual(result["source_id"], "mokena-library-events")
+        self.assertEqual(result["event_count"], 2)
+        self.assertEqual(result["capture"]["capture_method"], "manual-public-page-review")
+        self.assertIn("No raw HTML response", result["capture"]["observation_note"])
+        self.assertEqual(
+            [event["title"] for event in result["events"]],
+            ["One-On-One Technology Help", "Sensory Storytime: Falling Leaves & Cozy Reads"]
+        )
+        self.assertTrue(all(event["time_status"] == "floating" for event in result["events"]))
 
     def test_unsupported_format_rejected(self):
         with self.assertRaises(NormalizationError):

@@ -133,6 +133,27 @@ class PublishICSTests(unittest.TestCase):
         self.assertIn("DTSTART;TZID=America/Chicago:20270314T090000", text)
         self.assertIn("DTEND;TZID=America/Chicago:20270314T100000", text)
 
+
+    def test_nonexistent_daylight_saving_wall_time_is_rejected(self):
+        record = identity_record()
+        record["current"].update({
+            "start": {"value": "2027-03-14T02:30:00", "kind": "date-time"},
+            "time_status": "zoned",
+            "timezone": "America/Chicago",
+        })
+        with self.assertRaises(FeedError):
+            build_calendar(state_with(record), manifest("evt_123"))
+
+    def test_ambiguous_daylight_saving_wall_time_requires_offset(self):
+        record = identity_record()
+        record["current"].update({
+            "start": {"value": "2026-11-01T01:30:00", "kind": "date-time"},
+            "time_status": "zoned",
+            "timezone": "America/Chicago",
+        })
+        with self.assertRaises(FeedError):
+            build_calendar(state_with(record), manifest("evt_123"))
+
     def test_unknown_iana_timezone_is_rejected(self):
         record = identity_record()
         record["current"].update({

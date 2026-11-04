@@ -105,7 +105,7 @@ class SourceFixtureIntegrationTests(unittest.TestCase):
             self.assertIn(f"UID:{event_id}@civiccal", calendar_text)
             self.assertIn("SUMMARY:Chamber of Commerce Parade of Lights & Village Tree Lighting Ceremony", calendar_text)
             self.assertIn("DTSTART:20261121T170000", calendar_text)
-            self.assertIn("DTEND:20261121T200000", calendar_text)
+            self.assertNotIn("DTEND:", calendar_text)
 
             round_trip = parse_ics(calendar_text, source_id="calendar-round-trip")
             self.assertEqual(round_trip["event_count"], 1)

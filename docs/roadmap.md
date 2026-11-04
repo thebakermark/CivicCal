@@ -149,7 +149,7 @@ Webhooks, advanced search, user-created custom feeds, and a full web UI follow a
 
 ## Current project baseline
 
-Already present in the repository: source registry schema/validator, source onboarding docs, dependency-free ICS parser, HTML/JSON-LD extraction foundation, Mokena Park District and Village adapters, duplicate-candidate detection, manual ICS source importer, fixture validation, CI checks, an offline RFC 5545 feed generator, a read-only JSON query projection, and a loopback-only HTTP integration server, all driven by an explicit publication approval manifest.
+Already present in the repository: source registry schema/validator, source onboarding docs, dependency-free ICS parser, HTML/JSON-LD extraction foundation, Mokena Park District and Village adapters, duplicate-candidate detection, manual ICS source importer, fixture validation, CI checks, an offline RFC 5545 feed generator, a read-only JSON query projection, a loopback-only HTTP integration server, and a manual source-scoped event approval/revocation command, all driven by an explicit publication approval manifest.
 
 Not yet implemented as a complete service: canonical persistent event database, general scheduled capture engine, public deployment and remote API access, database-backed and public feed delivery, recurrence-aware ICS publication, webhook delivery, and production operations/backup service. The source-specific feed route exists in the loopback development server only; it is not publicly deployed. A loopback-only read-only HTTP integration server with ETag caching and an offline source health/integrity report are implemented for local testing.
 

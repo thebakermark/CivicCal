@@ -74,7 +74,33 @@ Relevant product documentation:
 - https://www.librarymarket.com/blog/calendar-built-for-libraries
 - https://portal.suffolklibrarysystem.org/sites/default/files/2023-12/LibraryCalendar-Features.pdf
 
-**Preferred next step:** ask the library whether its LibraryCalendar instance has a public combined iCal, RSS, XML, or JSON feed and, if so, request the publisher-approved URL and usage guidance. A combined feed would be preferable to discovering and fetching each event's individual export.
+**Ingestion decision:** do not make a publisher-wide feed URL a dependency. CivicCal will support multiple independent ingestion paths from the public material already exposed by the library.
+
+## Fallback ingestion design
+
+The public Upcoming and List views already expose enough structured event information to support ingestion without a combined feed. The current rendered Upcoming page contains featured cards followed by the main dated listing; featured items repeat in the main listing, so the List view should be the preferred index when building the first adapter. The public page also exposes individual detail links for enrichment. The inspected rendered page includes event rows with dates/times, all-day ranges, audience/age group, program type, registration status, registration-required state, room/branch, and descriptions. See the [live rendered page](https://mokena.librarycalendar.com/events/upcoming).
+
+Use this fallback order:
+
+1. **Offline HTML snapshot adapter (primary).** Capture a genuine copy of the public List page and representative detail pages as raw files, with exact URL, capture timestamp, content hash, and page role. Build a LibraryCalendar-specific parser only against those saved responses and checked-in fixtures. Do not guess CSS selectors or assume the web-rendered text is the underlying DOM. The existing generic JSON-LD parser remains a first-pass option, but a source-specific parser will be needed if LibraryCalendar's events are not represented as JSON-LD.
+2. **Individual event iCalendar (supplemental).** When an event's public detail page exposes Add to Calendar / Download iCal File, import that event's `.ics` response through the existing ICS parser. The iCal record and HTML listing are two observations of the same source event, not two separate events. Preserve the node ID and event URL as identity evidence.
+3. **Manual structured snapshot (fallback of last resort).** If raw HTML cannot be retained, create an offline JSON snapshot from the visible public listing/detail fields. Every event must carry its exact source URL, observed-at timestamp, and extraction method `manual-public-page-review`; preserve source wording and leave unknown values null. This path is auditable and deterministic, but must be labeled manually transcribed rather than machine-captured.
+4. **Board schedule as a separate source.** Ingest unconflicted trustee meeting dates from the official board page as schedule observations. Keep the December 15 versus December 22 conflict as two disputed date candidates in source evidence; do not select either as a verified event. The rest of the board schedule can proceed independently of that one conflict.
+
+### Library event mapping rules
+
+- Keep each published dated session separate, including separate times for the same program title.
+- Preserve multi-day all-day programs and timed pickup windows as ranges; do not collapse them to a single start date.
+- Preserve the exact age-group and program-type labels, room/branch, registration-required flag, and current registration state.
+- Treat `Open`, `Full`, `Waitlist`, and `Closed` as registration availability, not event cancellation.
+- Retain eligibility and accompanying-adult disclaimers in the source record; do not infer general admission from a public listing.
+- Do not manufacture recurring occurrences from prose such as “every Tuesday and Thursday.” Only dated publisher records become events.
+- Use a stable event/node identifier when available. If two records lack a shared identifier, create a duplicate candidate based on title/date/time and retain both observations; never auto-merge.
+- Preserve source timezone statements. The inspected event detail states times are Central; do not apply that assumption to an unrelated source.
+
+### Implementation boundary
+
+No combined feed endpoint will be guessed or fetched. The source remains `review_required`, `polling_enabled: false`, and terms/robots review remains outstanding. This design prepares the offline ingestion path; it does not authorize scheduled scraping, live network capture, or publication. The first parser implementation should wait for a real saved HTML response and regression fixture so its selectors can be verified against the actual markup.
 
 ## Access and completeness status
 
@@ -83,7 +109,7 @@ Relevant product documentation:
 - Terms and robots review remain outstanding; the attempted robots.txt lookup did not yield a readable response.
 - Do not use the event-specific export as permission to crawl every event.
 - No complete snapshot can be claimed until the actual listing pagination, detail links, duplicate featured cards, and terminal-page behavior are verified from genuine captured responses.
-- No source completeness profile is enabled for this source yet; the capture policy needs to account for query-parameter pagination and variable event-detail paths.
+- No source completeness profile is enabled yet. Listing pagination, detail-link coverage, and the true terminal page still need verification from saved raw captures. The current source-specific offline adapter should not claim a complete snapshot until these checks pass.
 
 ## Evidence reviewed
 

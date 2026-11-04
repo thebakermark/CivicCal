@@ -10,7 +10,8 @@ import argparse
 import json
 import re
 import sys
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
@@ -67,7 +68,7 @@ def _utc_stamp(value: Any, field: str) -> str:
     return parsed.astimezone(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 
-def _temporal(value: Any, time_status: str, field: str) -> tuple[str, str]:
+def _temporal(value: Any, time_status: str, field: str, tzid: str | None = None) -> tuple[str, str]:
     if not isinstance(value, dict) or not isinstance(value.get("value"), str):
         raise FeedError(f"Approved event is missing a valid {field}.")
     kind = value.get("kind")
@@ -88,13 +89,96 @@ def _temporal(value: Any, time_status: str, field: str) -> tuple[str, str]:
             raise FeedError(f"{field} is marked floating but contains an offset.")
         return "", parsed.strftime("%Y%m%dT%H%M%S")
     if time_status in {"utc", "zoned"}:
-        if parsed.tzinfo is None or parsed.utcoffset() is None:
-            raise FeedError(
-                f"{field} is zoned but has no explicit UTC offset; "
-                "TZID/VTIMEZONE publication is not implemented yet."
-            )
-        return "", parsed.astimezone(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        if parsed.tzinfo is not None and parsed.utcoffset() is not None:
+            return "", parsed.astimezone(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        if time_status == "zoned" and tzid:
+            try:
+                ZoneInfo(tzid)
+            except (ZoneInfoNotFoundError, ValueError) as exc:
+                raise FeedError(f"{field} has unknown IANA timezone {tzid!r}.") from exc
+            return f"TZID={tzid}", parsed.strftime("%Y%m%dT%H%M%S")
+        raise FeedError(f"{field} is zoned but has no explicit UTC offset or valid IANA timezone.")
     raise FeedError(f"{field} has unsupported time status {time_status!r}.")
+
+
+def _offset_text(value: timedelta) -> str:
+    seconds = int(value.total_seconds())
+    sign = "+" if seconds >= 0 else "-"
+    seconds = abs(seconds)
+    hours, remainder = divmod(seconds, 3600)
+    minutes = remainder // 60
+    return f"{sign}{hours:02d}{minutes:02d}"
+
+
+def _timezone_component(tzid: str, years: set[int]) -> list[str]:
+    """Build bounded explicit VTIMEZONE observances from the system IANA database."""
+    try:
+        zone = ZoneInfo(tzid)
+    except (ZoneInfoNotFoundError, ValueError) as exc:
+        raise FeedError(f"Unknown IANA timezone {tzid!r}.") from exc
+    if not years:
+        raise FeedError("Cannot build VTIMEZONE without event years.")
+    first_year = max(1900, min(years) - 1)
+    last_year = min(2100, max(years) + 2)
+    start_utc = datetime(first_year, 1, 1, tzinfo=timezone.utc)
+    end_utc = datetime(last_year + 1, 1, 1, tzinfo=timezone.utc)
+    step = timedelta(hours=6)
+    transitions = []
+    cursor = start_utc
+    previous = cursor.astimezone(zone)
+    while cursor < end_utc:
+        next_cursor = min(cursor + step, end_utc)
+        current = next_cursor.astimezone(zone)
+        if (previous.utcoffset(), previous.tzname()) != (current.utcoffset(), current.tzname()):
+            low, high = cursor, next_cursor
+            old_offset, old_name = previous.utcoffset(), previous.tzname()
+            while (high - low).total_seconds() > 1:
+                mid = low + (high - low) / 2
+                probe = mid.astimezone(zone)
+                if (probe.utcoffset(), probe.tzname()) == (old_offset, old_name):
+                    low = mid
+                else:
+                    high = mid
+            instant = high.replace(microsecond=0)
+            before = (instant - timedelta(seconds=1)).astimezone(zone)
+            after = instant.astimezone(zone)
+            old, new = before.utcoffset(), after.utcoffset()
+            if old is None or new is None:
+                raise FeedError(f"Timezone {tzid!r} has an unresolved offset transition.")
+            local_transition = (instant + old).replace(tzinfo=None)
+            transitions.append((local_transition, old, new, after.tzname() or tzid))
+        cursor, previous = next_cursor, current
+
+    groups = {}
+    for local, old, new, name in transitions:
+        kind = "DAYLIGHT" if new > old else "STANDARD"
+        key = (kind, _offset_text(old), _offset_text(new), name)
+        groups.setdefault(key, []).append(local)
+
+    lines = ["BEGIN:VTIMEZONE", f"TZID:{_escape(tzid)}"]
+    for (kind, old, new, name), dates in sorted(groups.items()):
+        dates.sort()
+        lines.extend([
+            f"BEGIN:{kind}",
+            f"DTSTART:{dates[0].strftime('%Y%m%dT%H%M%S')}",
+            f"TZOFFSETFROM:{old}",
+            f"TZOFFSETTO:{new}",
+            f"TZNAME:{_escape(name)}",
+        ])
+        if len(dates) > 1:
+            lines.append("RDATE:" + ",".join(item.strftime("%Y%m%dT%H%M%S") for item in dates[1:]))
+        lines.append(f"END:{kind}")
+    lines.append("END:VTIMEZONE")
+    return lines
+
+
+def _event_year(value: Any) -> int | None:
+    if not isinstance(value, dict) or not isinstance(value.get("value"), str):
+        return None
+    try:
+        return int(value["value"][:4])
+    except (TypeError, ValueError):
+        return None
 
 
 def _valid_url(value: Any, field: str) -> str | None:
@@ -123,7 +207,8 @@ def _event_lines(event_id: str, record: dict) -> list[str]:
         raise FeedError(f"{event_id}: invalid revision number.")
     stamp = _utc_stamp(revision[-1].get("observed_at"), f"{event_id} revision observed_at")
     time_status = current.get("time_status") or "unresolved"
-    start_param, start_value = _temporal(current.get("start"), time_status, "start")
+    tzid = current.get("timezone") if isinstance(current.get("timezone"), str) else None
+    start_param, start_value = _temporal(current.get("start"), time_status, "start", tzid)
     lines = [
         "BEGIN:VEVENT",
         f"UID:{_escape(event_id)}@civiccal",
@@ -139,7 +224,7 @@ def _event_lines(event_id: str, record: dict) -> list[str]:
 
     end = current.get("end")
     if end is not None:
-        end_param, end_value = _temporal(end, time_status, "end")
+        end_param, end_value = _temporal(end, time_status, "end", tzid)
         if end_param != start_param:
             raise FeedError(f"{event_id}: DTSTART and DTEND value types do not match.")
         if start_param:
@@ -222,6 +307,16 @@ def build_calendar(identity_state: dict, manifest: dict) -> tuple[str, dict]:
         f"X-WR-CALNAME:{_escape(name)}",
         "METHOD:PUBLISH",
     ]
+    timezone_years = {}
+    for event_id in approved:
+        current = records_by_id[event_id].get("current") or {}
+        tzid = current.get("timezone")
+        if isinstance(tzid, str) and tzid:
+            year = _event_year(current.get("start"))
+            if year is not None:
+                timezone_years.setdefault(tzid, set()).add(year)
+    for tzid, years in sorted(timezone_years.items()):
+        lines.extend(_timezone_component(tzid, years))
     for event_id in approved:
         lines.extend(_event_lines(event_id, records_by_id[event_id]))
     lines.append("END:VCALENDAR")

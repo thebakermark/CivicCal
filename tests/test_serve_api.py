@@ -80,6 +80,24 @@ class ServeAPITests(unittest.TestCase):
             payload = json.loads(response.read())
         self.assertEqual(payload["pagination"]["total"], 1)
 
+    def test_source_filtered_json_matches_source_relay(self):
+        with urlopen(self.base + "/api/v1/events?source_id=library") as response:
+            payload = json.loads(response.read())
+        self.assertEqual([item["event_id"] for item in payload["events"]], ["evt-public"])
+        with urlopen(self.base + "/calendars/sources/library.ics") as response:
+            body = response.read().decode("utf-8")
+        self.assertIn("UID:evt-public@civiccal", body)
+        self.assertNotIn("evt-private", body)
+
+    def test_duplicate_event_ids_fail_closed_for_source_relay(self):
+        state = json.loads(self.state_path.read_text(encoding="utf-8"))
+        duplicate = dict(state["events"]["a"])
+        state["events"]["duplicate"] = duplicate
+        self.state_path.write_text(json.dumps(state), encoding="utf-8")
+        with self.assertRaises(HTTPError) as caught:
+            urlopen(self.base + "/calendars/sources/library.ics")
+        self.assertEqual(caught.exception.code, 400)
+
     def test_ics_endpoint_returns_calendar_content(self):
         with urlopen(self.base + "/calendars/sources/library.ics") as response:
             body = response.read().decode("utf-8")

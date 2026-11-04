@@ -10,10 +10,10 @@ Each source should have, at minimum:
 
 - `source_id`: immutable CivicCal identifier.
 - `organization_id`: publisher/organization identifier.
-- `display_name`: human-readable source name.
-- `source_type`: `ics`, `rss`, `atom`, `json_api`, `jsonld_html`, `html_adapter`, or explicitly scoped `email`.
+- `name` or `display_name`: optional human-readable source label; `source_id` remains the immutable identifier.
+- `source_type`: current one-shot HTTP capture types are `ics`, `rss`, `atom`, `json_api`, and `html`; other adapter types require an implemented capture path before use.
 - `url`: canonical source URL, where applicable.
-- `status`: `discovered`, `review_required`, `approved`, `paused`, `blocked`, or `retired`.
+- `access_status`: access decision such as `review_required`, `approved`, or `blocked`; lifecycle states such as paused or retired should remain distinct if/when represented in the registry.
 - `polling_enabled`: explicit operational switch; default false for newly discovered sources.
 - `poll_interval` and scheduling policy.
 - `timezone_policy`: source-declared, explicit configured IANA zone, or unresolved.

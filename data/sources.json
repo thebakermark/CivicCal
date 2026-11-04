@@ -185,13 +185,13 @@
       "id": "village-of-mokena-events",
       "organization_id": "village-of-mokena",
       "source_type": "html",
-      "url": "https://www.mokena.org/calendar.aspx?categoryid=0&id=20697&catid=550",
+      "url": "https://www.mokena.gov/calendar.aspx",
       "access_status": "review_required",
       "polling_enabled": false,
       "terms_reviewed": false,
       "robots_reviewed": false,
       "event_access": "mixed",
-      "notes": "Official Calendar of Events page linked from village website. HTML listing; terms/robots review and extraction method still required. Discovered 2026-11-03."
+      "notes": "Official Village calendar page on current mokena.gov domain. Calendar view includes municipal meetings, closures, recycling days, election/voting notices, and community events submitted by partner organizations, including Park District events. Because partner events may also arrive from their originating organization, preserve source provenance and create duplicate candidates rather than silently merging. HTML calendar has date-range/category controls; determine stable event-detail URLs and pagination/query behavior before building the adapter. Polling remains disabled pending terms/robots and parser review."
     },
     {
       "id": "mokena-library-events",
@@ -215,7 +215,7 @@
       "terms_reviewed": false,
       "robots_reviewed": false,
       "event_access": "mixed",
-      "notes": "Official Upcoming Events page. Includes preregistration, fees, eligibility and public event details. Review terms/robots and extraction method before polling. Discovered 2026-11-03."
+      "notes": "Official Upcoming Events page. Current page contains curated event listings with dates/times, descriptions, registration links, eligibility, fees, and deadlines. This is not necessarily the complete program/class or sports schedule; treat as a distinct featured/upcoming-events source and assess additional calendar sources separately. Preserve registration details and original event links during extraction. Polling remains disabled pending terms/robots and parser review."
     },
     {
       "id": "mokena-sd159-events-ical",
@@ -241,7 +241,7 @@
       "terms_reviewed": false,
       "robots_reviewed": false,
       "event_access": "mixed",
-      "notes": "Official district Events page has a Subscribe > Download .ICS link resolving to this endpoint. Page displays District Events plus separate calendars for Indian Trail, Dr. Julian Rogus, Hilda Walker Intermediate, Summit Hill Jr. High, and Mary Drew Early Learning Center. The default id=0 calendar scope needs verification. Terms/robots review and calendar scope review required before any automated fetch. Discovered 2026-11-03."
+      "notes": "Official district Events page exposes a Download .ICS link resolving to this endpoint. The visible default page lists District Events; the page also exposes separate selectable calendars for Indian Trail, Dr. Julian Rogus, Hilda Walker Intermediate, Summit Hill Jr. High, and Mary Drew Early Learning Center. The exact scope returned by id=0 has not yet been verified; treat it as the default district calendar only until compared with school-specific calendar exports. Endpoint responds as text/calendar (web text viewer cannot parse it). Terms/robots review and scope review required before automated retrieval. Discovered 2026-11-03."
     }
   ],
   "verification_policy": {

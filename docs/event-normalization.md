@@ -31,7 +31,7 @@ Each normalized event includes:
 - Data-quality flags.
 - Full `source_record` copy and capture provenance.
 
-The envelope includes parser warnings, counts, and flag counts. No event is dropped for being incomplete; records without a usable title or start remain present and are flagged.
+The envelope includes parser warnings, counts, and flag counts. No event is dropped for being incomplete; records without a usable title or start remain present and are flagged. A separate, pure Schema.org projection is available through `scripts/schemaorg.py`; it does not alter canonical records or replace CivicCal provenance and review data.
 
 ## Date and time policy
 
@@ -48,6 +48,10 @@ The envelope includes parser warnings, counts, and flag counts. No event is drop
 ## Validation behavior
 
 Validation is non-destructive. Missing title/start, unresolved date semantics, missing location, and end-before-start are reported as flags. Warnings do not cause the source record to be discarded. The complete parser event is retained in `source_record`, including source-specific fields not yet mapped into the canonical vocabulary.
+
+## Schema.org projection
+
+Use `to_schemaorg_event()` from `scripts/schemaorg.py` to create a Schema.org Event view of one normalized event. The adapter maps supported names, descriptions, URLs, dates, locations, organizers, status, attendance mode, free-access status, keywords, audience, registration action, and publisher identifier. It omits unresolved temporal values and unknown status/mode values rather than guessing. It does not export CivicCal source authorization, publication approval, capture history, or internal identity state. Tests live in `tests/test_schemaorg.py`.
 
 ## Boundaries
 

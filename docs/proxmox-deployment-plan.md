@@ -4,9 +4,9 @@
 
 ## 1. Recommendation
 
-Deploy CivicCal as one application in a dedicated **Ubuntu Server 26.04 LTS VM** on Proxmox.
+Deploy CivicCal as one application in a dedicated **unprivileged Debian 13 LXC** on Proxmox.
 
-This follows the user's previously selected Ubuntu Server VM approach. Use the guest's native systemd service manager and Python runtime. Do not introduce Docker, Kubernetes, PostgreSQL, Redis, a task queue, or a reverse proxy merely to run the current single-process application.
+For this small, single-instance Python service, an unprivileged LXC is lighter than a full VM while retaining a separate filesystem, network identity, service account, and backup boundary. Use the container's native systemd service manager and Python runtime. Do not introduce Docker, Kubernetes, PostgreSQL, Redis, a task queue, or a reverse proxy merely to run the current single-process application.
 
 This keeps the deployment small, inspectable, easy to back up, and consistent with CivicCal's modular-monolith architecture. Keep the application independent of Proxmox-specific features so it can be moved to another VM or host later.
 
@@ -14,14 +14,14 @@ This keeps the deployment small, inspectable, easy to back up, and consistent wi
 
 | Resource | Initial proposal | Notes |
 |---|---:|---|
-| Guest | Ubuntu Server 26.04 LTS VM | Matches the previously selected VM-based Proxmox approach |
-| CPU | 2 vCPU | Parsing and one-shot capture are modest workloads |
-| Memory | 4 GiB | Comfortable headroom for Ubuntu Server and the application |
-| OS disk | 32 GiB | Operating system, Python runtime, application checkout |
-| Data volume | Separate virtual disk if storage permits; begin at 32 GiB | Raw captures and state live outside the application checkout; size can be increased |
+| Guest | Unprivileged Debian 13 LXC | Lightweight system container; no privileged mode or nesting required by the current application |
+| CPU | 2 cores | Parsing and one-shot capture are modest workloads |
+| Memory | 2 GiB | Starting allocation; increase only if measured usage warrants it |
+| Root disk | 16 GiB | Debian base, Python runtime, application checkout |
+| Persistent data | Separate Proxmox mount point; start at 32 GiB if available | Raw captures and state remain separate from replaceable application code |
 | Network | `vmbr0`, DHCP initially | Preserve the existing network; no router or DHCP changes during initial testing; no inbound public access |
 
-These are starting estimates, not hard requirements. Previously recorded Proxmox details include node `pve0`, bridge `vmbr0`, and `local-lvm`; storage capacity can change, so verify current availability with `pvesm status` before allocating disks. Keep the first network test on DHCP and do not change router/DHCP settings until the guest has been tested successfully.
+These are starting estimates, not hard requirements. Previously recorded Proxmox details include node `pve0`, bridge `vmbr0`, and `local-lvm`; storage capacity can change, so verify current availability with `pvesm status` before allocating the root filesystem and persistent mount point. Use an unprivileged container, enable only the features Debian/systemd actually needs, and do not enable nesting or privileged mode by default. Keep the first network test on DHCP and do not change router/DHCP settings until the guest has been tested successfully.
 
 ## 3. Application layout
 
@@ -112,7 +112,7 @@ A Proxmox snapshot alone is not the complete backup strategy.
 |---|---|---|
 | 0 | Review this plan against the actual Proxmox node, storage, bridge, and backup destination | User review |
 | 1 | Prepare a reproducible guest provisioning checklist and systemd unit | Documentation/config review |
-| 2 | Create the Ubuntu Server VM and install only the required OS/Python packages | Explicit deployment approval |
+| 2 | Create the unprivileged Debian 13 LXC and install only the required OS/Python packages | Explicit deployment approval |
 | 3 | Deploy current JSON-backed application in private validation mode | Explicit deployment approval |
 | 4 | Implement SQLite adapter, migration, parity checks, and rollback | Separate database approval |
 | 5 | Switch API and ICS to database-backed approved records | Migration acceptance |
@@ -136,7 +136,7 @@ This deployment does not add:
 Before creating the guest, confirm:
 - Target Proxmox node and available storage.
 - Preferred network bridge and reserved address.
-- The VM ID, current storage availability, and final virtual-disk sizing.
+- The CT ID, current storage availability, and final root/data mount sizing.
 - Persistent data-volume location and capacity.
 - Existing Proxmox backup target and retention.
 - Whether the first validation is LAN-only or strictly guest-local.

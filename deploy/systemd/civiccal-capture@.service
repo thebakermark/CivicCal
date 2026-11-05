@@ -10,7 +10,7 @@ User=civiccal-capture
 Group=civiccal-capture
 WorkingDirectory=/opt/civiccal/app
 Environment=PYTHONDONTWRITEBYTECODE=1
-ExecStart=/opt/civiccal/venv/bin/python /opt/civiccal/app/scripts/run_capture_job.py --source-id %i
+ExecStart=/opt/civiccal/venv/bin/python -m scripts.run_capture_job --source-id %i
 TimeoutStartSec=150
 
 # The job can write only raw captures and reports. Application code,

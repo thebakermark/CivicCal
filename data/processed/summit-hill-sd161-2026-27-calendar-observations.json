@@ -1,0 +1,394 @@
+{
+  "format": "civiccal.school-calendar-observation-set.v1",
+  "processing_mode": "offline_source_separated_transcription",
+  "organization": "Summit Hill School District 161",
+  "organization_id": "summit-hill-school-district-161",
+  "school_year": "2026-2027",
+  "processed_at": "2026-11-05",
+  "source_attribution_policy": "Records remain attributed to the manually transcribed official district calendar PDF. No registered ICS source_id is assigned; this PDF transcription is not evidence that the district ICS endpoint has been captured or verified.",
+  "source_set": {
+    "fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+    "channel": "approved_district_calendar_pdf",
+    "format": "civiccal.school-year-calendar-transcription.v1",
+    "source": {
+      "title": "2026-27 District Calendar",
+      "url": "https://4.files.edl.io/6880/02/27/26/205237-d3ecd887-dee3-4089-ad5b-d8b29281ee6e.pdf",
+      "approved_date": "2026-02-18",
+      "revised_date": "2026-02-25",
+      "page": 1,
+      "verification": "Official district School Calendar page links directly to this one-page PDF. Entries below are a manual transcription of the published calendar; no dates or dismissal times have been inferred."
+    }
+  },
+  "input_observation_count": 18,
+  "canonical_event_ids_assigned": false,
+  "source_identity_tracking_applied": false,
+  "automatic_deduplication": false,
+  "cross_source_merge": false,
+  "network_access": false,
+  "database_writes": false,
+  "publication": false,
+  "authorization_flags_modified": false,
+  "grouping_policy": "All calendar entries are retained as separate source observations. Calendar date overlap with another district is not a duplicate and does not justify merging.",
+  "observations": [
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#1",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 1,
+      "temporal": {
+        "start_date": "2026-08-17",
+        "end_date_inclusive": "2026-08-19",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "Teacher Institute Days",
+        "start_date": "2026-08-17",
+        "end_date_inclusive": "2026-08-19",
+        "scope": "district",
+        "schedule_type": "teacher_institute",
+        "student_attendance": "confirm_student_attendance",
+        "source_text": "August 17, 18 & 19 — Teacher Institute Days"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#2",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 2,
+      "temporal": {
+        "start_date": "2026-09-07",
+        "end_date_inclusive": "2026-09-07",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "Labor Day - No School",
+        "start_date": "2026-09-07",
+        "end_date_inclusive": "2026-09-07",
+        "scope": "district",
+        "schedule_type": "no_school",
+        "student_attendance": "no_school",
+        "source_text": "September 7 — Labor Day - No School"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#3",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 3,
+      "temporal": {
+        "start_date": "2026-10-09",
+        "end_date_inclusive": "2026-10-09",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "1/2 Day School in AM/PM Teacher In-service",
+        "start_date": "2026-10-09",
+        "end_date_inclusive": "2026-10-09",
+        "scope": "district",
+        "schedule_type": "half_day",
+        "student_attendance": "shortened_day",
+        "source_text": "October 9 — 1/2 Day School in AM/PM Teacher In-service"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#4",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 4,
+      "temporal": {
+        "start_date": "2026-10-12",
+        "end_date_inclusive": "2026-10-12",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "Columbus Day - No School",
+        "start_date": "2026-10-12",
+        "end_date_inclusive": "2026-10-12",
+        "scope": "district",
+        "schedule_type": "no_school",
+        "student_attendance": "no_school",
+        "source_text": "October 12 — Columbus Day - No School"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#5",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 5,
+      "temporal": {
+        "start_date": "2026-10-30",
+        "end_date_inclusive": "2026-10-30",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "1/2 Day School in AM/PM Teacher In-service",
+        "start_date": "2026-10-30",
+        "end_date_inclusive": "2026-10-30",
+        "scope": "district",
+        "schedule_type": "half_day",
+        "student_attendance": "shortened_day",
+        "source_text": "October 30 — 1/2 Day School in AM/PM Teacher In-service"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#6",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 6,
+      "temporal": {
+        "start_date": "2026-11-03",
+        "end_date_inclusive": "2026-11-03",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "Polling Place - No School at Mary Drew Early Learning Center Only",
+        "start_date": "2026-11-03",
+        "end_date_inclusive": "2026-11-03",
+        "scope": "Mary Drew Early Learning Center only",
+        "schedule_type": "no_school",
+        "student_attendance": "no_school",
+        "source_text": "November 3 — Polling Place – No School at Mary Drew Early Learning Center Only"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#7",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 7,
+      "temporal": {
+        "start_date": "2026-11-20",
+        "end_date_inclusive": "2026-11-20",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "1/2 Day School in AM/PM Teacher In-service",
+        "start_date": "2026-11-20",
+        "end_date_inclusive": "2026-11-20",
+        "scope": "district",
+        "schedule_type": "half_day",
+        "student_attendance": "shortened_day",
+        "source_text": "November 20 — 1/2 Day School in AM/PM Teacher In-service"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#8",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 8,
+      "temporal": {
+        "start_date": "2026-11-23",
+        "end_date_inclusive": "2026-11-24",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "Parent/Teacher Conference Day - No School",
+        "start_date": "2026-11-23",
+        "end_date_inclusive": "2026-11-24",
+        "scope": "district",
+        "schedule_type": "no_school",
+        "student_attendance": "no_school",
+        "source_text": "November 23 & 24 — Parent/Teacher Conference Day - No School"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#9",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 9,
+      "temporal": {
+        "start_date": "2026-11-25",
+        "end_date_inclusive": "2026-11-27",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "Thanksgiving Holiday - No School",
+        "start_date": "2026-11-25",
+        "end_date_inclusive": "2026-11-27",
+        "scope": "district",
+        "schedule_type": "school_break",
+        "student_attendance": "no_school",
+        "source_text": "November 25-27 — Thanksgiving Holiday - No School"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#10",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 10,
+      "temporal": {
+        "start_date": "2026-12-18",
+        "end_date_inclusive": "2026-12-18",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "1/2 Day School in AM/PM Teacher In-service",
+        "start_date": "2026-12-18",
+        "end_date_inclusive": "2026-12-18",
+        "scope": "district",
+        "schedule_type": "half_day",
+        "student_attendance": "shortened_day",
+        "source_text": "December 18 — 1/2 Day School in AM/PM Teacher In-service"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#11",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 11,
+      "temporal": {
+        "start_date": "2026-12-21",
+        "end_date_inclusive": "2027-01-01",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "Holiday Break",
+        "start_date": "2026-12-21",
+        "end_date_inclusive": "2027-01-01",
+        "scope": "district",
+        "schedule_type": "school_break",
+        "student_attendance": "no_school",
+        "source_text": "December 21 – January 1 — Holiday Break"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#12",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 12,
+      "temporal": {
+        "start_date": "2027-01-04",
+        "end_date_inclusive": "2027-01-04",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "Teacher Inservice - No School",
+        "start_date": "2027-01-04",
+        "end_date_inclusive": "2027-01-04",
+        "scope": "district",
+        "schedule_type": "no_school",
+        "student_attendance": "no_school",
+        "source_text": "January 4 — Teacher Inservice – No School"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#13",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 13,
+      "temporal": {
+        "start_date": "2027-01-18",
+        "end_date_inclusive": "2027-01-18",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "Martin Luther King's Birthday - No School",
+        "start_date": "2027-01-18",
+        "end_date_inclusive": "2027-01-18",
+        "scope": "district",
+        "schedule_type": "no_school",
+        "student_attendance": "no_school",
+        "source_text": "January 18 — Martin Luther King’s Birthday - No School"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#14",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 14,
+      "temporal": {
+        "start_date": "2027-02-12",
+        "end_date_inclusive": "2027-02-12",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "1/2 Day School in AM/PM Teacher In-service",
+        "start_date": "2027-02-12",
+        "end_date_inclusive": "2027-02-12",
+        "scope": "district",
+        "schedule_type": "half_day",
+        "student_attendance": "shortened_day",
+        "source_text": "February 12 — 1/2 Day School in AM/PM Teacher In-service"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#15",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 15,
+      "temporal": {
+        "start_date": "2027-02-15",
+        "end_date_inclusive": "2027-02-15",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "President's Day - No School",
+        "start_date": "2027-02-15",
+        "end_date_inclusive": "2027-02-15",
+        "scope": "district",
+        "schedule_type": "no_school",
+        "student_attendance": "no_school",
+        "source_text": "February 15 — President’s Day - No School"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#16",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 16,
+      "temporal": {
+        "start_date": "2027-03-25",
+        "end_date_inclusive": "2027-03-25",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "1/2 Day School in AM/PM Teacher In-Service",
+        "start_date": "2027-03-25",
+        "end_date_inclusive": "2027-03-25",
+        "scope": "district",
+        "schedule_type": "half_day",
+        "student_attendance": "shortened_day",
+        "source_text": "March 25 — 1/2 Day School in AM/PM Teacher In-Service"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#17",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 17,
+      "temporal": {
+        "start_date": "2027-03-26",
+        "end_date_inclusive": "2027-04-02",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "Spring Break",
+        "start_date": "2027-03-26",
+        "end_date_inclusive": "2027-04-02",
+        "scope": "district",
+        "schedule_type": "school_break",
+        "student_attendance": "no_school",
+        "source_text": "March 26 – April 2 — Spring Break"
+      }
+    },
+    {
+      "observation_ref": "data/fixtures/summit-hill-2026-27-school-schedule.json#18",
+      "source_fixture": "data/fixtures/summit-hill-2026-27-school-schedule.json",
+      "source_channel": "approved_district_calendar_pdf",
+      "record_index": 18,
+      "temporal": {
+        "start_date": "2027-05-26",
+        "end_date_inclusive": "2027-05-26",
+        "all_day": true
+      },
+      "original_record": {
+        "title": "1/2 Day School in AM/PM Teacher In-service - Last Day Without Snow Days",
+        "start_date": "2027-05-26",
+        "end_date_inclusive": "2027-05-26",
+        "scope": "district",
+        "schedule_type": "half_day",
+        "student_attendance": "shortened_day",
+        "source_text": "May 26 — 1/2 Day School in AM/PM Teacher In-service; last day of school without snow days"
+      }
+    }
+  ]
+}

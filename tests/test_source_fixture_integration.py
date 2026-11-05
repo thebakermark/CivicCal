@@ -19,7 +19,7 @@ from scripts.serve_api import make_handler
 
 
 class SourceFixtureIntegrationTests(unittest.TestCase):
-    def test_three_initial_source_fixtures_validate_together(self):
+    def test_initial_source_and_manual_snapshot_fixtures_validate_together(self):
         report = validate_fixtures(Path(__file__).resolve().parents[1])
 
         self.assertEqual(report["format"], "civiccal.fixture-validation.v1")
@@ -27,10 +27,10 @@ class SourceFixtureIntegrationTests(unittest.TestCase):
         self.assertFalse(report["network_access"])
         self.assertFalse(report["database_writes"])
         self.assertFalse(report["publication"])
-        self.assertEqual(report["source_count"], 3)
-        self.assertEqual(report["event_count"], 6)
-        self.assertEqual(report["normalized_event_count"], 6)
-        self.assertEqual(report["review_flagged_event_count"], 5)
+        self.assertEqual(report["source_count"], 4)
+        self.assertEqual(report["event_count"], 8)
+        self.assertEqual(report["normalized_event_count"], 8)
+        self.assertEqual(report["review_flagged_event_count"], 7)
 
         by_source = {source["parser"]: source for source in report["sources"]}
         self.assertEqual(by_source["parse_ics"]["event_count"], 2)
@@ -39,6 +39,8 @@ class SourceFixtureIntegrationTests(unittest.TestCase):
         self.assertEqual(by_source["parse_ics"]["normalized_event_count"], 2)
         self.assertEqual(by_source["parse_mokena_park"]["normalized_event_count"], 3)
         self.assertEqual(by_source["parse_village"]["normalized_event_count"], 1)
+        self.assertEqual(by_source["manual_snapshot"]["event_count"], 2)
+        self.assertEqual(by_source["manual_snapshot"]["normalized_event_count"], 2)
 
 
     def test_village_html_fixture_flows_through_storage_query_and_ics(self):

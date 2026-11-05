@@ -1,0 +1,34 @@
+[Unit]
+Description=CivicCal one-shot capture for source %i
+Documentation=https://github.com/TheBakerMark/CivicCal/blob/main/docs/capture-runner.md
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=civiccal-capture
+Group=civiccal-capture
+WorkingDirectory=/opt/civiccal/app
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/civiccal/venv/bin/python /opt/civiccal/app/scripts/run_capture_job.py --source-id %i
+TimeoutStartSec=150
+
+# The job can write only raw captures and reports. Application code,
+# source registry, and completeness policy remain read-only.
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+NoNewPrivileges=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadOnlyPaths=/opt/civiccal/app /srv/civiccal/data/registry
+ReadWritePaths=/srv/civiccal/data/captures /srv/civiccal/data/reports
+UMask=0027
+
+[Install]
+# Deliberately no [Install] target: this is manually started, never enabled.

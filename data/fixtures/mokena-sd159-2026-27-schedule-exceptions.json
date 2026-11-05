@@ -260,6 +260,19 @@
       ]
     },
     {
+      "title": "Election Day-E-Learning Day",
+      "start_date": "2027-04-06",
+      "end_date_inclusive": "2027-04-06",
+      "schedule_type": "e_learning",
+      "student_attendance": "e_learning",
+      "school_scope": "Not specified in this iCalendar event; do not infer which schools are remote or in person from this record alone.",
+      "source_text": "Election Day-E-Learning Day",
+      "source_event_uids": [
+        "f1f159f6-5dbb-4d08-bb7d-565c654e0c2c"
+      ],
+      "source_date_semantics": "All-day VEVENT; DTSTART;VALUE=DATE:20270406; DTEND;VALUE=DATE:20270407 (exclusive end)."
+    },
+    {
       "title": "Early dismissal",
       "start_date": "2027-04-16",
       "end_date_inclusive": "2027-04-16",
@@ -288,5 +301,8 @@
         "46df2345-b632-4858-9538-a848eec5742a"
       ]
     }
+  ],
+  "reconciliation_notes": [
+    "April 6, 2027 is present in the archived iCalendar export as the all-day event “Election Day-E-Learning Day” (UID f1f159f6-5dbb-4d08-bb7d-565c654e0c2c; exclusive DTEND 2027-04-07). The VEVENT itself has no description or location and does not identify school-level scope. The approved-calendar transcription separately specifies MES and MIS in person and MJHS e-learning; retain that school-specific detail under the approved-calendar source rather than attributing it to this VEVENT."
   ]
 }

@@ -1,0 +1,1642 @@
+{
+  "format": "civiccal.school-calendar-observation-set.v1",
+  "processing_mode": "offline_source_separated_reconciliation",
+  "organization": "Mokena School District 159",
+  "organization_id": "mokena-school-district-159",
+  "school_year": "2026-2027",
+  "processed_at": "2026-11-05",
+  "source_attribution_policy": "Each record remains attached to its original fixture and source channel. No new registered source_id is assigned. The SD159 iCalendar endpoint remains blocked for automated retrieval; only the user-provided local ICS export was used.",
+  "source_sets": [
+    {
+      "fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+      "channel": "approved_calendar_pdf",
+      "format": "civiccal.school-year-approved-calendar.v1",
+      "source": {
+        "title": "Mokena D159 School Calendar 26.27.pdf",
+        "url": "https://drive.google.com/file/d/10XU79esFWvZ8pJ-IhHGh0w-TVtgkoUdq/view",
+        "announcement_url": "https://www.mokena159.org/article/2775307",
+        "announcement_published": "2026-03-19",
+        "verification": "The district's March 19, 2026 announcement states that the Board approved the 2026-2027 school-year calendar and links this PDF. The public Google Drive viewer rendered the approved one-page calendar as an image; this fixture is a manual transcription of its labels, color legend, and date markers.",
+        "transcription_policy": "Preserve the published calendar categories. Do not infer dismissal times from color markers. Keep school-specific attendance exceptions distinct from district-wide closures."
+      },
+      "reviewed_at": "2026-11-04"
+    },
+    {
+      "fixture": "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json",
+      "channel": "official_live_feed_and_district_graphics",
+      "format": "civiccal.school-year-live-feed-supplement.v1",
+      "sources": [
+        {
+          "id": "mis-live-feed-page-2",
+          "url": "https://mes.mokena159.org/o/mis/live-feed?page_no=2",
+          "description": "Official Mokena Intermediate School live-feed archive, including the September dates graphic and Labor Day/early-dismissal notices."
+        },
+        {
+          "id": "mis-live-feed-page-1",
+          "url": "https://mes.mokena159.org/o/mis/live-feed",
+          "description": "Official Mokena Intermediate School live-feed archive, including the October district dates graphic and explicit October 9–13 no-school/return notice."
+        },
+        {
+          "id": "september-district-dates-graphic",
+          "url": "https://core-docs.s3.amazonaws.com/mokena_school_district_159_ar/live_feed_image/image/29325072/large_DIstrict_Dates__10_.png",
+          "description": "District-created September 2026 dates graphic."
+        },
+        {
+          "id": "october-district-dates-graphic",
+          "url": "https://core-docs.s3.amazonaws.com/mokena_school_district_159_ar/live_feed_image/image/30848899/large_DIstrict_Dates__14_.png",
+          "description": "District-created October 2026 dates graphic."
+        },
+        {
+          "id": "october-no-school-reminder-graphic",
+          "url": "https://core-docs.s3.amazonaws.com/mokena_school_district_159_ar/live_feed_image/image/30662630/large_No_School__7_.png",
+          "description": "District-created no-school reminder graphic confirming October 9 and October 12."
+        },
+        {
+          "id": "early-dismissal-times-graphic",
+          "url": "https://core-docs.s3.amazonaws.com/mokena_school_district_159_ar/live_feed_image/image/29454822/large_Pink_and_White_Cute_Bordered_Clock_Leave_the_Office_Early_Day_Social_Media_Graphic__2_.png",
+          "description": "District-created graphic attached to the official live-feed post saying tomorrow is the first Early Dismissal Day. The approved calendar identifies September 4 as the first early-dismissal date, resolving the graphic's date association."
+        },
+        {
+          "id": "august-chalk-the-walk-live-feed",
+          "url": "https://mes.mokena159.org/o/mes/live-feed?page_no=2",
+          "description": "Official district live-feed post states MES students, parents, and staff could visit on August 17 and 18 for Chalk the Walk; this does not establish whether classes were in session."
+        }
+      ],
+      "reviewed_at": "2026-11-04",
+      "excluded_or_unresolved": [
+        {
+          "date_range": "2026-08-17 to 2026-08-18",
+          "claim": "Chalk the Walk activity at MES",
+          "status": "context only; attendance resolved by approved calendar",
+          "reason": "The live-feed post itself does not establish attendance status. The district-approved calendar independently confirms August 17-18 as Teacher Institute Days; see data/fixtures/mokena-sd159-2026-27-approved-calendar.json."
+        }
+      ]
+    },
+    {
+      "fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+      "channel": "user_provided_offline_ics_export",
+      "format": "civiccal.school-year-calendar-transcription.v1",
+      "source": {
+        "title": "Official Mokena SD 159 district iCalendar export",
+        "url": "https://thrillshare-cmsv2.services.thrillshare.com/api/v4/o/9768/cms/events/generate_ical",
+        "file_name": "mokena_school_district_159_events.ics",
+        "sha256": "33cf370e9abde1cfddef88e77e82babce747e7e1f7313ebcea4248f8b1fb2774",
+        "captured_at": "2026-11-03T23:30:43Z",
+        "vevent_count": 5936,
+        "coverage_start": "2026-11-03",
+        "coverage_end": "2099-12-25",
+        "calendar_timezone": "America/Chicago",
+        "time_policy": "VEVENT DTSTART/DTEND values in this export are floating local values without TZID or UTC marker. Preserve as floating; do not assign a timezone to individual events solely from the VTIMEZONE component.",
+        "verification": "Derived from the user-provided official district iCalendar export. Original event UIDs and source wording are retained below. Repeated entries remain represented in source_event_uids; this is a schedule-oriented reference view, not a destructive deduplication."
+      }
+    }
+  ],
+  "input_observation_count": 49,
+  "date_range_candidate_group_count": 27,
+  "canonical_event_ids_assigned": false,
+  "source_identity_tracking_applied": false,
+  "automatic_deduplication": false,
+  "cross_source_merge": false,
+  "network_access": false,
+  "database_writes": false,
+  "publication": false,
+  "authorization_flags_modified": false,
+  "grouping_policy": "Records are grouped only by identical inclusive date range to surface possible overlaps. A group is not an event identity. Different school scope, schedule type, attendance status, original wording, or source channel remain separate observations. Never merge records solely because dates overlap.",
+  "groups": [
+    {
+      "date_range_key": "2026-08-17/2026-08-18",
+      "observation_count": 1,
+      "grouping_status": "single_observation",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#1",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 1,
+          "date_range_key": "2026-08-17/2026-08-18",
+          "temporal": {
+            "start_date": "2026-08-17",
+            "end_date_inclusive": "2026-08-18",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Teacher Institute Days",
+            "start_date": "2026-08-17",
+            "end_date_inclusive": "2026-08-18",
+            "schedule_type": "teacher_institute",
+            "student_attendance": "no_school",
+            "school_scope": "District-wide",
+            "source_text": "Calendar legend: Teacher Institute Days (4); August 17 and 18 are marked as teacher institute days. First day of school is August 19.",
+            "attendance_basis": "The approved calendar separately counts 176 student attendance days and four teacher institute days; the first student day is August 19.",
+            "dismissal_time": null
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2026-08-19/2026-08-19",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#2",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 2,
+          "date_range_key": "2026-08-19/2026-08-19",
+          "temporal": {
+            "start_date": "2026-08-19",
+            "end_date_inclusive": "2026-08-19",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "First day of school",
+            "start_date": "2026-08-19",
+            "end_date_inclusive": "2026-08-19",
+            "schedule_type": "school_resumes",
+            "student_attendance": "school_in_session",
+            "school_scope": "District-wide",
+            "source_text": "First Day of School"
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json#1",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json",
+          "source_channel": "live_feed_supplement",
+          "record_index": 1,
+          "date_range_key": "2026-08-19/2026-08-19",
+          "temporal": {
+            "start_date": "2026-08-19",
+            "end_date_inclusive": "2026-08-19",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "First day of 2026–2027 school year",
+            "start_date": "2026-08-19",
+            "end_date_inclusive": "2026-08-19",
+            "schedule_type": "school_resumes",
+            "student_attendance": "school_in_session",
+            "school_scope": "All three district schools; district live-feed wording says students were welcomed at all schools.",
+            "source_text": "What a great morning at all of our schools as we welcomed our students to the 2026-2027 school year!",
+            "evidence": [
+              "mis-live-feed-page-2"
+            ],
+            "date_basis": "Official district post identifies the first day; date corroborated by the district's dated live-feed record."
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2026-09-04/2026-09-04",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#3",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 3,
+          "date_range_key": "2026-09-04/2026-09-04",
+          "temporal": {
+            "start_date": "2026-09-04",
+            "end_date_inclusive": "2026-09-04",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "School improvement / early dismissal day",
+            "start_date": "2026-09-04",
+            "end_date_inclusive": "2026-09-04",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "District-wide",
+            "source_text": "School Improvement/Early Dismissal Days (9)",
+            "dismissal_time": null
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json#2",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json",
+          "source_channel": "live_feed_supplement",
+          "record_index": 2,
+          "date_range_key": "2026-09-04/2026-09-04",
+          "temporal": {
+            "start_date": "2026-09-04",
+            "end_date_inclusive": "2026-09-04",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Early release day",
+            "start_date": "2026-09-04",
+            "end_date_inclusive": "2026-09-04",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "District dates graphic; applies district-wide unless a school-specific notice states otherwise.",
+            "source_text": "04 FRI. EARLY RELEASE DAY",
+            "evidence": [
+              "september-district-dates-graphic",
+              "early-dismissal-times-graphic",
+              "mis-live-feed-page-2"
+            ],
+            "dismissal_time": null,
+            "dismissal_times_by_school": {
+              "MJHS": "10:55 AM",
+              "MIS": "11:30 AM",
+              "MES": "12:00 PM"
+            },
+            "date_basis": "The district live-feed post says tomorrow is the first Early Dismissal Day and includes this times graphic; the approved calendar identifies September 4 as the first early-dismissal date."
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2026-09-07/2026-09-07",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#4",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 4,
+          "date_range_key": "2026-09-07/2026-09-07",
+          "temporal": {
+            "start_date": "2026-09-07",
+            "end_date_inclusive": "2026-09-07",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Labor Day — school holiday",
+            "start_date": "2026-09-07",
+            "end_date_inclusive": "2026-09-07",
+            "schedule_type": "no_school",
+            "student_attendance": "no_school",
+            "school_scope": "District-wide",
+            "source_text": "School Holiday - Offices Closed"
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json#3",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json",
+          "source_channel": "live_feed_supplement",
+          "record_index": 3,
+          "date_range_key": "2026-09-07/2026-09-07",
+          "temporal": {
+            "start_date": "2026-09-07",
+            "end_date_inclusive": "2026-09-07",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Labor Day — no school",
+            "start_date": "2026-09-07",
+            "end_date_inclusive": "2026-09-07",
+            "schedule_type": "no_school",
+            "student_attendance": "no_school",
+            "school_scope": "District-wide.",
+            "source_text": "07 MON. NO SCHOOL–LABOR DAY; live-feed reminder: There is no school on Monday due to Labor Day.",
+            "evidence": [
+              "september-district-dates-graphic",
+              "mis-live-feed-page-2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2026-10-09/2026-10-09",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#5",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 5,
+          "date_range_key": "2026-10-09/2026-10-09",
+          "temporal": {
+            "start_date": "2026-10-09",
+            "end_date_inclusive": "2026-10-09",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Teacher Institute Day",
+            "start_date": "2026-10-09",
+            "end_date_inclusive": "2026-10-09",
+            "schedule_type": "teacher_institute",
+            "student_attendance": "no_school",
+            "school_scope": "District-wide",
+            "source_text": "Teacher Institute Days (4)",
+            "attendance_basis": "The district's official live-feed reminder independently states there is no school on Friday, October 9 due to Teachers Institute."
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json#4",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json",
+          "source_channel": "live_feed_supplement",
+          "record_index": 4,
+          "date_range_key": "2026-10-09/2026-10-09",
+          "temporal": {
+            "start_date": "2026-10-09",
+            "end_date_inclusive": "2026-10-09",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Teachers Institute Day — no school",
+            "start_date": "2026-10-09",
+            "end_date_inclusive": "2026-10-09",
+            "schedule_type": "teacher_institute",
+            "student_attendance": "no_school",
+            "school_scope": "District-wide.",
+            "source_text": "NO SCHOOL TEACHERS INSTITUTE; live-feed reminder: there is no school on Friday, October 9th due to Teachers Institute.",
+            "evidence": [
+              "october-district-dates-graphic",
+              "october-no-school-reminder-graphic",
+              "mis-live-feed-page-1"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2026-10-12/2026-10-12",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#6",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 6,
+          "date_range_key": "2026-10-12/2026-10-12",
+          "temporal": {
+            "start_date": "2026-10-12",
+            "end_date_inclusive": "2026-10-12",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "School holiday",
+            "start_date": "2026-10-12",
+            "end_date_inclusive": "2026-10-12",
+            "schedule_type": "no_school",
+            "student_attendance": "no_school",
+            "school_scope": "District-wide",
+            "source_text": "School Holiday - Offices Closed"
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json#5",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json",
+          "source_channel": "live_feed_supplement",
+          "record_index": 5,
+          "date_range_key": "2026-10-12/2026-10-12",
+          "temporal": {
+            "start_date": "2026-10-12",
+            "end_date_inclusive": "2026-10-12",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "School holiday — no school",
+            "start_date": "2026-10-12",
+            "end_date_inclusive": "2026-10-12",
+            "schedule_type": "no_school",
+            "student_attendance": "no_school",
+            "school_scope": "District-wide.",
+            "source_text": "NO SCHOOL SCHOOL HOLIDAY; live-feed reminder: Monday, October 12th due to a school holiday.",
+            "evidence": [
+              "october-district-dates-graphic",
+              "october-no-school-reminder-graphic",
+              "mis-live-feed-page-1"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2026-10-13/2026-10-13",
+      "observation_count": 1,
+      "grouping_status": "single_observation",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json#6",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json",
+          "source_channel": "live_feed_supplement",
+          "record_index": 6,
+          "date_range_key": "2026-10-13/2026-10-13",
+          "temporal": {
+            "start_date": "2026-10-13",
+            "end_date_inclusive": "2026-10-13",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Students return after October school holiday",
+            "start_date": "2026-10-13",
+            "end_date_inclusive": "2026-10-13",
+            "schedule_type": "school_resumes",
+            "student_attendance": "school_in_session",
+            "school_scope": "District-wide.",
+            "source_text": "We will see everyone back on Tuesday, October 13th!",
+            "evidence": [
+              "mis-live-feed-page-1"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2026-10-30/2026-10-30",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#7",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 7,
+          "date_range_key": "2026-10-30/2026-10-30",
+          "temporal": {
+            "start_date": "2026-10-30",
+            "end_date_inclusive": "2026-10-30",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "School improvement / early dismissal day",
+            "start_date": "2026-10-30",
+            "end_date_inclusive": "2026-10-30",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "District-wide",
+            "source_text": "School Improvement/Early Dismissal Days (9)",
+            "dismissal_time": null
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json#7",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-live-feed-supplement.json",
+          "source_channel": "live_feed_supplement",
+          "record_index": 7,
+          "date_range_key": "2026-10-30/2026-10-30",
+          "temporal": {
+            "start_date": "2026-10-30",
+            "end_date_inclusive": "2026-10-30",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Early dismissal day",
+            "start_date": "2026-10-30",
+            "end_date_inclusive": "2026-10-30",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "District dates graphic; district-wide.",
+            "source_text": "30 FRI. EARLY DISMISSAL DAY",
+            "evidence": [
+              "october-district-dates-graphic"
+            ],
+            "dismissal_time": null
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2026-11-03/2026-11-03",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#8",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 8,
+          "date_range_key": "2026-11-03/2026-11-03",
+          "temporal": {
+            "start_date": "2026-11-03",
+            "end_date_inclusive": "2026-11-03",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "School-specific learning schedule",
+            "start_date": "2026-11-03",
+            "end_date_inclusive": "2026-11-03",
+            "schedule_type": "e_learning",
+            "student_attendance": "mixed_by_school",
+            "school_scope": {
+              "in_person": [
+                "Mokena Elementary School",
+                "Mokena Intermediate School"
+              ],
+              "remote_learning": [
+                "Mokena Junior High School"
+              ]
+            },
+            "source_text": "MES, MIS will be in session, MJHS E-Learning Day 11/3, 4/6.",
+            "additional_note": "The district iCalendar fixture independently preserves the same school-specific Election Day learning arrangement."
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#1",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 1,
+          "date_range_key": "2026-11-03/2026-11-03",
+          "temporal": {
+            "start_date": "2026-11-03",
+            "end_date_inclusive": "2026-11-03",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "b212aa19-5181-4332-8ad9-cd9f226191bb",
+            "3aa1edec-21de-42af-8792-a7009f184e37"
+          ],
+          "original_record": {
+            "title": "Election Day — e-learning at MJHS; MES and MIS in person",
+            "start_date": "2026-11-03",
+            "end_date_inclusive": "2026-11-03",
+            "schedule_type": "e_learning",
+            "student_attendance": "mixed_by_school",
+            "school_scope": {
+              "in_person": [
+                "Mokena Elementary School",
+                "Mokena Intermediate School"
+              ],
+              "remote_learning": [
+                "Mokena Junior High School"
+              ]
+            },
+            "source_text": "Election Day--MES In Person Learning; description: MES and MIS will be in session. MJHS will have an E-Learning Day.",
+            "source_event_uids": [
+              "b212aa19-5181-4332-8ad9-cd9f226191bb",
+              "3aa1edec-21de-42af-8792-a7009f184e37"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2026-11-12/2026-11-12",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#9",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 9,
+          "date_range_key": "2026-11-12/2026-11-12",
+          "temporal": {
+            "start_date": "2026-11-12",
+            "end_date_inclusive": "2026-11-12",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Parent/Teacher Conference Day",
+            "start_date": "2026-11-12",
+            "end_date_inclusive": "2026-11-12",
+            "schedule_type": "parent_teacher_conference",
+            "student_attendance": "no_school",
+            "school_scope": "District calendar; no-student-attendance status independently recorded in district iCalendar fixture.",
+            "source_text": "Parent/Teacher Conference Day",
+            "attendance_basis": "District iCalendar fixture records 'No School - Parent/Teacher Conferences 2:00-8:00 PM'."
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#2",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 2,
+          "date_range_key": "2026-11-12/2026-11-12",
+          "temporal": {
+            "start_date": "2026-11-12",
+            "end_date_inclusive": "2026-11-12",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "beee8071-aee1-48af-95e9-0e8e67909878",
+            "cf313288-3bd4-4f78-b6ac-79d6d834aa1c",
+            "f3064f99-422f-4b5f-9247-a0bd3fbd2981",
+            "17b422c5-cf8c-45b1-a92f-a02ec8fb3666",
+            "215ca32e-4303-4315-9ce8-7aea41cb965b"
+          ],
+          "original_record": {
+            "title": "Parent/Teacher Conferences — no student attendance",
+            "start_date": "2026-11-12",
+            "end_date_inclusive": "2026-11-12",
+            "schedule_type": "no_school",
+            "student_attendance": "no_school",
+            "school_scope": "District calendar; MES-specific conference entry also present",
+            "conference_time": "2:00 PM–8:00 PM",
+            "source_text": "No School - Parent/Teacher Conferences 2:00-8:00; MES Parent/Teacher Conferences",
+            "source_event_uids": [
+              "beee8071-aee1-48af-95e9-0e8e67909878",
+              "cf313288-3bd4-4f78-b6ac-79d6d834aa1c",
+              "f3064f99-422f-4b5f-9247-a0bd3fbd2981",
+              "17b422c5-cf8c-45b1-a92f-a02ec8fb3666",
+              "215ca32e-4303-4315-9ce8-7aea41cb965b"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2026-11-13/2026-11-13",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#10",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 10,
+          "date_range_key": "2026-11-13/2026-11-13",
+          "temporal": {
+            "start_date": "2026-11-13",
+            "end_date_inclusive": "2026-11-13",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Parent/Teacher Conference Day",
+            "start_date": "2026-11-13",
+            "end_date_inclusive": "2026-11-13",
+            "schedule_type": "parent_teacher_conference",
+            "student_attendance": "no_school",
+            "school_scope": "District calendar; no-student-attendance status independently recorded in district iCalendar fixture.",
+            "source_text": "Parent/Teacher Conference Day",
+            "attendance_basis": "District iCalendar fixture records 'No School - Parent/Teacher Conferences 8:00 AM-1:00 PM'."
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#3",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 3,
+          "date_range_key": "2026-11-13/2026-11-13",
+          "temporal": {
+            "start_date": "2026-11-13",
+            "end_date_inclusive": "2026-11-13",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "7fb19f8e-735a-417d-a584-52fb5b31b734",
+            "2e6e3703-9f1f-4d75-8e9d-a9e2935bf1c5",
+            "73b47f2a-46ce-450c-9a36-dd3c0c1cec7b",
+            "3e9942ae-e092-4893-a758-c5058cbe2dae"
+          ],
+          "original_record": {
+            "title": "Parent/Teacher Conferences — no student attendance",
+            "start_date": "2026-11-13",
+            "end_date_inclusive": "2026-11-13",
+            "schedule_type": "no_school",
+            "student_attendance": "no_school",
+            "school_scope": "District calendar; MES-specific conference entry also present",
+            "conference_time": "8:00 AM–1:00 PM",
+            "source_text": "No School - Parent/Teacher Conferences 8:00-1:00; MES Parent/Teacher Conferences; Teachers make own breaks",
+            "source_event_uids": [
+              "7fb19f8e-735a-417d-a584-52fb5b31b734",
+              "2e6e3703-9f1f-4d75-8e9d-a9e2935bf1c5",
+              "73b47f2a-46ce-450c-9a36-dd3c0c1cec7b",
+              "3e9942ae-e092-4893-a758-c5058cbe2dae"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2026-11-20/2026-11-20",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#11",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 11,
+          "date_range_key": "2026-11-20/2026-11-20",
+          "temporal": {
+            "start_date": "2026-11-20",
+            "end_date_inclusive": "2026-11-20",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "School improvement / early dismissal day",
+            "start_date": "2026-11-20",
+            "end_date_inclusive": "2026-11-20",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "District-wide calendar marker; MES-specific 12:00 PM dismissal appears in district iCalendar fixture.",
+            "source_text": "School Improvement/Early Dismissal Days (9)",
+            "dismissal_time": null
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#4",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 4,
+          "date_range_key": "2026-11-20/2026-11-20",
+          "temporal": {
+            "start_date": "2026-11-20",
+            "end_date_inclusive": "2026-11-20",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "186472af-b239-4981-b934-a85bd5b5a815",
+            "1a1e4326-0abf-4c30-bc22-9ce2d768779b",
+            "e39262bb-9089-4d79-8b27-58c3bc96fa29"
+          ],
+          "original_record": {
+            "title": "Early dismissal",
+            "start_date": "2026-11-20",
+            "end_date_inclusive": "2026-11-20",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "MES explicitly; additional generic early-dismissal entries have unspecified school scope",
+            "dismissal_time": "12:00 PM (MES)",
+            "additional_note": "No Early Start/Early Childhood Classes",
+            "source_text": "MES Early Dismissal at 12:00 PM; Early Dismissal Day; Early Dismissal",
+            "source_event_uids": [
+              "186472af-b239-4981-b934-a85bd5b5a815",
+              "1a1e4326-0abf-4c30-bc22-9ce2d768779b",
+              "e39262bb-9089-4d79-8b27-58c3bc96fa29"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2026-11-23/2026-11-27",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#12",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 12,
+          "date_range_key": "2026-11-23/2026-11-27",
+          "temporal": {
+            "start_date": "2026-11-23",
+            "end_date_inclusive": "2026-11-27",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Thanksgiving break",
+            "start_date": "2026-11-23",
+            "end_date_inclusive": "2026-11-27",
+            "schedule_type": "school_break",
+            "student_attendance": "no_school",
+            "school_scope": "District-wide",
+            "source_text": "No Student Attendance - Holiday Break/Election; School Holiday - Offices Closed"
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#5",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 5,
+          "date_range_key": "2026-11-23/2026-11-27",
+          "temporal": {
+            "start_date": "2026-11-23",
+            "end_date_inclusive": "2026-11-27",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "009cdc94-9daa-46b0-8056-51e6d10375c5",
+            "b970f107-f705-4149-996d-9fc0dec02a14",
+            "96c2413a-728d-45bf-b1fc-0232c7c2810e",
+            "478fa03f-fbf0-4c41-aaaf-7ab46e3b1aca"
+          ],
+          "original_record": {
+            "title": "Thanksgiving break — no school",
+            "start_date": "2026-11-23",
+            "end_date_inclusive": "2026-11-27",
+            "schedule_type": "school_break",
+            "student_attendance": "no_school",
+            "school_scope": "District calendar; MES no-student-attendance entry also present",
+            "source_text": "MES No Student Attendance; No School; Thanksgiving Break-No School",
+            "source_event_uids": [
+              "009cdc94-9daa-46b0-8056-51e6d10375c5",
+              "b970f107-f705-4149-996d-9fc0dec02a14",
+              "96c2413a-728d-45bf-b1fc-0232c7c2810e",
+              "478fa03f-fbf0-4c41-aaaf-7ab46e3b1aca"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2026-12-18/2026-12-18",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#13",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 13,
+          "date_range_key": "2026-12-18/2026-12-18",
+          "temporal": {
+            "start_date": "2026-12-18",
+            "end_date_inclusive": "2026-12-18",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "School improvement / early dismissal day",
+            "start_date": "2026-12-18",
+            "end_date_inclusive": "2026-12-18",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "District-wide calendar marker; MES-specific 12:00 PM dismissal appears in district iCalendar fixture.",
+            "source_text": "School Improvement/Early Dismissal Days (9)",
+            "dismissal_time": null
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#6",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 6,
+          "date_range_key": "2026-12-18/2026-12-18",
+          "temporal": {
+            "start_date": "2026-12-18",
+            "end_date_inclusive": "2026-12-18",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "8c2ce5d1-4323-4c2c-a48a-ef610f18cf1e",
+            "044c1a48-cb3d-4393-853c-fee0ef34ac11",
+            "f5f8cb25-ccbc-4f8b-bd63-2a647a5ad1c1"
+          ],
+          "original_record": {
+            "title": "Early dismissal",
+            "start_date": "2026-12-18",
+            "end_date_inclusive": "2026-12-18",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "MES explicitly; additional generic early-dismissal entries have unspecified school scope",
+            "dismissal_time": "12:00 PM (MES)",
+            "additional_note": "No Early Start/Early Childhood Classes",
+            "source_text": "MES Early Dismissal at 12:00 PM; Early Dismissal Day; Early Dismissal",
+            "source_event_uids": [
+              "8c2ce5d1-4323-4c2c-a48a-ef610f18cf1e",
+              "044c1a48-cb3d-4393-853c-fee0ef34ac11",
+              "f5f8cb25-ccbc-4f8b-bd63-2a647a5ad1c1"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2026-12-21/2027-01-01",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#14",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 14,
+          "date_range_key": "2026-12-21/2027-01-01",
+          "temporal": {
+            "start_date": "2026-12-21",
+            "end_date_inclusive": "2027-01-01",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Winter break",
+            "start_date": "2026-12-21",
+            "end_date_inclusive": "2027-01-01",
+            "schedule_type": "school_break",
+            "student_attendance": "no_school",
+            "school_scope": "District-wide",
+            "source_text": "No Student Attendance - Holiday Break/Election; School Holiday - Offices Closed"
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#7",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 7,
+          "date_range_key": "2026-12-21/2027-01-01",
+          "temporal": {
+            "start_date": "2026-12-21",
+            "end_date_inclusive": "2027-01-01",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "af7a21c0-0830-4d68-89ad-84d3fe846a67",
+            "8608e8c1-2d20-423e-8c36-26b648902aa3",
+            "e0f959c1-83d7-4d15-bf70-d2c7e286f42d",
+            "a6d68043-8915-4680-8a7b-d402d9b11e5f",
+            "c586bfde-ffcc-4fcf-b237-b279e9f672b4",
+            "e31b6e92-820b-49ec-bde4-c2f4a62dbaf3",
+            "7f11f3f1-0166-4f1a-82d3-ac8a22b47da2"
+          ],
+          "original_record": {
+            "title": "Winter break",
+            "start_date": "2026-12-21",
+            "end_date_inclusive": "2027-01-01",
+            "schedule_type": "school_break",
+            "student_attendance": "no_school",
+            "school_scope": "District calendar; MES winter-break entry also present",
+            "source_text": "MES Winter Break; Winter Break; Winter Break-No School",
+            "source_event_uids": [
+              "af7a21c0-0830-4d68-89ad-84d3fe846a67",
+              "8608e8c1-2d20-423e-8c36-26b648902aa3",
+              "e0f959c1-83d7-4d15-bf70-d2c7e286f42d",
+              "a6d68043-8915-4680-8a7b-d402d9b11e5f",
+              "c586bfde-ffcc-4fcf-b237-b279e9f672b4",
+              "e31b6e92-820b-49ec-bde4-c2f4a62dbaf3",
+              "7f11f3f1-0166-4f1a-82d3-ac8a22b47da2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2027-01-04/2027-01-04",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#15",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 15,
+          "date_range_key": "2027-01-04/2027-01-04",
+          "temporal": {
+            "start_date": "2027-01-04",
+            "end_date_inclusive": "2027-01-04",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Teacher Institute Day",
+            "start_date": "2027-01-04",
+            "end_date_inclusive": "2027-01-04",
+            "schedule_type": "teacher_institute",
+            "student_attendance": "no_school",
+            "school_scope": "District-wide",
+            "source_text": "Teacher Institute Days (4)",
+            "attendance_basis": "District iCalendar fixture explicitly records Teacher Institute Day - No School."
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#8",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 8,
+          "date_range_key": "2027-01-04/2027-01-04",
+          "temporal": {
+            "start_date": "2027-01-04",
+            "end_date_inclusive": "2027-01-04",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "d18ea5ec-cc3d-4636-bdde-a9c5dcee2662",
+            "e9e023f0-dfdd-4eb4-b5de-a10d206012d4",
+            "1b5922af-f5a8-41a3-9a26-6ceb92430a72",
+            "6b1aa44d-3c49-41c4-8c54-c667a5879c17"
+          ],
+          "original_record": {
+            "title": "Teacher institute day — no school",
+            "start_date": "2027-01-04",
+            "end_date_inclusive": "2027-01-04",
+            "schedule_type": "teacher_institute",
+            "student_attendance": "no_school",
+            "school_scope": "District calendar; MES-specific no-student-attendance entry also present",
+            "source_text": "MES Teacher Institute Day; No School - Teacher Institute Day; Teacher Institute Day-No School",
+            "source_event_uids": [
+              "d18ea5ec-cc3d-4636-bdde-a9c5dcee2662",
+              "e9e023f0-dfdd-4eb4-b5de-a10d206012d4",
+              "1b5922af-f5a8-41a3-9a26-6ceb92430a72",
+              "6b1aa44d-3c49-41c4-8c54-c667a5879c17"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2027-01-05/2027-01-05",
+      "observation_count": 1,
+      "grouping_status": "single_observation",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#9",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 9,
+          "date_range_key": "2027-01-05/2027-01-05",
+          "temporal": {
+            "start_date": "2027-01-05",
+            "end_date_inclusive": "2027-01-05",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "a765b52a-c3c1-41da-959b-12778e0a6ef8"
+          ],
+          "original_record": {
+            "title": "Students return from winter break",
+            "start_date": "2027-01-05",
+            "end_date_inclusive": "2027-01-05",
+            "schedule_type": "school_resumes",
+            "student_attendance": "school_in_session",
+            "school_scope": "MES explicitly",
+            "source_text": "MES Students Return from Winter Break",
+            "source_event_uids": [
+              "a765b52a-c3c1-41da-959b-12778e0a6ef8"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2027-01-15/2027-01-15",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#16",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 16,
+          "date_range_key": "2027-01-15/2027-01-15",
+          "temporal": {
+            "start_date": "2027-01-15",
+            "end_date_inclusive": "2027-01-15",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "School improvement / early dismissal day",
+            "start_date": "2027-01-15",
+            "end_date_inclusive": "2027-01-15",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "District-wide calendar marker; MES-specific 12:00 PM dismissal appears in district iCalendar fixture.",
+            "source_text": "School Improvement/Early Dismissal Days (9)",
+            "dismissal_time": null
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#10",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 10,
+          "date_range_key": "2027-01-15/2027-01-15",
+          "temporal": {
+            "start_date": "2027-01-15",
+            "end_date_inclusive": "2027-01-15",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "4dbc6d4d-7a77-498d-8a34-6cdbb3f84e80",
+            "75ec3e03-fc93-4b2a-b76e-0d6a7b65599b",
+            "3c385b5b-73bf-43b0-ad65-b664de47d9f2"
+          ],
+          "original_record": {
+            "title": "Early dismissal",
+            "start_date": "2027-01-15",
+            "end_date_inclusive": "2027-01-15",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "MES explicitly; additional generic early-dismissal entries have unspecified school scope",
+            "dismissal_time": "12:00 PM (MES)",
+            "additional_note": "No Early Start/Early Childhood Classes",
+            "source_text": "MES Early Dismissal at 12:00 PM; Early Dismissal Day; Early Dismissal",
+            "source_event_uids": [
+              "4dbc6d4d-7a77-498d-8a34-6cdbb3f84e80",
+              "75ec3e03-fc93-4b2a-b76e-0d6a7b65599b",
+              "3c385b5b-73bf-43b0-ad65-b664de47d9f2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2027-01-18/2027-01-18",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#17",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 17,
+          "date_range_key": "2027-01-18/2027-01-18",
+          "temporal": {
+            "start_date": "2027-01-18",
+            "end_date_inclusive": "2027-01-18",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Martin Luther King Jr. Day — school holiday",
+            "start_date": "2027-01-18",
+            "end_date_inclusive": "2027-01-18",
+            "schedule_type": "no_school",
+            "student_attendance": "no_school",
+            "school_scope": "District-wide",
+            "source_text": "School Holiday - Offices Closed"
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#11",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 11,
+          "date_range_key": "2027-01-18/2027-01-18",
+          "temporal": {
+            "start_date": "2027-01-18",
+            "end_date_inclusive": "2027-01-18",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "88e09aeb-f99f-45f5-b8df-828e8c2c8dc8",
+            "d68fa5c3-f12e-45a5-8a74-bb9b69499699",
+            "b9e5c49a-e9f2-4106-a764-be6f6072a523"
+          ],
+          "original_record": {
+            "title": "Martin Luther King Jr. Day — no school",
+            "start_date": "2027-01-18",
+            "end_date_inclusive": "2027-01-18",
+            "schedule_type": "no_school",
+            "student_attendance": "no_school",
+            "school_scope": "District calendar; MES no-school entry also present",
+            "source_text": "Martin Luther King Jr. Day-No School; MES No School; No School - Dr. Martin Luther King, Jr. Day",
+            "source_event_uids": [
+              "88e09aeb-f99f-45f5-b8df-828e8c2c8dc8",
+              "d68fa5c3-f12e-45a5-8a74-bb9b69499699",
+              "b9e5c49a-e9f2-4106-a764-be6f6072a523"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2027-02-12/2027-02-12",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#18",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 18,
+          "date_range_key": "2027-02-12/2027-02-12",
+          "temporal": {
+            "start_date": "2027-02-12",
+            "end_date_inclusive": "2027-02-12",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "School improvement / early dismissal day",
+            "start_date": "2027-02-12",
+            "end_date_inclusive": "2027-02-12",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "District-wide calendar marker; MES-specific 12:00 PM dismissal appears in district iCalendar fixture.",
+            "source_text": "School Improvement/Early Dismissal Days (9)",
+            "dismissal_time": null
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#12",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 12,
+          "date_range_key": "2027-02-12/2027-02-12",
+          "temporal": {
+            "start_date": "2027-02-12",
+            "end_date_inclusive": "2027-02-12",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "95ef39f3-ddd2-4544-8701-b1e80662c90e",
+            "08dd60ee-6f48-46b0-a527-79160ffba5d7",
+            "30a4c4ed-c5fe-431a-9346-f1ac652757c4"
+          ],
+          "original_record": {
+            "title": "Early dismissal",
+            "start_date": "2027-02-12",
+            "end_date_inclusive": "2027-02-12",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "MES explicitly; additional generic early-dismissal entries have unspecified school scope",
+            "dismissal_time": "12:00 PM (MES)",
+            "additional_note": "No Early Start/Early Childhood Classes",
+            "source_text": "MES Early Dismissal at 12:00 PM; Early Dismissal Day; Early Dismissal",
+            "source_event_uids": [
+              "95ef39f3-ddd2-4544-8701-b1e80662c90e",
+              "08dd60ee-6f48-46b0-a527-79160ffba5d7",
+              "30a4c4ed-c5fe-431a-9346-f1ac652757c4"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2027-02-15/2027-02-15",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#19",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 19,
+          "date_range_key": "2027-02-15/2027-02-15",
+          "temporal": {
+            "start_date": "2027-02-15",
+            "end_date_inclusive": "2027-02-15",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Presidents' Day — school holiday",
+            "start_date": "2027-02-15",
+            "end_date_inclusive": "2027-02-15",
+            "schedule_type": "no_school",
+            "student_attendance": "no_school",
+            "school_scope": "District-wide",
+            "source_text": "School Holiday - Offices Closed"
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#13",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 13,
+          "date_range_key": "2027-02-15/2027-02-15",
+          "temporal": {
+            "start_date": "2027-02-15",
+            "end_date_inclusive": "2027-02-15",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "c5436ad6-91f7-4375-90f3-51eace824ec3",
+            "72f3f265-03d0-4f8e-a8cd-f300148a120f",
+            "5fb4ce80-8b84-4225-87bf-f9f954fb39c5"
+          ],
+          "original_record": {
+            "title": "Presidents' Day — no school",
+            "start_date": "2027-02-15",
+            "end_date_inclusive": "2027-02-15",
+            "schedule_type": "no_school",
+            "student_attendance": "no_school",
+            "school_scope": "District calendar; MES no-school entry also present",
+            "source_text": "MES No School; No School - President's Day; President's Day-No School",
+            "source_event_uids": [
+              "c5436ad6-91f7-4375-90f3-51eace824ec3",
+              "72f3f265-03d0-4f8e-a8cd-f300148a120f",
+              "5fb4ce80-8b84-4225-87bf-f9f954fb39c5"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2027-03-12/2027-03-12",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#20",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 20,
+          "date_range_key": "2027-03-12/2027-03-12",
+          "temporal": {
+            "start_date": "2027-03-12",
+            "end_date_inclusive": "2027-03-12",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "School improvement / early dismissal day",
+            "start_date": "2027-03-12",
+            "end_date_inclusive": "2027-03-12",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "District-wide calendar marker; MES-specific 12:00 PM dismissal appears in district iCalendar fixture.",
+            "source_text": "School Improvement/Early Dismissal Days (9)",
+            "dismissal_time": null
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#14",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 14,
+          "date_range_key": "2027-03-12/2027-03-12",
+          "temporal": {
+            "start_date": "2027-03-12",
+            "end_date_inclusive": "2027-03-12",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "ac6ce566-0a50-4675-ade9-905a5a2aebc0",
+            "f3828a51-d6a5-491c-b85e-350cda61bdd0",
+            "4e489e30-b6dc-4189-ba9a-d143d7a77c3b"
+          ],
+          "original_record": {
+            "title": "Early dismissal",
+            "start_date": "2027-03-12",
+            "end_date_inclusive": "2027-03-12",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "MES explicitly; additional generic early-dismissal entries have unspecified school scope",
+            "dismissal_time": "12:00 PM (MES)",
+            "additional_note": "No Early Start/Early Childhood Classes",
+            "source_text": "MES Early Dismissal at 12:00 PM; Early Dismissal Day; Early Dismissal",
+            "source_event_uids": [
+              "ac6ce566-0a50-4675-ade9-905a5a2aebc0",
+              "f3828a51-d6a5-491c-b85e-350cda61bdd0",
+              "4e489e30-b6dc-4189-ba9a-d143d7a77c3b"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2027-03-26/2027-04-02",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#21",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 21,
+          "date_range_key": "2027-03-26/2027-04-02",
+          "temporal": {
+            "start_date": "2027-03-26",
+            "end_date_inclusive": "2027-04-02",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Spring break",
+            "start_date": "2027-03-26",
+            "end_date_inclusive": "2027-04-02",
+            "schedule_type": "school_break",
+            "student_attendance": "no_school",
+            "school_scope": "District-wide",
+            "source_text": "No Student Attendance - Holiday Break/Election; School Holiday - Offices Closed"
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#15",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 15,
+          "date_range_key": "2027-03-26/2027-04-02",
+          "temporal": {
+            "start_date": "2027-03-26",
+            "end_date_inclusive": "2027-04-02",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "f7f5dbb1-2450-4efc-96b3-51e19ac33009",
+            "a6dd9fc1-ed63-4283-b6c1-61b8daeea76b",
+            "a1cf535e-3aac-4436-a5b9-bd93aaa45e93",
+            "7cb439e0-ac03-47f8-b424-3eed3689d31d",
+            "f26ef318-9161-4098-8d8c-40e367d15a24",
+            "e0da4925-d4bd-4261-9bd5-6a7dbb18cf33",
+            "626d3377-67fb-4b6d-84df-a2743aa80c4e",
+            "3c14896c-f2e5-4cd3-b7e7-f8a0b252294b",
+            "380c4164-9269-4e16-83b6-bd27ddfbc190",
+            "394a2333-0254-43bd-8cbc-e6cb56a022c1"
+          ],
+          "original_record": {
+            "title": "Spring break",
+            "start_date": "2027-03-26",
+            "end_date_inclusive": "2027-04-02",
+            "schedule_type": "school_break",
+            "student_attendance": "no_school",
+            "school_scope": "District calendar; MES spring-break entry also present",
+            "source_text": "MES Spring Break; No School; Spring Break-No School",
+            "source_event_uids": [
+              "f7f5dbb1-2450-4efc-96b3-51e19ac33009",
+              "a6dd9fc1-ed63-4283-b6c1-61b8daeea76b",
+              "a1cf535e-3aac-4436-a5b9-bd93aaa45e93",
+              "7cb439e0-ac03-47f8-b424-3eed3689d31d",
+              "f26ef318-9161-4098-8d8c-40e367d15a24",
+              "e0da4925-d4bd-4261-9bd5-6a7dbb18cf33",
+              "626d3377-67fb-4b6d-84df-a2743aa80c4e",
+              "3c14896c-f2e5-4cd3-b7e7-f8a0b252294b",
+              "380c4164-9269-4e16-83b6-bd27ddfbc190",
+              "394a2333-0254-43bd-8cbc-e6cb56a022c1"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2027-04-06/2027-04-06",
+      "observation_count": 1,
+      "grouping_status": "single_observation",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#22",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 22,
+          "date_range_key": "2027-04-06/2027-04-06",
+          "temporal": {
+            "start_date": "2027-04-06",
+            "end_date_inclusive": "2027-04-06",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "School-specific learning schedule",
+            "start_date": "2027-04-06",
+            "end_date_inclusive": "2027-04-06",
+            "schedule_type": "e_learning",
+            "student_attendance": "mixed_by_school",
+            "school_scope": {
+              "in_person": [
+                "Mokena Elementary School",
+                "Mokena Intermediate School"
+              ],
+              "remote_learning": [
+                "Mokena Junior High School"
+              ]
+            },
+            "source_text": "MES, MIS will be in session, MJHS E-Learning Day 11/3, 4/6."
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2027-04-16/2027-04-16",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#23",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 23,
+          "date_range_key": "2027-04-16/2027-04-16",
+          "temporal": {
+            "start_date": "2027-04-16",
+            "end_date_inclusive": "2027-04-16",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "School improvement / early dismissal day",
+            "start_date": "2027-04-16",
+            "end_date_inclusive": "2027-04-16",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "District-wide calendar marker; district iCalendar entries do not explicitly identify school scope.",
+            "source_text": "School Improvement/Early Dismissal Days (9)",
+            "dismissal_time": null
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#16",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 16,
+          "date_range_key": "2027-04-16/2027-04-16",
+          "temporal": {
+            "start_date": "2027-04-16",
+            "end_date_inclusive": "2027-04-16",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "77314d4e-420a-41ff-8a90-ce3914c14e8f",
+            "d86f857f-a1b5-40f5-abef-171670b30339"
+          ],
+          "original_record": {
+            "title": "Early dismissal",
+            "start_date": "2027-04-16",
+            "end_date_inclusive": "2027-04-16",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "School scope not stated in the captured feed entries",
+            "source_text": "Early Dismissal Day; Early Dismissal",
+            "source_event_uids": [
+              "77314d4e-420a-41ff-8a90-ce3914c14e8f",
+              "d86f857f-a1b5-40f5-abef-171670b30339"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2027-05-28/2027-05-28",
+      "observation_count": 2,
+      "grouping_status": "same_date_range_candidate_only",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#24",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 24,
+          "date_range_key": "2027-05-28/2027-05-28",
+          "temporal": {
+            "start_date": "2027-05-28",
+            "end_date_inclusive": "2027-05-28",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Last day of school — early dismissal",
+            "start_date": "2027-05-28",
+            "end_date_inclusive": "2027-05-28",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "District-wide; MES-specific 12:00 PM dismissal appears in district iCalendar fixture.",
+            "source_text": "Last day of school; School Improvement/Early Dismissal Days (9)",
+            "dismissal_time": null
+          }
+        },
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json#17",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-schedule-exceptions.json",
+          "source_channel": "user_provided_offline_ics_transcription",
+          "record_index": 17,
+          "date_range_key": "2027-05-28/2027-05-28",
+          "temporal": {
+            "start_date": "2027-05-28",
+            "end_date_inclusive": "2027-05-28",
+            "all_day": true
+          },
+          "source_event_uids": [
+            "b820874e-2f43-4c7e-a875-a619205639f2",
+            "701133db-bdab-443f-b727-1d95bd70be1f",
+            "46df2345-b632-4858-9538-a848eec5742a"
+          ],
+          "original_record": {
+            "title": "Last day of school — early dismissal",
+            "start_date": "2027-05-28",
+            "end_date_inclusive": "2027-05-28",
+            "schedule_type": "early_dismissal",
+            "student_attendance": "shortened_day",
+            "school_scope": "MES explicitly; additional generic early-dismissal entries have unspecified school scope",
+            "dismissal_time": "12:00 PM (MES)",
+            "additional_note": "Last day of school; no early-start/early-childhood classes",
+            "source_text": "MES Last Day of School - Early Dismissal at 12:00 PM; Early Dismissal Day; Early Dismissal",
+            "source_event_uids": [
+              "b820874e-2f43-4c7e-a875-a619205639f2",
+              "701133db-bdab-443f-b727-1d95bd70be1f",
+              "46df2345-b632-4858-9538-a848eec5742a"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date_range_key": "2027-05-31/2027-05-31",
+      "observation_count": 1,
+      "grouping_status": "single_observation",
+      "observations": [
+        {
+          "observation_ref": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json#25",
+          "source_fixture": "data/fixtures/mokena-sd159-2026-27-approved-calendar.json",
+          "source_channel": "approved_calendar_pdf",
+          "record_index": 25,
+          "date_range_key": "2027-05-31/2027-05-31",
+          "temporal": {
+            "start_date": "2027-05-31",
+            "end_date_inclusive": "2027-05-31",
+            "all_day": true
+          },
+          "source_event_uids": null,
+          "original_record": {
+            "title": "Memorial Day — school holiday",
+            "start_date": "2027-05-31",
+            "end_date_inclusive": "2027-05-31",
+            "schedule_type": "no_school",
+            "student_attendance": "no_school",
+            "school_scope": "District-wide",
+            "source_text": "School Holiday - Offices Closed"
+          }
+        }
+      ]
+    }
+  ]
+}

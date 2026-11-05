@@ -176,6 +176,23 @@ class NormalizeEventsTests(unittest.TestCase):
         with self.assertRaises(NormalizationError):
             normalize_document({"format": "unknown", "events": []})
 
+    def test_string_false_does_not_mark_event_cancelled(self):
+        result = normalize_event({
+            "title": "Still scheduled",
+            "cancelled": "false",
+            "status": "CONFIRMED",
+            "start": {"value": "2026-11-04", "kind": "date"},
+        }, "demo")
+        self.assertEqual(result["status"], "scheduled")
+
+    def test_string_false_does_not_mark_timed_event_all_day(self):
+        result = normalize_event({
+            "title": "Evening meeting",
+            "all_day": "false",
+            "start": {"value": "2026-11-04T18:00:00", "kind": "date-time"},
+        }, "demo")
+        self.assertFalse(result["all_day"])
+
     def test_end_before_start_flagged_not_discarded(self):
         result = normalize_event({
             "title": "Bad interval",

@@ -1,6 +1,6 @@
 # Proxmox Deployment Plan
 
-**Status:** proposed deployment target; documentation only. No VM/LXC creation, package installation, database initialization, network exposure, or deployment is authorized by this plan.
+**Status:** proposed deployment target; documentation only. No guest creation, package installation, database initialization, network exposure, or deployment is authorized by this plan.
 
 ## 1. Recommendation
 
@@ -112,7 +112,7 @@ A Proxmox snapshot alone is not the complete backup strategy.
 |---|---|---|
 | 0 | Review this plan against the actual Proxmox node, storage, bridge, and backup destination | User review |
 | 1 | Prepare a reproducible guest provisioning checklist and systemd unit | Documentation/config review |
-| 2 | Create the unprivileged guest and install only the required OS/Python packages | Explicit deployment approval |
+| 2 | Create the Ubuntu Server VM and install only the required OS/Python packages | Explicit deployment approval |
 | 3 | Deploy current JSON-backed application in private validation mode | Explicit deployment approval |
 | 4 | Implement SQLite adapter, migration, parity checks, and rollback | Separate database approval |
 | 5 | Switch API and ICS to database-backed approved records | Migration acceptance |
@@ -136,7 +136,7 @@ This deployment does not add:
 Before creating the guest, confirm:
 - Target Proxmox node and available storage.
 - Preferred network bridge and reserved address.
-- Whether the guest should be an LXC (recommended) or a VM.
+- The VM ID, current storage availability, and final virtual-disk sizing.
 - Persistent data-volume location and capacity.
 - Existing Proxmox backup target and retention.
 - Whether the first validation is LAN-only or strictly guest-local.

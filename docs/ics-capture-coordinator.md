@@ -62,4 +62,10 @@ The official Download .ICS link for District Events resolves to `https://www.sum
 
 All Summit Hill source profiles currently set `allow_complete_snapshot: false`. A successful one-shot capture can therefore produce parsed and normalized events while its completeness remains `unknown`. The feed payloads still need to be compared against the corresponding visible publisher calendars before any source policy is reconsidered.
 
-The SD 159 Apptegy/Thrillshare source remains blocked behind its explicit written-consent switch. This coordinator does not bypass or modify that switch.
+## Mokena SD159 deployment profile
+
+The Mokena SD159 Apptegy/Thrillshare source now has a conservative `single_feed` profile in `data/source-completeness.json`. Its exact host and path are allowlisted, but `allow_complete_snapshot` remains false until a fresh capture is reconciled against the district's visible calendar. A successful capture can therefore be parsed and normalized without treating missing events as cancellations.
+
+The current source registry's structured fields read `access_status=approved`, `consent_required=true`, and `consent_granted=true`; however, its free-text notes still claim `consent_granted` remains false. The coordinator enforces the structured fields and does not interpret or rewrite notes. This contradiction must be reviewed by the operator/source owner before the first live capture. Do not change any authorization or polling flags as part of this deployment.
+
+A manually invoked, restricted systemd unit is documented in [the deployment guide](../deploy/README.md). It runs the existing coordinator as a separate unprivileged account, writes only to raw-capture and report directories, and has no scheduler or publication path.

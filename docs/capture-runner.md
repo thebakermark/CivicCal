@@ -72,37 +72,27 @@ The current project uses the Python standard library for this capture path. From
 python3 -m unittest tests.test_capture_ics_source tests.test_run_capture_job
 ```
 
-Create the runtime interpreter path expected by the unit, or edit `ExecStart` to the verified interpreter path before installation. If using a virtual environment:
+Create the runtime interpreter path expected by the unit:
 
 ```sh
 python3 -m venv /opt/civiccal/venv
 ```
 
-No third-party package installation is required for the capture runner itself.
+No third-party package installation is required for the capture runner itself. The unit executes the runner as a module from the repository root so Python resolves the `scripts` package reliably.
 
 ### 3. Install the systemd unit
 
 ```sh
 install -o root -g root -m 0644 deploy/systemd/civiccal-capture@.service /etc/systemd/system/civiccal-capture@.service
 systemctl daemon-reload
+systemd-analyze verify /etc/systemd/system/civiccal-capture@.service
 ```
 
 Do **not** enable the unit. It is intentionally operator-triggered.
 
-### 4. Dry validation before network access
+### 4. Run one operator-triggered capture
 
-First validate the source registry and policy in a controlled test environment. The live invocation below makes a real HTTPS request and must only be run after the source's current authorization record and consent have been reviewed.
-
-```sh
-systemd-run --wait --collect --unit=civiccal-capture-check \
-  /opt/civiccal/venv/bin/python /opt/civiccal/app/scripts/run_capture_job.py \
-  --source-id mokena-sd159-events-ical \
-  --registry /srv/civiccal/data/registry/sources.json \
-  --archive-dir /srv/civiccal/data/captures \
-  --reports-dir /srv/civiccal/data/reports
-```
-
-For repeatable operator use through the template unit:
+First validate the source registry and policy in a controlled test environment. The following command makes a real HTTPS request and must only be run after the source's current authorization record and consent have been reviewed:
 
 ```sh
 systemctl start civiccal-capture@mokena-sd159-events-ical.service
@@ -110,7 +100,7 @@ systemctl status civiccal-capture@mokena-sd159-events-ical.service
 journalctl -u civiccal-capture@mokena-sd159-events-ical.service --no-pager
 ```
 
-The unit's default paths are intentionally explicit in the runner and systemd unit. If paths differ, change both in a reviewed commit before running.
+The systemd unit supplies the repository working directory and the runner's default registry, archive, and report paths. It does not run automatically after boot and has no timer.
 
 ### 5. Verify output
 

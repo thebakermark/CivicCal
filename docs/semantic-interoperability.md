@@ -60,7 +60,7 @@ Create explicit, tested mappings between CivicCal fields and external vocabulari
 - Keep extension fields namespaced and documented if/when CivicCal must expose concepts that the standard vocabulary does not express.
 - Never use a serialization format as the source of truth for identity or approval.
 
-The first useful mapping is an event projection to Schema.org Event. It should be implemented as a pure adapter over CivicCal domain records, with mapping tests. JSON-LD can serialize that projection later; no JSON-LD runtime is needed merely to create the mapping.
+The first useful mapping is an event projection to Schema.org Event. A pure adapter now exists at `scripts/schemaorg.py` (`to_schemaorg_event`) with focused tests in `tests/test_schemaorg.py`. It maps only supported event facts, omits unknown/ambiguous values, and leaves the normalized CivicCal record untouched. The projection is not canonical storage and does not include internal authorization, approval, capture, or history fields. JSON-LD can serialize that projection later; no JSON-LD runtime is needed merely to create the mapping.
 
 ## 4. Stable identifiers and relationships
 
@@ -101,10 +101,10 @@ CivicCal is a useful bounded proving ground for MeaningWire because it contains 
 1. Keep the current CivicCal normalized event model and storage contracts.
 2. Continue producing iCalendar feeds as the primary subscription interface.
 3. Keep the existing OpenAPI 3.1.1 contract versioned and tested.
-4. Add a field mapping specification from CivicCal event records to Schema.org Event.
-5. Add pure mapping tests for supported fields, omitted/unknown values, status, all-day values, and time semantics.
+4. Maintain the field mapping specification and pure projection in `scripts/schemaorg.py`.
+5. Expand mapping tests when the normalized event model gains supported fields; verify downstream consumers preserve time semantics.
 6. Add JSON-LD serialization only when an actual consumer or integration needs it.
-7. Revisit MeaningWire integration after the database-backed domain model and public identifiers are stable.
+7. Revisit MeaningWire integration after the database-backed domain model and stable identifier policy are established.
 
 ## 7. Explicitly deferred
 

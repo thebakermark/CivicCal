@@ -12,7 +12,7 @@ This is the implementation tracker. Product requirements and accepted decisions 
 | F-003 | One-shot HTTP/HTML capture | Implemented | Capture utility and tests; completeness separate | Verify permitted live captures only after human authorization |
 | F-004 | One-shot ICS capture/import | Implemented foundation | ICS coordinator/importer/parser | Validate source coverage and temporal fidelity |
 | F-005 | Raw capture archive/provenance | Implemented foundation | Capture metadata and archive files | Define retention, integrity verification, backup/restore |
-| F-006 | HTML/ICS parsing | Implemented foundation | Parsers/adapters and tests | Complete source-specific fixture coverage |
+| F-006 | HTML/ICS parsing | Implemented foundation | ICS, Park District, Village parser fixtures plus Mokena Library manual-snapshot normalization; offline integration validation | Add authorized raw HTML/feed fixtures for remaining sources; manual snapshots are not parser fixtures |
 | F-007 | Event normalization | Implemented foundation | Normalizer and tests | Audit field completeness and temporal edge cases |
 | F-008 | Stable source-scoped identity | Implemented | Identity tracker and tests | Preserve exact IDs through DB migration |
 | F-009 | Observations/revisions/presence/lifecycle | Implemented in JSON | Tracker and relational design docs | Implement relational persistence after approval; parity tests |

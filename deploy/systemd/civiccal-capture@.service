@@ -1,0 +1,37 @@
+[Unit]
+Description=CivicCal one-shot iCalendar capture for %i
+Documentation=https://github.com/thebakermark/CivicCal/blob/main/docs/ics-capture-coordinator.md
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=civiccal-capture
+Group=civiccal-capture
+WorkingDirectory=/opt/civiccal/app
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/bin/python3 /opt/civiccal/app/scripts/capture_ics_source.py --source-id %i --registry /srv/civiccal/data/registry/sources.json --policies /opt/civiccal/app/data/source-completeness.json --archive-dir /srv/civiccal/data/captures --output /srv/civiccal/data/reports/%i/latest.json --timeout 30
+TimeoutStartSec=90
+UMask=0077
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ProtectHostname=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+AmbientCapabilities=
+ReadWritePaths=/srv/civiccal/data/captures /srv/civiccal/data/reports
+
+# Deliberately no [Install] section: this unit is started manually and is not enabled.

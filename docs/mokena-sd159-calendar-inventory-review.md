@@ -36,7 +36,7 @@ The original SUMMARY text remains authoritative. These buckets are inventory aid
 
 ## Timed duplicate-candidate groups
 
-There are 17 groups with multiple VEVENT records sharing the exact same floating DTSTART date and time. They contain 56 source records in total. Every source record and UID must remain intact. The shared start is a candidate relationship signal, not permission to merge.
+There are 17 groups with multiple VEVENT records sharing the exact same floating DTSTART date and time. They contain **64 source records** in total. Every source record and UID must remain intact. The shared start is a candidate relationship signal, not permission to merge.
 
 | DTSTART (floating local) | Records | Title pattern |
 |---|---:|---|

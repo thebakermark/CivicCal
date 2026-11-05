@@ -1,6 +1,6 @@
 # CivicCal deployment assets
 
-These files prepare a private, single-instance systemd deployment on an Ubuntu Server 26.04 LTS Proxmox VM.
+These files prepare a private, single-instance systemd deployment in an unprivileged Debian 13 Proxmox LXC.
 
 ## Included
 
@@ -24,7 +24,7 @@ The application checkout and configuration should be owned by root and not writa
 
 ## Manual preparation outline
 
-1. Provision the Ubuntu Server VM and create the dedicated `civiccal` system account.
+1. Provision the unprivileged Debian 13 LXC and create the dedicated `civiccal` system account.
 2. Check out a reviewed CivicCal commit under `/opt/civiccal/app`.
 3. Create the persistent data directories and install the source registry as an operator-managed file.
 4. Create and validate the initial identity-state and publication-manifest files using the current schemas. Do not invent empty shapes or copy test-only fixtures into production.
@@ -33,7 +33,7 @@ The application checkout and configuration should be owned by root and not writa
 7. Before enabling it, inspect the unit, verify file ownership/permissions, and run the documented API tests against the exact runtime data.
 8. Start the service only after explicit deployment approval; confirm `http://127.0.0.1:8765/health` from inside the guest.
 
-No provisioning or install script is supplied yet because the target Proxmox node, storage, bridge, guest ID, and data initialization method have not been reviewed.
+No provisioning or install script is supplied yet because current storage capacity, container ID, mount-point allocation, and data initialization method have not been reviewed.
 
 ## Security posture
 

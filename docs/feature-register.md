@@ -21,7 +21,7 @@ This is the implementation tracker. Product requirements and accepted decisions 
 | F-012 | Source-specific ICS generation | Implemented offline | publish_ics.py; tests | Recurrence/update/cancellation interoperability validation |
 | F-013 | Read-only JSON query API | Implemented local foundation | Query engine + loopback server | DB-backed queries, OpenAPI contract parity, public delivery only after approval |
 | F-014 | Source-specific HTTP ICS route | Implemented local foundation | Loopback route in serve_api.py | DB-backed route; stable external URL requires approved deployment |
-| F-015 | Schema.org mapping | Planned | Semantic interoperability direction documented | Define field-by-field mapping and extension policy |
+| F-015 | Schema.org mapping | Implemented foundation | `scripts/schemaorg.py`, `tests/test_schemaorg.py`; pure, non-mutating Event projection | Expand mapping coverage as the domain model matures; verify time and recurrence interoperability |
 | F-016 | Database persistence | Designed, not implemented | Schema, storage contracts, JSON mapping, event history design | User review, then implementation/migration in target environment |
 | F-017 | Migration and rollback | Designed, not implemented | JSON migration map and schema doc | Executable dry-run, parity report, backup/restore, explicit cutover approval |
 | F-018 | Source health reporting | Implemented offline foundation | Health report and tests | Persist run history and operational health in DB |

@@ -193,6 +193,18 @@ class NormalizeEventsTests(unittest.TestCase):
         }, "demo")
         self.assertFalse(result["all_day"])
 
+    def test_mixed_floating_and_zoned_endpoints_are_retained_for_review(self):
+        result = normalize_event({
+            "title": "Mixed time semantics",
+            "start": {"value": "2026-11-04T18:00:00", "kind": "date-time",
+                      "timezone": None, "utc": False},
+            "end": {"value": "2026-11-04T19:00:00-06:00", "kind": "date-time",
+                    "timezone": None, "utc": False},
+        }, "demo")
+        self.assertEqual(result["start"]["value"], "2026-11-04T18:00:00")
+        self.assertEqual(result["end"]["value"], "2026-11-04T19:00:00-06:00")
+        self.assertIn("temporal_comparison_unavailable", result["data_quality_flags"])
+
     def test_end_before_start_flagged_not_discarded(self):
         result = normalize_event({
             "title": "Bad interval",

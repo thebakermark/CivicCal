@@ -36,6 +36,23 @@ Unknown sources, unknown events, ambiguous identities, source mismatches, and ma
 
 This is a manual publication decision, not an automated quality judgment. The operator must review the source record and its details before approving. The command does not infer approval from source permissions, title, organizer, parser confidence, or capture status.
 
+## Where source approval flags live
+
+Edit the source record in `data/sources.json`, inside the top-level `source_records` array. Find the exact record by its `id`; do not edit an organization entry in the separate `organizations` array when changing source permissions.
+
+| Field | Meaning | Required state for capture |
+|---|---|---|
+| `access_status` | General source-access decision | `approved` |
+| `terms_reviewed` | Applicable terms have been reviewed | `true` |
+| `robots_reviewed` | Applicable robots rules have been reviewed | `true` |
+| `consent_required` | Source requires additional written consent | `true` when applicable |
+| `consent_granted` | Required written consent has actually been received | `true` when `consent_required` is true |
+| `polling_enabled` | Operator's future polling configuration | Remains `false` unless separately and deliberately enabled |
+
+For example, the Mokena School District 159 record is `mokena-sd159-events-ical` in `data/sources.json`. Its current `access_status` is `blocked`, `consent_required` is `true`, `consent_granted` is `false`, and `polling_enabled` is `false`. Do not change those values unless the required written consent and separate review decisions have actually been completed. The source-capture gate is implemented in `scripts/capture_source.py` (`load_source`).
+
+These are source-level capture controls. They are separate from the event-level publication manifest described below.
+
 ## Strict separation of controls
 
 - Source access, terms, robots, and written-consent flags govern whether capture is permitted.

@@ -151,7 +151,7 @@ def _registration(event: dict) -> str | None:
 
 def _status(event: dict) -> str:
     raw = str(event.get("status") or "").casefold()
-    if event.get("cancelled") or "cancel" in raw:
+    if event.get("cancelled") is True or "cancel" in raw:
         return "cancelled"
     if "postpon" in raw:
         return "postponed"
@@ -202,7 +202,7 @@ def normalize_event(event: dict, source_id: str, capture: dict | None = None) ->
     if not event.get("title") or not str(event.get("title")).strip():
         flags.append("title_missing")
 
-    all_day = bool(event.get("all_day")) or bool(start and start["kind"] == "date")
+    all_day = (event.get("all_day") is True) or bool(start and start["kind"] == "date")
     if end and start and end["kind"] == start["kind"] == "date-time":
         try:
             if datetime.fromisoformat(end["value"]) < datetime.fromisoformat(start["value"]):

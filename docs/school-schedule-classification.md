@@ -72,6 +72,15 @@ The capture begins November 3, 2026, so this fixture is **not a complete 2026–
 
 This fixture is derived from the actual export, not from an automated live capture. Its hash and capture metadata are recorded in the fixture for reproducibility. Source event UIDs remain intact for later identity/reconciliation work.
 
+### Reconciliation coverage check
+
+A date-level comparison of the 18 schedule groupings in the iCalendar-derived fixture against the 25 approved-calendar entries leaves eight approved-calendar dates without a matching schedule-group start date in the archived iCalendar view:
+
+- August 17, August 19, September 4, September 7, October 9, October 12, and October 30, 2026 are before the archived feed's November 3, 2026 capture window. Their absence is a coverage limitation, not evidence of a feed omission.
+- May 31, 2027 (Memorial Day) falls within the archived feed's future coverage but has no matching VEVENT. It is documented separately as an approved-calendar / iCalendar discrepancy above.
+
+This is a comparison of schedule-group start dates, not a claim that every calendar entry must have a one-to-one VEVENT. The approved calendar and iCalendar feed remain separate source records.
+
 
 ## Mokena SD 159 approved calendar transcription
 

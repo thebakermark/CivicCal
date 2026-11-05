@@ -118,5 +118,6 @@ The project blueprint is documented before expanding the implementation:
 - [Webhook specification](docs/webhook-specification.md)
 - [Open-source reuse assessment](docs/open-source-reuse.md)
 - [Proxmox deployment plan](docs/proxmox-deployment-plan.md)
+- [Proxmox deployment assets and systemd service](deploy/README.md)
 
 The current implementation is an offline/local development foundation. JSON storage is in use; the MVP requires a persistent database, but implementation/migration remain deferred until target-environment review. Public deployment and unattended polling are not authorized or required for this personal-use project.

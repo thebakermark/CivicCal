@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run CivicCal's three initial source parsers against local fixtures only.
+"""Run CivicCal's initial parser and manual-snapshot fixtures locally.
 
 This is a deterministic integration check. It performs no network requests,
 does not read source URLs, and does not publish or persist event records.
@@ -62,10 +62,22 @@ def validate_fixtures(root: Path = ROOT) -> dict[str, Any]:
     assert village_events[0]["timezone"] is None
     assert village_events[0]["description"].startswith("The Mokena Chamber of Commerce presents the Parade of Lights")
 
+    # The library fixture is a manually reviewed source-linked snapshot, not a
+    # raw HTML parser fixture. Validate it through the same normalization path.
+    library_path = root / "data/fixtures/mokena-library-manual-snapshot-2026-11-04.json"
+    library_document = json.loads(library_path.read_text(encoding="utf-8"))
+    library = normalize_document(library_document)
+    assert library["event_count"] == 2, "Library manual snapshot should contain two events"
+    assert library["events"][0]["title"] == "One-On-One Technology Help"
+    assert library["events"][0]["registration_required"] is True
+    assert library["events"][1]["audience"][-1] == "Neurodiversity"
+    assert all(event["time_status"] == "floating" for event in library["events"])
+
     normalized_sources = [
         normalize_document(ics),
         normalize_document(park),
         normalize_document(village),
+        library,
     ]
     normalized_by_id = {item["source_id"]: item for item in normalized_sources}
 
@@ -137,6 +149,23 @@ def validate_fixtures(root: Path = ROOT) -> dict[str, Any]:
                 "timezone not guessed",
                 "published description retained",
                 "canonical event record created",
+            ],
+        },
+        {
+            "source_id": library["source_id"],
+            "parser": "manual_snapshot",
+            "fixture": "data/fixtures/mokena-library-manual-snapshot-2026-11-04.json",
+            "event_count": library["event_count"],
+            "warning_count": len(library["parser_warnings"]),
+            "warnings": library["parser_warnings"],
+            "normalized_event_count": library["event_count"],
+            "review_flagged_count": library["summary"]["events_with_review_flags"],
+            "checks": [
+                "manual observation provenance retained",
+                "event links and locations retained",
+                "registration requirements and status retained",
+                "audience and categories retained",
+                "floating times not assigned a timezone",
             ],
         },
     ]

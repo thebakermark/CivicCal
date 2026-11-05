@@ -4,24 +4,24 @@
 
 ## 1. Recommendation
 
-Deploy CivicCal as one application in a dedicated **unprivileged Debian 13 LXC** on Proxmox.
+Deploy CivicCal as one application in a dedicated **Ubuntu Server 26.04 LTS VM** on Proxmox.
 
-Use the host's native systemd service manager and Python runtime. Do not introduce Docker, Kubernetes, PostgreSQL, Redis, a task queue, or a reverse proxy merely to run the current single-process application.
+This follows the user's previously selected Ubuntu Server VM approach. Use the guest's native systemd service manager and Python runtime. Do not introduce Docker, Kubernetes, PostgreSQL, Redis, a task queue, or a reverse proxy merely to run the current single-process application.
 
-This keeps the deployment small, inspectable, easy to back up, and consistent with CivicCal's modular-monolith architecture. If the target Proxmox environment or required isolation makes an LXC unsuitable, use a small Debian VM with the same filesystem and service layout; the application should not care which Proxmox guest type hosts it.
+This keeps the deployment small, inspectable, easy to back up, and consistent with CivicCal's modular-monolith architecture. Keep the application independent of Proxmox-specific features so it can be moved to another VM or host later.
 
 ## 2. Initial guest sizing (provisional)
 
 | Resource | Initial proposal | Notes |
 |---|---:|---|
-| Guest | Unprivileged Debian 13 LXC | No nesting or privileged mode required by the current application |
+| Guest | Ubuntu Server 26.04 LTS VM | Matches the previously selected VM-based Proxmox approach |
 | CPU | 2 vCPU | Parsing and one-shot capture are modest workloads |
-| Memory | 2 GiB | Reassess only if measured workload requires more |
-| OS disk | 16 GiB | Operating system, Python runtime, application checkout |
-| Data volume | Separate mount; begin at 32 GiB | Raw captures and state live outside the application checkout; size can be increased |
-| Network | Proxmox LAN bridge, reserved DHCP lease or static address | No inbound public access in the initial phase |
+| Memory | 4 GiB | Comfortable headroom for Ubuntu Server and the application |
+| OS disk | 32 GiB | Operating system, Python runtime, application checkout |
+| Data volume | Separate virtual disk if storage permits; begin at 32 GiB | Raw captures and state live outside the application checkout; size can be increased |
+| Network | `vmbr0`, DHCP initially | Preserve the existing network; no router or DHCP changes during initial testing; no inbound public access |
 
-These are starting estimates, not hard requirements. Confirm actual storage availability and the intended Proxmox bridge before creating a guest.
+These are starting estimates, not hard requirements. Previously recorded Proxmox details include node `pve0`, bridge `vmbr0`, and `local-lvm`; storage capacity can change, so verify current availability with `pvesm status` before allocating disks. Keep the first network test on DHCP and do not change router/DHCP settings until the guest has been tested successfully.
 
 ## 3. Application layout
 

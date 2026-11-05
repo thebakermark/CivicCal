@@ -1,6 +1,6 @@
 # Offline source-fixture validation
 
-CivicCal's first three source adapters and the common event normalizer can be checked together without contacting any source website.
+CivicCal's initial HTML/ICS adapters, a source-linked manual snapshot, and the common event normalizer can be checked together without contacting any source website.
 
 ## Run
 
@@ -23,8 +23,10 @@ The runner parses only these checked-in fixtures:
   `scripts/parse_mokena_park.py`
 - `data/fixtures/village-calendar-detail.html` through
   `scripts/parse_village.py`
+- `data/fixtures/mokena-library-manual-snapshot-2026-11-04.json` through the
+  manual-snapshot normalization path (not represented as a raw HTML capture)
 
-After parsing, it passes each parser result through `scripts/normalize_events.py` and checks that the canonical records retain source IDs, event counts, temporal semantics, and review flags. It checks representative source semantics across all three adapters:
+After parsing, it passes each parser result through `scripts/normalize_events.py` and checks that the canonical records retain source IDs, event counts, temporal semantics, and review flags. It checks representative source semantics across all three parser adapters plus the manual snapshot:
 calendar UIDs, timezone preservation, cancellation status, Park District
 registration-deadline and judging-date separation, explicit year preservation,
 and Village detail-field extraction without timezone guessing. It also verifies that the Village's explicit date/time becomes a floating local datetime, ICS TZID and cancellation status survive normalization, and undated Park District cards remain present with registration deadlines kept separate.

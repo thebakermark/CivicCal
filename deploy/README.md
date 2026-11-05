@@ -1,6 +1,6 @@
 # CivicCal deployment assets
 
-These files prepare a private, single-instance systemd deployment on a Debian 13 Proxmox guest. The recommended guest is an unprivileged LXC.
+These files prepare a private, single-instance systemd deployment on an Ubuntu Server 26.04 LTS Proxmox VM.
 
 ## Included
 
@@ -24,7 +24,7 @@ The application checkout and configuration should be owned by root and not writa
 
 ## Manual preparation outline
 
-1. Provision the Debian guest and create the dedicated `civiccal` system account.
+1. Provision the Ubuntu Server VM and create the dedicated `civiccal` system account.
 2. Check out a reviewed CivicCal commit under `/opt/civiccal/app`.
 3. Create the persistent data directories and install the source registry as an operator-managed file.
 4. Create and validate the initial identity-state and publication-manifest files using the current schemas. Do not invent empty shapes or copy test-only fixtures into production.

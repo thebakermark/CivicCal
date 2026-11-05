@@ -207,7 +207,8 @@ def normalize_event(event: dict, source_id: str, capture: dict | None = None) ->
         try:
             if datetime.fromisoformat(end["value"]) < datetime.fromisoformat(start["value"]):
                 flags.append("end_before_start")
-        except ValueError:
+        except (TypeError, ValueError):
+            # Floating and zoned datetimes cannot be ordered without guessing a zone.
             flags.append("temporal_comparison_unavailable")
 
     raw_location = event.get("location")

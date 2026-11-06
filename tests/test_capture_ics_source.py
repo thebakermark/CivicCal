@@ -130,7 +130,7 @@ class CaptureICSCoordinatorTests(unittest.TestCase):
             self.assertEqual(result["snapshot"]["blockers"], [])
 
     def test_empty_feed_requires_explicit_operator_confirmation(self):
-        empty_feed = b"BEGIN:VCALENDAR\\nVERSION:2.0\\nEND:VCALENDAR\\n"
+        empty_feed = b"BEGIN:VCALENDAR\nVERSION:2.0\nEND:VCALENDAR\n"
         with tempfile.TemporaryDirectory() as folder:
             policies = self.policies(folder, allow_complete=True)
             without_confirmation = coordinate_ics_capture(

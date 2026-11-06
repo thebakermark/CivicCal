@@ -332,8 +332,20 @@ def build_calendar(identity_state: dict, manifest: dict) -> tuple[str, dict]:
         raise FeedError("Approved event IDs not found in identity state: " + ", ".join(missing))
 
     name = manifest.get("calendar_name") or "CivicCal Community Calendar"
+    return build_calendar_records(records_by_id, approved, name)
+
+
+def build_calendar_records(records_by_id: dict, approved: list[str], name: str) -> tuple[str, dict]:
+    """Render an already source-scoped set of approved event records."""
     if not isinstance(name, str) or not name.strip():
         raise FeedError("calendar_name must be a non-empty string.")
+    if not isinstance(approved, list) or any(not isinstance(item, str) or not item for item in approved):
+        raise FeedError("approved event IDs must be non-empty strings.")
+    if len(set(approved)) != len(approved):
+        raise FeedError("approved event IDs contain duplicates.")
+    missing = [event_id for event_id in approved if event_id not in records_by_id]
+    if missing:
+        raise FeedError("Approved event IDs not found in records: " + ", ".join(missing))
     lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
@@ -349,7 +361,7 @@ def build_calendar(identity_state: dict, manifest: dict) -> tuple[str, dict]:
         start = current.get("start")
         raw_start = start.get("value") if isinstance(start, dict) else None
         has_explicit_offset = isinstance(raw_start, str) and (
-            raw_start.endswith("Z") or bool(re.search(r"[+-]\d{2}:?\d{2}$", raw_start))
+            raw_start.endswith("Z") or bool(re.search(r"[+-]\\d{2}:?\\d{2}$", raw_start))
         )
         if current.get("time_status") == "zoned" and isinstance(tzid, str) and tzid and not has_explicit_offset:
             years = {year for year in (_event_year(start), _event_year(current.get("end"))) if year is not None}
@@ -360,7 +372,7 @@ def build_calendar(identity_state: dict, manifest: dict) -> tuple[str, dict]:
     for event_id in approved:
         lines.extend(_event_lines(event_id, records_by_id[event_id]))
     lines.append("END:VCALENDAR")
-    rendered = "\r\n".join(_fold(line) for line in lines) + "\r\n"
+    rendered = "\\r\\n".join(_fold(line) for line in lines) + "\\r\\n"
     return rendered, {
         "approved_count": len(approved),
         "published_count": len(approved),

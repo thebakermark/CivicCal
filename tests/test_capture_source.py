@@ -50,6 +50,25 @@ class CaptureSourceTests(unittest.TestCase):
         path.write_text(json.dumps({"source_records": [source]}), encoding="utf-8")
         return path
 
+
+    def test_loading_source_preserves_all_protected_registry_fields(self):
+        protected = {
+            "access_status": "approved",
+            "polling_enabled": True,
+            "consent_required": True,
+            "consent_granted": True,
+            "terms_reviewed": True,
+            "robots_reviewed": True,
+            "event_access": "unknown",
+        }
+        with tempfile.TemporaryDirectory() as folder:
+            source = self.source(**protected)
+            path = self.registry(folder, source)
+            original_bytes = path.read_bytes()
+            loaded = load_source(path, "sample-feed")
+            self.assertEqual({key: loaded.get(key) for key in protected}, protected)
+            self.assertEqual(path.read_bytes(), original_bytes)
+
     def test_registry_gate_rejects_unapproved_source(self):
         with tempfile.TemporaryDirectory() as folder:
             path = self.registry(folder, self.source(access_status="review_required"))

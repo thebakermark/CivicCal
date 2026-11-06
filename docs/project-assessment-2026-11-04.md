@@ -1,4 +1,4 @@
-# CivicCal Project Assessment — 2026-11-04
+# CivicCal Project Assessment — 2026-11-06
 
 ## Executive assessment
 
@@ -26,7 +26,13 @@ Registered sources:
 - Mokena SD 159 events feed.
 - Summit Hill SD 161 district events, Indian Trail, Dr. Julian Rogus, Hilda Walker, Summit Hill Jr. High, and Mary Drew calendars.
 
-Current source authorization state: 11 sources are review_required and 1 source (Mokena SD159) is blocked. All 12 have polling_enabled=false. This is the correct conservative state; source records being present does not mean capture permission has been granted.
+Current source authorization state: all 12 source records have access_status=approved. All 12 have terms_reviewed=true and robots_reviewed=true. SD159 is the only source with polling_enabled=true; its consent_required and consent_granted fields are both true. These are registry values only: they do not start a scheduler or authorize unattended polling. Source-level event_access remains mixed or unknown for some records, so approved registry status is not proof that every event is public or publishable.
+
+## Current audit findings — 2026-11-06
+
+The current completeness-policy file on main contains 10 profiles and is missing profiles for both Mokena Library events and SD159. The accompanying audit branch adds an SD159 profile scoped only to the official district Events iCalendar export, using single_feed, requiring the feed role, and retaining allow_complete_snapshot=false. This enables policy validation without asserting feed completeness. The Mokena Library profile remains outstanding. SD159's archived feed still requires comparison with the district's visible calendar; the separately reviewed 2026–27 PDF does not establish ICS scope or completeness.
+
+The ICS coordinator records the HTTP Content-Type and validates UTF-8 plus a VCALENDAR envelope. It does not reject a structurally valid feed solely because the server labels it application/octet-stream. Regression tests have been added for text/calendar and application/octet-stream. Authorization immutability and archived ICS-to-identity ingestion/idempotency tests have also been added. These tests are not marked verified until a clean CI run passes.
 
 ## Assessment
 
@@ -64,16 +70,14 @@ The source automation specification is a post-release proposal only. Its propose
 
 ## Highest-priority remaining work
 
-1. Maintain one authoritative requirements, decision, and feature register.
-2. Complete the Schema.org mapping without changing CivicCal's internal event model.
-3. Audit actual code/tests against manual authorization invariants.
-4. Complete source coverage/fixture validation for initial Mokena-area sources without activating unauthorized sources.
-5. Finalize database schema and migration details; implementation waits for user review/target environment.
-6. Implement database persistence and prove JSON-to-DB parity, rollback, and authorization preservation.
-7. Make API and source-specific ICS read from the same database-backed approved records.
-8. Define backup/restore and prove recovery.
-9. Only after the local end-to-end loop works, separately decide whether to authorize public hosting/deployment.
-10. Add webhook delivery after MVP; keep its standard contract documented.
+1. Run the full test suite from a clean checkout and verify the newly added MIME, authorization-invariant, and archived ICS integration tests.
+2. Complete source-specific evidence review without live retrieval unless separately authorized; keep snapshot completeness disabled until source coverage is demonstrated.
+3. Finalize the SQLite schema and storage adapter.
+4. Implement JSON-to-database migration, preserving stable IDs, observations, revisions, presence history, and publication approvals; prove parity and rollback.
+5. Make the API and each independent ICS feed read from the same database-backed approved records.
+6. Add operational readiness checks and validate source isolation, cache behavior, and error handling.
+7. Define backup scope and retention; back up registry, database, raw captures, reports, and publication approvals; prove restore.
+8. Only after the local service and recovery path are proven, separately decide the permitted access path for the user's calendar client.
 
 ## MVP exit test
 

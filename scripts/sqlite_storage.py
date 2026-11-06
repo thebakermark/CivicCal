@@ -23,6 +23,10 @@ CREATE TABLE organizations (
     organization_id TEXT PRIMARY KEY,
     record_json TEXT NOT NULL
 );
+CREATE TABLE registry_metadata (
+    singleton_id INTEGER PRIMARY KEY CHECK(singleton_id=1),
+    metadata_json TEXT NOT NULL
+);
 CREATE TABLE sources (
     source_id TEXT PRIMARY KEY,
     organization_id TEXT,
@@ -226,6 +230,7 @@ def import_json_documents(
             raise MigrationError("Target database already contains event data")
         for oid, row in organizations.items():
             connection.execute("INSERT INTO organizations VALUES(?,?)", (oid, _dump(row)))
+        connection.execute("INSERT INTO registry_metadata VALUES(1,?)", (_dump(registry),))
         for sid, row in sources.items():
             auth = {field: row[field] for field in AUTH_FIELDS if field in row}
             connection.execute(
@@ -350,11 +355,13 @@ def import_json_documents(
                 raise MigrationError("Presence observation must be an object")
             source_id = row.get("source_id")
             identity_key = row.get("identity_key")
-            event_id = event_ids.get(identity_key, (None,))[0]
+            event_info = event_ids.get(identity_key)
+            event_id = event_info[0] if event_info else None
             if event_id is None:
-                # Some historical records only contain source_event_id. Never
-                # guess across sources; require the identity key for migration.
+                # Never guess identity from title/date or publisher ID.
                 raise MigrationError("Presence observation has no resolvable identity_key")
+            if source_id != event_info[2]:
+                raise MigrationError("Presence observation source does not own its event")
             material = _dump(row)
             presence_id = row.get("presence_observation_id") or "pres_" + hashlib.sha256(
                 f"{seq}:{material}".encode("utf-8")

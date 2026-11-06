@@ -34,6 +34,25 @@ CREATE TABLE sources (
     authorization_json TEXT NOT NULL,
     FOREIGN KEY (organization_id) REFERENCES organizations(organization_id)
 );
+CREATE TABLE captures (
+    capture_id TEXT PRIMARY KEY,
+    source_id TEXT NOT NULL,
+    capture_key TEXT NOT NULL,
+    captured_at TEXT,
+    requested_url TEXT,
+    final_url TEXT,
+    http_status INTEGER,
+    content_type TEXT,
+    etag TEXT,
+    last_modified TEXT,
+    payload_sha256 TEXT,
+    payload_size_bytes INTEGER,
+    archive_uri TEXT,
+    outcome TEXT,
+    metadata_json TEXT NOT NULL,
+    UNIQUE(source_id, capture_key),
+    FOREIGN KEY(source_id) REFERENCES sources(source_id)
+);
 CREATE TABLE source_events (
     event_id TEXT PRIMARY KEY,
     identity_key TEXT NOT NULL UNIQUE,
@@ -499,7 +518,9 @@ class SQLiteIdentityStateStore:
     def __init__(self, database_path: str | Path):
         self.database_path = Path(database_path)
 
-    def ingest_normalized(self, document: dict, observed_at: str | None = None) -> dict:
+    def ingest_normalized(self, document: dict, observed_at: str | None = None,
+                          capture_metadata: dict | None = None,
+                          archive_uri: str | None = None) -> dict:
         try:
             from .track_event_identity import process_normalized
         except ImportError:
@@ -516,7 +537,10 @@ class SQLiteIdentityStateStore:
             if result.get("already_processed"):
                 connection.commit()
                 return result
-            self._persist_source_state(connection, source_id, prior, updated, result)
+            self._persist_source_state(
+                connection, source_id, prior, updated, result,
+                capture_metadata=capture_metadata, archive_uri=archive_uri,
+            )
             connection.commit()
             return result
         except Exception:
@@ -591,7 +615,32 @@ class SQLiteIdentityStateStore:
         }
 
     def _persist_source_state(self, connection: sqlite3.Connection, source_id: str,
-                              prior: dict, updated: dict, result: dict) -> None:
+                              prior: dict, updated: dict, result: dict,
+                              capture_metadata: dict | None = None,
+                              archive_uri: str | None = None) -> None:
+        capture_key = result.get("capture_key")
+        if capture_metadata is not None:
+            if not isinstance(capture_metadata, dict):
+                raise MigrationError("Capture metadata must be an object")
+            capture_id = "cap_" + hashlib.sha256(
+                f"{source_id}:{capture_key}".encode("utf-8")
+            ).hexdigest()[:24]
+            connection.execute(
+                """INSERT INTO captures VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                   ON CONFLICT(source_id,capture_key) DO NOTHING""",
+                (capture_id, source_id, capture_key, capture_metadata.get("captured_at"),
+                 capture_metadata.get("requested_url"), capture_metadata.get("final_url"),
+                 capture_metadata.get("http_status"), capture_metadata.get("content_type"),
+                 capture_metadata.get("etag"), capture_metadata.get("last_modified"),
+                 capture_metadata.get("content_sha256"), capture_metadata.get("content_length"),
+                 archive_uri, capture_metadata.get("outcome"), _dump(capture_metadata)),
+            )
+            stored = connection.execute(
+                "SELECT payload_sha256 FROM captures WHERE source_id=? AND capture_key=?",
+                (source_id, capture_key),
+            ).fetchone()
+            if stored is None or stored[0] != capture_metadata.get("content_sha256"):
+                raise MigrationError("Capture key already exists with different payload provenance")
         events = updated["events"]
         event_by_key = {}
         for identity_key, record in events.items():

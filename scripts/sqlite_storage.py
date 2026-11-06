@@ -256,7 +256,7 @@ def import_json_documents(
             if not isinstance(current_revision, int) or current_revision < 0:
                 raise MigrationError(f"Event {event_id} has invalid current revision number")
             connection.execute(
-                """INSERT INTO source_events VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                """INSERT INTO source_events VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (event_id, identity_key, source_id, row.get("source_event_id"),
                  row.get("recurrence_instance_id"), row.get("current_fingerprint"),
                  current_revision, row.get("first_seen_at"), row.get("last_seen_at"),
@@ -362,7 +362,7 @@ def import_json_documents(
             if presence_value not in {"present", "missing"}:
                 raise MigrationError(f"Invalid presence value {presence_value!r}")
             connection.execute(
-                "INSERT INTO presence_observations VALUES(?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO presence_observations VALUES(?,?,?,?,?,?,?,?)",
                 (presence_id, event_id, source_id, row.get("capture_key"),
                  row.get("observed_at"), presence_value, seq, material),
             )

@@ -33,7 +33,9 @@ install -m 0640 "${REPO_ROOT}/deploy/civiccal-sqlite.env.example" \
 chroot "${ROOTFS}" groupadd --system civiccal
 chroot "${ROOTFS}" useradd --system --gid civiccal --home-dir /nonexistent \
   --no-create-home --shell /usr/sbin/nologin civiccal
-install -d -o root -g civiccal -m 0750 "${ROOTFS}/srv/civiccal/data"
+install -d -m 0750 "${ROOTFS}/srv/civiccal/data"
+chroot "${ROOTFS}" chown root:civiccal /srv/civiccal/data
+chroot "${ROOTFS}" chmod 0750 /srv/civiccal/data
 chroot "${ROOTFS}" chown -R root:root /opt/civiccal
 chroot "${ROOTFS}" chmod -R go-w /opt/civiccal
 chroot "${ROOTFS}" chown root:civiccal /etc/civiccal/civiccal-sqlite.env

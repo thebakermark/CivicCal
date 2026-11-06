@@ -261,6 +261,8 @@ def import_json_documents(
             current_revision = row.get("current_revision_number", len(revisions))
             if not isinstance(current_revision, int) or current_revision < 0:
                 raise MigrationError(f"Event {event_id} has invalid current revision number")
+            if current_revision != len(revisions):
+                raise MigrationError(f"Event {event_id} current revision number does not match revision history")
             connection.execute(
                 """INSERT INTO source_events VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (event_id, identity_key, source_id, row.get("source_event_id"),

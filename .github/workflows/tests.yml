@@ -6,6 +6,7 @@ on:
       - main
       - build/debian13-sqlite-server
   pull_request:
+    types: [opened, synchronize, reopened, edited]
 
 permissions:
   contents: read
@@ -20,6 +21,8 @@ jobs:
           python-version: "3.12"
       - name: Compile Python modules
         run: python -m compileall -q scripts tests
+      - name: Validate container build script syntax
+        run: bash -n deploy/build-lxc-rootfs.sh
       - name: Run test suite
         run: python -m unittest discover -s tests -v
 

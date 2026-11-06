@@ -86,11 +86,11 @@ class IngestCaptureTests(unittest.TestCase):
         }
         registry = {"source_records": [source]}
         payload = (
-            b"BEGIN:VCALENDAR\\r\\nVERSION:2.0\\r\\nPRODID:-//CivicCal Test//EN\\r\\n"
-            b"BEGIN:VEVENT\\r\\nUID:sample-meeting@example.org\\r\\n"
-            b"DTSTAMP:20261106T120000Z\\r\\nDTSTART:20261110T190000Z\\r\\n"
-            b"DTEND:20261110T200000Z\\r\\nSUMMARY:Sample Meeting\\r\\n"
-            b"END:VEVENT\\r\\nEND:VCALENDAR\\r\\n"
+            b"BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//CivicCal Test//EN\r\n"
+            b"BEGIN:VEVENT\r\nUID:sample-meeting@example.org\r\n"
+            b"DTSTAMP:20261106T120000Z\r\nDTSTART:20261110T190000Z\r\n"
+            b"DTEND:20261110T200000Z\r\nSUMMARY:Sample Meeting\r\n"
+            b"END:VEVENT\r\nEND:VCALENDAR\r\n"
         )
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

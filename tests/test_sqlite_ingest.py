@@ -88,6 +88,32 @@ class SQLiteIngestionTests(unittest.TestCase):
             self.assertEqual(db.execute("SELECT COUNT(*) FROM identity_conflicts").fetchone()[0], 1)
             self.assertEqual(db.execute("SELECT COUNT(*) FROM source_events").fetchone()[0], 0)
 
+    def test_archived_capture_provenance_is_registered(self):
+        metadata = {
+            "captured_at": "2026-11-04T12:00:00Z",
+            "requested_url": "https://example.test/events.ics",
+            "final_url": "https://example.test/events.ics",
+            "http_status": 200,
+            "content_type": "text/calendar",
+            "etag": '"capture-1"',
+            "last_modified": None,
+            "content_sha256": "capture-1",
+            "content_length": 123,
+            "outcome": "captured",
+        }
+        self.store.ingest_normalized(
+            normalized([event()], source="source-a", capture="capture-1"),
+            capture_metadata=metadata,
+            archive_uri="/archive/source-a/capture-1.json",
+        )
+        with sqlite3.connect(self.database) as db:
+            row = db.execute(
+                "SELECT source_id, capture_key, payload_sha256, archive_uri FROM captures"
+            ).fetchone()
+        self.assertEqual(row, (
+            "source-a", "capture-1", "capture-1", "/archive/source-a/capture-1.json"
+        ))
+
     def test_source_authorization_flags_are_not_changed_by_ingestion(self):
         self.store.ingest_normalized(normalized([event()], source="source-a", capture="capture-1"))
         with sqlite3.connect(self.database) as db:

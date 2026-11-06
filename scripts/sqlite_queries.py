@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
-from datetime import date
+from datetime import datetime, timezone
 from pathlib import Path
 
 from .publish_ics import FeedError, build_calendar_records
@@ -119,6 +119,8 @@ def build_source_calendar(database_path: str | Path, source_id: str) -> tuple[st
             if source is None:
                 raise KeyError(source_id)
             source_record = json.loads(source["record_json"])
+            if not isinstance(source_record, dict):
+                raise SQLiteReadError("Stored source registry record is invalid")
             rows = db.execute(
                 """SELECT e.event_id, e.source_id, e.current_event_json,
                           e.current_revision_number,
@@ -150,11 +152,17 @@ def build_source_calendar(database_path: str | Path, source_id: str) -> tuple[st
                            "observed_at": row["latest_observed_at"]}],
         }
         if row["latest_observed_at"]:
-            timestamps.append(row["latest_observed_at"])
+            try:
+                parsed = datetime.fromisoformat(row["latest_observed_at"].replace("Z", "+00:00"))
+                if parsed.tzinfo is not None:
+                    timestamps.append(parsed.astimezone(timezone.utc))
+            except (TypeError, ValueError):
+                continue
     approved = list(records)
     name = source_record.get("name") or source_id
     try:
         rendered, summary = build_calendar_records(records, approved, name)
     except FeedError:
         raise
-    return rendered, summary, max(timestamps) if timestamps else None
+    modified = max(timestamps).isoformat().replace("+00:00", "Z") if timestamps else None
+    return rendered, summary, modified

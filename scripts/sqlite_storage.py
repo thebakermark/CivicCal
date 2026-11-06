@@ -452,10 +452,16 @@ def migrate_files(database_path: str | Path, registry_path: str | Path,
     connection = sqlite3.connect(db_path)
     try:
         connection.execute("PRAGMA foreign_keys=ON")
-        return import_json_documents(
+        result = import_json_documents(
             connection, registry, state, manifest,
             {"registry": str(registry_path), "state": str(state_path),
              "manifest": str(manifest_path)},
         )
-    finally:
+    except Exception:
         connection.close()
+        # A failed first migration must not leave a half-initialized target
+        # that would block a clean retry. Existing non-empty DBs were refused.
+        db_path.unlink(missing_ok=True)
+        raise
+    connection.close()
+    return result

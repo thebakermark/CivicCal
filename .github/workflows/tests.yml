@@ -6,7 +6,7 @@ on:
       - main
       - build/debian13-sqlite-server
   pull_request:
-    types: [opened, synchronize, reopened, edited]
+    types: [opened, synchronize, reopened, edited, ready_for_review]
 
 permissions:
   contents: read

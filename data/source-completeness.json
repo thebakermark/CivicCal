@@ -183,6 +183,24 @@
       "allowed_paths": [
         "/library-board"
       ]
+    },
+    {
+      "source_id": "mokena-sd159-events-ical",
+      "profile_id": "mokena-sd159-district-ical-v1",
+      "scope": "The official Mokena School District 159 Events iCalendar export only.",
+      "pagination_strategy": "single_feed",
+      "required_page_roles": [
+        "feed"
+      ],
+      "require_detail_link_reconciliation": false,
+      "allow_complete_snapshot": false,
+      "reason_disabled": "The archived ICS feed has not yet been compared with the district's visible Events calendar. The separately reviewed 2026-2027 approved calendar PDF does not establish the ICS feed's scope or completeness.",
+      "allowed_hosts": [
+        "thrillshare-cmsv2.services.thrillshare.com"
+      ],
+      "allowed_paths": [
+        "/api/v4/o/9768/cms/events/generate_ical"
+      ]
     }
   ]
 }

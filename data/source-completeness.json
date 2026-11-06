@@ -183,6 +183,24 @@
       "allowed_paths": [
         "/library-board"
       ]
+    },
+    {
+      "source_id": "mokena-sd159-events-ical",
+      "profile_id": "mokena-sd159-district-ical-v1",
+      "scope": "The Mokena School District 159 official district Events iCalendar export only.",
+      "pagination_strategy": "single_feed",
+      "required_page_roles": [
+        "feed"
+      ],
+      "require_detail_link_reconciliation": false,
+      "allow_complete_snapshot": false,
+      "reason_disabled": "The archived feed has not yet been compared with a fresh live capture and the district's visible calendar for scope and completeness. Captures may be parsed and normalized, but absence must not be interpreted as cancellation.",
+      "allowed_hosts": [
+        "thrillshare-cmsv2.services.thrillshare.com"
+      ],
+      "allowed_paths": [
+        "/api/v4/o/9768/cms/events/generate_ical"
+      ]
     }
   ]
 }

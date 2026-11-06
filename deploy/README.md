@@ -7,6 +7,41 @@ These files prepare a private, single-instance systemd deployment in an unprivil
 - `systemd/civiccal-api.service`: read-only HTTP service unit, loopback-bound.
 - `civiccal.env.example`: runtime path and port configuration template.
 
+## Operator-invoked iCalendar capture
+
+The capture coordinator already exists at `scripts/capture_ics_source.py`; this deployment adds a dedicated, manually started systemd one-shot unit. It is **not** an HTTP microservice, daemon, timer, cron job, or polling worker. The unit has no `[Install]` section and is never enabled at boot.
+
+Install the capture account and writable directories:
+
+```sh
+sudo useradd --system --home /nonexistent --shell /usr/sbin/nologin civiccal-capture
+sudo install -d -o root -g civiccal-capture -m 0750 /srv/civiccal/data/registry
+sudo install -d -o civiccal-capture -g civiccal-capture -m 0750 /srv/civiccal/data/captures /srv/civiccal/data/reports
+sudo install -o root -g civiccal-capture -m 0640 /opt/civiccal/app/data/sources.json /srv/civiccal/data/registry/sources.json
+sudo install -o root -g root -m 0644 /opt/civiccal/app/deploy/systemd/civiccal-capture@.service /etc/systemd/system/civiccal-capture@.service
+sudo systemctl daemon-reload
+sudo systemd-analyze verify /etc/systemd/system/civiccal-capture@.service
+```
+
+Before the first live request, inspect the exact source record in the installed registry. The capture code enforces the structured `access_status`, `terms_reviewed`, `robots_reviewed`, and consent fields. It never changes them. The current SD159 registry entry has structured `consent_required=true` and `consent_granted=true`, while its free-text notes still say consent remains false. Resolve that stale-note contradiction with the source owner/operator before capture; do not change either flag as part of deployment. The SD159 completeness profile deliberately keeps `allow_complete_snapshot=false` until the fresh feed is compared with the visible district calendar.
+
+Start exactly one capture manually (replace the source ID only with another registered ICS source):
+
+```sh
+sudo systemctl start civiccal-capture@mokena-sd159-events-ical.service
+sudo systemctl status civiccal-capture@mokena-sd159-events-ical.service --no-pager
+sudo journalctl -u civiccal-capture@mokena-sd159-events-ical.service -n 80 --no-pager
+```
+
+On success, inspect:
+
+- Raw payload and metadata: `/srv/civiccal/data/captures/mokena-sd159-events-ical/`
+- Parsed/normalized report: `/srv/civiccal/data/reports/mokena-sd159-events-ical/latest.json`
+
+The service account can write only under the capture and report directories. It reads the registry and completeness policy but cannot edit them. The API service account remains separate and read-only. A failed request leaves the previous report untouched unless the coordinator itself completed a new capture; inspect the journal and metadata before retrying.\n\nFor the privacy-preserving outbound route, follow [the Proton VPN WireGuard egress guide](../docs/proton-wireguard-egress.md). The capture worker must run behind a dedicated Proton WireGuard gateway with a tested fail-closed policy before any live district request. Do not install WireGuard on the Proxmox host or home router.
+
+Do not use `systemctl enable`, create a timer, or configure cron. Every capture is a deliberate one-shot operator action. The service does not ingest into identity state or publish events.
+
 ## Important current-state limitation
 
 The current application reads JSON identity state and a publication manifest. The repository does not include production runtime state or a publication manifest, and the database adapter is not implemented. Do not start the service until the operator has provisioned valid runtime files from the documented data contracts and verified their contents.

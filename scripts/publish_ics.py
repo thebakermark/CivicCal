@@ -372,7 +372,7 @@ def build_calendar_records(records_by_id: dict, approved: list[str], name: str) 
     for event_id in approved:
         lines.extend(_event_lines(event_id, records_by_id[event_id]))
     lines.append("END:VCALENDAR")
-    rendered = "\r\n".join(_fold(line) for line in lines) + "\\r\\n"
+    rendered = "\r\n".join(_fold(line) for line in lines) + "\r\n"
     return rendered, {
         "approved_count": len(approved),
         "published_count": len(approved),

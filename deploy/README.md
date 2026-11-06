@@ -38,7 +38,7 @@ On success, inspect:
 - Raw payload and metadata: `/srv/civiccal/data/captures/mokena-sd159-events-ical/`
 - Parsed/normalized report: `/srv/civiccal/data/reports/mokena-sd159-events-ical/latest.json`
 
-The service account can write only under the capture and report directories. It reads the registry and completeness policy but cannot edit them. The API service account remains separate and read-only. A failed request leaves the previous report untouched unless the coordinator itself completed a new capture; inspect the journal and metadata before retrying.\n\nFor the privacy-preserving outbound route, follow [the Cloudflare WARP egress guide](../docs/cloudflare-warp-egress.md). The capture worker must run behind WARP with a tested fail-closed policy before any live district request. Do not install WARP on the Proxmox host or home router.
+The service account can write only under the capture and report directories. It reads the registry and completeness policy but cannot edit them. The API service account remains separate and read-only. A failed request leaves the previous report untouched unless the coordinator itself completed a new capture; inspect the journal and metadata before retrying.\n\nFor the privacy-preserving outbound route, follow [the Proton VPN WireGuard egress guide](../docs/proton-wireguard-egress.md). The capture worker must run behind a dedicated Proton WireGuard gateway with a tested fail-closed policy before any live district request. Do not install WireGuard on the Proxmox host or home router.
 
 Do not use `systemctl enable`, create a timer, or configure cron. Every capture is a deliberate one-shot operator action. The service does not ingest into identity state or publish events.
 

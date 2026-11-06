@@ -109,3 +109,26 @@ over the only copy of the current database.
 The SQLite backup does **not** include raw archived source payloads. Back up
 the capture archive directory separately and retain it with the matching
 database backup. No scheduled backup job is installed or enabled by this build.
+
+
+## One-shot archived capture ingestion
+
+After the original capture step has been explicitly run and its payload safely
+archived, an operator can parse and ingest that one capture into SQLite:
+
+```sh
+python3 -m scripts.ingest_capture_sqlite \
+  --source-id SOURCE_ID \
+  --capture-metadata /path/to/archive/SOURCE_ID/capture-metadata.json \
+  --database /srv/civiccal/data/civiccal.sqlite
+```
+
+This command reads the archived payload and source configuration already stored
+in SQLite. It does not make a network request, start a worker, schedule another
+capture, or publish events. It commits the source's observations, revisions,
+presence/lifecycle history, idempotency token, and identity-conflict records in
+one SQLite transaction. Reprocessing the same capture is idempotent.
+
+The command does not grant consent, alter source authorization flags, or
+approve publication. An event appears in the API/ICS output only if an operator
+separately approves that exact event in the publication approval workflow.

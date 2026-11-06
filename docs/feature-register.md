@@ -2,17 +2,17 @@
 
 This is the implementation tracker. Product requirements and accepted decisions live in Product Requirements and Decision Register. This register answers what exists, what is incomplete, and what evidence is needed before calling it done.
 
-**Last audited:** 2026-11-04  
+**Last audited:** 2026-11-06  
 **Rule:** Implemented means code exists; verified means relevant automated tests/CI or an explicit end-to-end check demonstrate the acceptance behavior. A document is not implementation.
 
 | ID | Feature | Current state | Evidence / gap | Next completion gate |
 |---|---|---|---|---|
 | F-001 | Organization/source registry | Implemented foundation | data/sources.json, JSON Schema, validator | Audit every source identity, scope, and evidence |
-| F-002 | Manual authorization gates | Implemented foundation | capture_source.py checks access, terms, robots, consent | Add invariant tests that no code path mutates protected flags; preserve in DB |
+| F-002 | Manual authorization gates | Implemented foundation | capture_source.py checks access, terms, robots, consent; test_capture_source.py verifies protected registry fields remain unchanged during source loading | Extend invariant coverage to every future persistence/migration path; preserve in DB |
 | F-003 | One-shot HTTP/HTML capture | Implemented | Capture utility and tests; completeness separate | Verify permitted live captures only after human authorization |
-| F-004 | One-shot ICS capture/import | Implemented foundation | ICS coordinator/importer/parser | Validate source coverage and temporal fidelity |
+| F-004 | One-shot ICS capture/import | Implemented foundation | ICS coordinator/importer/parser; tests cover registered text/calendar and valid ICS labeled application/octet-stream | Validate source coverage and temporal fidelity; test results still require a clean CI run |
 | F-005 | Raw capture archive/provenance | Implemented foundation | Capture metadata and archive files | Define retention, integrity verification, backup/restore |
-| F-006 | HTML/ICS parsing | Implemented foundation | ICS, Park District, Village parser fixtures plus Mokena Library manual-snapshot normalization; offline integration validation | Add authorized raw HTML/feed fixtures for remaining sources; manual snapshots are not parser fixtures |
+| F-006 | HTML/ICS parsing | Implemented foundation | ICS, Park District, Village parser fixtures plus Mokena Library manual-snapshot normalization; archived ICS-to-identity integration test added | Add authorized raw HTML/feed fixtures for remaining sources; manual snapshots are not parser fixtures; verify clean CI run |
 | F-007 | Event normalization | Implemented foundation | Normalizer and tests | Audit field completeness and temporal edge cases |
 | F-008 | Stable source-scoped identity | Implemented | Identity tracker and tests | Preserve exact IDs through DB migration |
 | F-009 | Observations/revisions/presence/lifecycle | Implemented in JSON | Tracker and relational design docs | Implement relational persistence after approval; parity tests |

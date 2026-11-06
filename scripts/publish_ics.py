@@ -361,7 +361,7 @@ def build_calendar_records(records_by_id: dict, approved: list[str], name: str) 
         start = current.get("start")
         raw_start = start.get("value") if isinstance(start, dict) else None
         has_explicit_offset = isinstance(raw_start, str) and (
-            raw_start.endswith("Z") or bool(re.search(r"[+-]\\d{2}:?\\d{2}$", raw_start))
+            raw_start.endswith("Z") or bool(re.search(r"[+-]\d{2}:?\d{2}$", raw_start))
         )
         if current.get("time_status") == "zoned" and isinstance(tzid, str) and tzid and not has_explicit_offset:
             years = {year for year in (_event_year(start), _event_year(current.get("end"))) if year is not None}
@@ -372,7 +372,7 @@ def build_calendar_records(records_by_id: dict, approved: list[str], name: str) 
     for event_id in approved:
         lines.extend(_event_lines(event_id, records_by_id[event_id]))
     lines.append("END:VCALENDAR")
-    rendered = "\\r\\n".join(_fold(line) for line in lines) + "\\r\\n"
+    rendered = "\r\n".join(_fold(line) for line in lines) + "\\r\\n"
     return rendered, {
         "approved_count": len(approved),
         "published_count": len(approved),

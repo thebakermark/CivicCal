@@ -132,3 +132,25 @@ one SQLite transaction. Reprocessing the same capture is idempotent.
 The command does not grant consent, alter source authorization flags, or
 approve publication. An event appears in the API/ICS output only if an operator
 separately approves that exact event in the publication approval workflow.
+
+
+## Explicit publication approval
+
+Ingestion never publishes an event. To approve or revoke one event, an operator
+must explicitly run the local CLI with the exact source and event IDs:
+
+```sh
+python3 -m scripts.set_publication_approval \
+  --database /srv/civiccal/data/civiccal.sqlite \
+  --source-id SOURCE_ID \
+  --event-id EVENT_ID \
+  --action approve \
+  --actor "operator-id" \
+  --reason "Reviewed publisher event"
+```
+
+Use `--action revoke` to remove approval. Each actual state change is recorded
+in an append-only approval-action audit table. Repeating the current state is
+idempotent and creates no duplicate audit action. The command verifies that
+the event belongs to the supplied source. It does not alter source consent,
+terms, robots, access, or polling flags.

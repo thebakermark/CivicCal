@@ -171,7 +171,7 @@ def main() -> int:
             if version is None or version[0] != "1":
                 raise ValueError("Unsupported CivicCal SQLite schema version.")
         server = ThreadingHTTPServer((str(address), args.port), make_handler(database))
-    except (ValueError, OSError, Exception) as exc:
+    except Exception as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
     print(f"CivicCal SQLite API listening on http://{args.host}:{args.port}", file=sys.stderr)

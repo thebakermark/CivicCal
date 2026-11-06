@@ -151,18 +151,6 @@
       ]
     },
     {
-      "title": "Students return from winter break",
-      "start_date": "2027-01-05",
-      "end_date_inclusive": "2027-01-05",
-      "schedule_type": "school_resumes",
-      "student_attendance": "school_in_session",
-      "school_scope": "MES explicitly",
-      "source_text": "MES Students Return from Winter Break",
-      "source_event_uids": [
-        "a765b52a-c3c1-41da-959b-12778e0a6ef8"
-      ]
-    },
-    {
       "title": "Early dismissal",
       "start_date": "2027-01-15",
       "end_date_inclusive": "2027-01-15",

@@ -128,6 +128,17 @@ CREATE TABLE publication_approvals (
     FOREIGN KEY(event_id) REFERENCES source_events(event_id),
     FOREIGN KEY(source_id) REFERENCES sources(source_id)
 );
+CREATE TABLE publication_approval_actions (
+    action_id TEXT PRIMARY KEY,
+    event_id TEXT NOT NULL,
+    source_id TEXT NOT NULL,
+    action TEXT NOT NULL CHECK(action IN ('approve','revoke')),
+    acted_at TEXT NOT NULL,
+    actor TEXT NOT NULL,
+    reason TEXT,
+    FOREIGN KEY(event_id) REFERENCES source_events(event_id),
+    FOREIGN KEY(source_id) REFERENCES sources(source_id)
+);
 CREATE TABLE identity_conflicts (
     conflict_id TEXT PRIMARY KEY,
     source_id TEXT NOT NULL,

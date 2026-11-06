@@ -1,0 +1,47 @@
+name: CivicCal tests and container build
+
+on:
+  push:
+    branches:
+      - main
+      - build/debian13-sqlite-server
+  pull_request:
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile Python modules
+        run: python -m compileall -q scripts tests
+      - name: Validate container build script syntax
+        run: bash -n deploy/build-lxc-rootfs.sh
+      - name: Run test suite
+        run: python -m unittest discover -s tests -v
+
+  build-lxc-rootfs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install debootstrap
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y debootstrap
+      - name: Build Debian 13 LXC root filesystem
+        run: sudo bash deploy/build-lxc-rootfs.sh "$RUNNER_TEMP/civiccal-dist"
+      - name: Upload LXC rootfs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: civiccal-debian13-lxc-rootfs
+          path: |
+            ${{ runner.temp }}/civiccal-dist/civiccal-debian13-rootfs.tar.gz
+            ${{ runner.temp }}/civiccal-dist/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 7

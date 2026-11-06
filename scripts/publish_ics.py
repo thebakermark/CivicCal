@@ -332,8 +332,20 @@ def build_calendar(identity_state: dict, manifest: dict) -> tuple[str, dict]:
         raise FeedError("Approved event IDs not found in identity state: " + ", ".join(missing))
 
     name = manifest.get("calendar_name") or "CivicCal Community Calendar"
+    return build_calendar_records(records_by_id, approved, name)
+
+
+def build_calendar_records(records_by_id: dict, approved: list[str], name: str) -> tuple[str, dict]:
+    """Render an already source-scoped set of approved event records."""
     if not isinstance(name, str) or not name.strip():
         raise FeedError("calendar_name must be a non-empty string.")
+    if not isinstance(approved, list) or any(not isinstance(item, str) or not item for item in approved):
+        raise FeedError("approved event IDs must be non-empty strings.")
+    if len(set(approved)) != len(approved):
+        raise FeedError("approved event IDs contain duplicates.")
+    missing = [event_id for event_id in approved if event_id not in records_by_id]
+    if missing:
+        raise FeedError("Approved event IDs not found in records: " + ", ".join(missing))
     lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",

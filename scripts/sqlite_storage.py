@@ -164,6 +164,7 @@ def initialize_database(connection: sqlite3.Connection) -> None:
         "INSERT OR REPLACE INTO schema_meta(key,value) VALUES('schema_version',?)",
         (str(SCHEMA_VERSION),),
     )
+    connection.commit()
 
 
 def _validate_registry(registry: Any) -> tuple[dict[str, dict], dict[str, dict]]:
@@ -219,8 +220,8 @@ def import_json_documents(
 
     counts = {}
     try:
-        connection.execute("BEGIN IMMEDIATE")
         initialize_database(connection)
+        connection.execute("BEGIN IMMEDIATE")
         if connection.execute("SELECT COUNT(*) FROM source_events").fetchone()[0]:
             raise MigrationError("Target database already contains event data")
         for oid, row in organizations.items():

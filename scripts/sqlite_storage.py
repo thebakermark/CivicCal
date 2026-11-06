@@ -56,6 +56,7 @@ CREATE TABLE source_events (
 CREATE INDEX source_events_source_idx ON source_events(source_id);
 CREATE TABLE event_observations (
     observation_id TEXT PRIMARY KEY,
+    global_sequence INTEGER NOT NULL UNIQUE,
     event_id TEXT NOT NULL,
     event_sequence INTEGER NOT NULL,
     source_id TEXT NOT NULL,
@@ -125,6 +126,13 @@ CREATE TABLE publication_approvals (
     approved INTEGER NOT NULL CHECK(approved IN (0,1)),
     imported_from TEXT NOT NULL,
     FOREIGN KEY(event_id) REFERENCES source_events(event_id),
+    FOREIGN KEY(source_id) REFERENCES sources(source_id)
+);
+CREATE TABLE identity_conflicts (
+    conflict_id TEXT PRIMARY KEY,
+    source_id TEXT NOT NULL,
+    capture_key TEXT,
+    record_json TEXT NOT NULL,
     FOREIGN KEY(source_id) REFERENCES sources(source_id)
 );
 CREATE TABLE migration_diagnostics (
@@ -305,14 +313,14 @@ def import_json_documents(
         if set(by_id) != set(observation_map):
             orphaned = sorted(set(by_id) - set(observation_map))
             raise MigrationError(f"Unreferenced global observations: {orphaned[:5]}")
-        for oid, obs in by_id.items():
-            event_id, seq = observation_map[oid]
+        for global_seq, (oid, obs) in enumerate(by_id.items(), 1):
+            event_id, event_seq = observation_map[oid]
             connection.execute(
-                "INSERT INTO event_observations VALUES(?,?,?,?,?,?,?,?,?,?)",
-                (oid, event_id, seq, obs["source_id"], obs.get("source_event_id"),
-                 obs["identity_key"], str(obs.get("capture_key", "")),
-                 obs.get("observed_at"), obs.get("material_fingerprint"),
-                 _dump(obs.get("event", {}))),
+                "INSERT INTO event_observations VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                (oid, global_seq, event_id, event_seq, obs["source_id"],
+                 obs.get("source_event_id"), obs["identity_key"],
+                 str(obs.get("capture_key", "")), obs.get("observed_at"),
+                 obs.get("material_fingerprint"), _dump(obs.get("event", {}))),
             )
         counts["observations"] = len(by_id)
 

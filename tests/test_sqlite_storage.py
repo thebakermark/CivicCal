@@ -75,7 +75,10 @@ class SQLiteMigrationTests(unittest.TestCase):
         with self.assertRaises(MigrationError):
             import_json_documents(self.connection, registry, state, manifest)
         self.assertEqual(self.connection.execute(
-            "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='source_events'"
+            "SELECT COUNT(*) FROM source_events"
+        ).fetchone()[0], 0)
+        self.assertEqual(self.connection.execute(
+            "SELECT COUNT(*) FROM organizations"
         ).fetchone()[0], 0)
 
     def test_unknown_source_rejected(self):

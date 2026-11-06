@@ -69,7 +69,8 @@ def ingest_capture_sqlite(source_id: str, capture_metadata_path: Path,
         if not isinstance(observed_at, str) or not observed_at.strip():
             raise IngestError("Capture metadata has no captured_at timestamp.")
         identity_result = SQLiteIdentityStateStore(database_path).ingest_normalized(
-            normalized, observed_at=observed_at
+            normalized, observed_at=observed_at,
+            capture_metadata=metadata, archive_uri=str(capture_metadata_path)
         )
         return {
             "format": "civiccal.ingest-result.v1",

@@ -36,12 +36,12 @@ END:VCALENDAR
 
 
 class FakeResponse:
-    def __init__(self, body, url, status=200):
+    def __init__(self, body, url, status=200, content_type="text/calendar; charset=utf-8"):
         self.body = body
         self.url = url
         self.status = status
         self.headers = Message()
-        self.headers["Content-Type"] = "text/calendar; charset=utf-8"
+        self.headers["Content-Type"] = content_type
         self.headers["ETag"] = '"fixture-ics"'
 
     def __enter__(self):
@@ -90,12 +90,14 @@ class CaptureICSCoordinatorTests(unittest.TestCase):
         }), encoding="utf-8")
         return path
 
-    def opener_factory(self, body=FEED, final_url=None, failure=None):
+    def opener_factory(self, body=FEED, final_url=None, failure=None,
+                       content_type="text/calendar; charset=utf-8"):
         def factory(source, policies_path):
             def open_request(request, timeout=20):
                 if failure:
                     raise failure
-                return FakeResponse(body, final_url or request.full_url)
+                return FakeResponse(body, final_url or request.full_url,
+                                    content_type=content_type)
             return open_request
         return factory
 
@@ -164,6 +166,30 @@ class CaptureICSCoordinatorTests(unittest.TestCase):
             )
             self.assertGreater(result["summary"]["parser_warning_count"], 0)
             self.assertEqual(result["snapshot"]["completeness"], "partial")
+
+
+    def test_valid_ics_is_accepted_when_server_uses_generic_octet_stream(self):
+        with tempfile.TemporaryDirectory() as folder:
+            result = coordinate_ics_capture(
+                self.source(), self.policies(folder), Path(folder) / "archive",
+                opener_factory=self.opener_factory(content_type="application/octet-stream"),
+            )
+            self.assertEqual(result["event_count"], 2)
+            metadata_path = Path(result["coordinator"]["raw_capture_metadata"])
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            self.assertEqual(metadata["content_type"], "application/octet-stream")
+            self.assertEqual(metadata["content_sha256"], result["events"][0]["capture"]["content_sha256"])
+
+    def test_registered_calendar_mime_type_is_preserved_in_capture_metadata(self):
+        with tempfile.TemporaryDirectory() as folder:
+            result = coordinate_ics_capture(
+                self.source(), self.policies(folder), Path(folder) / "archive",
+                opener_factory=self.opener_factory(content_type="text/calendar; charset=utf-8"),
+            )
+            metadata_path = Path(result["coordinator"]["raw_capture_metadata"])
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            self.assertEqual(metadata["content_type"], "text/calendar; charset=utf-8")
+            self.assertEqual(result["event_count"], 2)
 
     def test_non_calendar_response_is_rejected(self):
         with tempfile.TemporaryDirectory() as folder:

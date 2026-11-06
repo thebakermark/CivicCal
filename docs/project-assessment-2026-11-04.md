@@ -32,7 +32,7 @@ Current source authorization state: all 12 source records have access_status=app
 
 The current completeness-policy file on main contains 10 profiles and is missing profiles for both Mokena Library events and SD159. The accompanying audit branch adds an SD159 profile scoped only to the official district Events iCalendar export, using single_feed, requiring the feed role, and retaining allow_complete_snapshot=false. This enables policy validation without asserting feed completeness. The Mokena Library profile remains outstanding. SD159's archived feed still requires comparison with the district's visible calendar; the separately reviewed 2026–27 PDF does not establish ICS scope or completeness.
 
-The ICS coordinator records the HTTP Content-Type and validates UTF-8 plus a VCALENDAR envelope. It does not reject a structurally valid feed solely because the server labels it application/octet-stream. Regression tests have been added for text/calendar and application/octet-stream. Authorization immutability and archived ICS-to-identity ingestion/idempotency tests have also been added. These tests are not marked verified until a clean CI run passes. An initial pull-request workflow run stopped at source-registry validation because the existing SD159 record had polling_enabled=true but lacked poll_interval_minutes and last_verified_at. Following explicit user authorization, those two metadata fields were added: poll_interval_minutes=1440 and last_verified_at=2026-11-04. The latter records the date of the documented manual official-source review; it does not claim a live ICS capture. polling_enabled remains true and unchanged. These fields do not enable a scheduler; no timer, cron job, or background process was created. A fresh CI run is required to verify the updated registry and tests.
+The ICS coordinator records the HTTP Content-Type and validates UTF-8 plus a VCALENDAR envelope. It does not reject a structurally valid feed solely because the server labels it application/octet-stream. Regression tests have been added for text/calendar and application/octet-stream. Authorization immutability and archived ICS-to-identity ingestion/idempotency tests have also been added. The pull-request workflow initially stopped at source-registry validation because the existing SD159 record had polling_enabled=true but lacked poll_interval_minutes and last_verified_at. Following explicit user authorization, those two metadata fields were added: poll_interval_minutes=1440 and last_verified_at=2026-11-04. The latter records the date of the documented manual official-source review; it does not claim a live ICS capture. polling_enabled remains true and unchanged. These fields do not enable a scheduler; no timer, cron job, or background process was created. The subsequent push and pull-request CI runs both passed, including the MIME, authorization-invariant, and archived ICS ingestion/idempotency tests (245 tests in the successful validation run).
 
 ## Assessment
 
@@ -70,14 +70,13 @@ The source automation specification is a post-release proposal only. Its propose
 
 ## Highest-priority remaining work
 
-1. Run the full test suite from a clean checkout and verify the newly added MIME, authorization-invariant, and archived ICS integration tests.
-2. Complete source-specific evidence review without live retrieval unless separately authorized; keep snapshot completeness disabled until source coverage is demonstrated.
-3. Finalize the SQLite schema and storage adapter.
-4. Implement JSON-to-database migration, preserving stable IDs, observations, revisions, presence history, and publication approvals; prove parity and rollback.
-5. Make the API and each independent ICS feed read from the same database-backed approved records.
-6. Add operational readiness checks and validate source isolation, cache behavior, and error handling.
-7. Define backup scope and retention; back up registry, database, raw captures, reports, and publication approvals; prove restore.
-8. Only after the local service and recovery path are proven, separately decide the permitted access path for the user's calendar client.
+1. Complete source-specific evidence review without live retrieval unless separately authorized; keep snapshot completeness disabled until source coverage is demonstrated.
+2. Finalize the SQLite schema and storage adapter.
+3. Implement JSON-to-database migration, preserving stable IDs, observations, revisions, presence history, and publication approvals; prove parity and rollback.
+4. Make the API and each independent ICS feed read from the same database-backed approved records.
+5. Add operational readiness checks and validate source isolation, cache behavior, and error handling.
+6. Define backup scope and retention; back up registry, database, raw captures, reports, and publication approvals; prove restore.
+7. Only after the local service and recovery path are proven, separately decide the permitted access path for the user's calendar client.
 
 ## MVP exit test
 

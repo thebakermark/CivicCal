@@ -92,7 +92,7 @@ def ingest_capture_sqlite(source_id: str, capture_metadata_path: Path,
             "parser_warnings": parser_output.get("warnings", []),
             "normalized_summary": normalized.get("summary", {}),
         }
-    except (HandoffError, IdentityError, MigrationError, OSError, ValueError) as exc:
+    except (HandoffError, IdentityError, MigrationError, OSError, ValueError, sqlite3.Error) as exc:
         raise IngestError(str(exc)) from exc
 
 

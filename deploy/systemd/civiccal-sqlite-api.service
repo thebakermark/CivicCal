@@ -1,0 +1,35 @@
+[Unit]
+Description=CivicCal SQLite read-only API and source-specific calendar feeds
+Documentation=https://github.com/thebakermark/CivicCal
+After=local-fs.target
+
+[Service]
+Type=simple
+User=civiccal
+Group=civiccal
+WorkingDirectory=/opt/civiccal/app
+EnvironmentFile=/etc/civiccal/civiccal-sqlite.env
+ExecStart=/usr/bin/python3 /opt/civiccal/app/scripts/serve_sqlite_api.py --database ${CIVICCAL_DATABASE_FILE} --host 127.0.0.1 --port ${CIVICCAL_PORT}
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=20
+UMask=0077
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ProtectHostname=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadOnlyPaths=/srv/civiccal/data
+
+[Install]
+WantedBy=multi-user.target

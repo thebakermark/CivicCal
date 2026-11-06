@@ -1,4 +1,4 @@
-name: CivicCal tests
+name: CivicCal tests and container build
 
 on:
   push:
@@ -22,3 +22,23 @@ jobs:
         run: python -m compileall -q scripts tests
       - name: Run test suite
         run: python -m unittest discover -s tests -v
+
+  build-lxc-rootfs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install debootstrap
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y debootstrap
+      - name: Build Debian 13 LXC root filesystem
+        run: sudo deploy/build-lxc-rootfs.sh "$RUNNER_TEMP/civiccal-dist"
+      - name: Upload LXC rootfs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: civiccal-debian13-lxc-rootfs
+          path: |
+            ${{ runner.temp }}/civiccal-dist/civiccal-debian13-rootfs.tar.gz
+            ${{ runner.temp }}/civiccal-dist/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 7

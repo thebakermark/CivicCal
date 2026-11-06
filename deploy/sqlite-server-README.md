@@ -64,3 +64,48 @@ capture payloads; those remain in their existing archive location.
 No Proxmox container is provisioned by this repository change. Container ID,
 storage allocation, backup schedule, host firewall, and any LAN/remote access
 remain separate operator decisions.
+
+
+## Database permissions
+
+After the operator runs the migration, set the database owner and permissions
+so the service can read it but cannot modify it:
+
+```sh
+chown root:civiccal /srv/civiccal/data/civiccal.sqlite
+chmod 0640 /srv/civiccal/data/civiccal.sqlite
+chmod 0750 /srv/civiccal/data
+```
+
+The database directory and file should remain operator-managed. The API runs
+with read-only SQLite connections and has no database write path.
+
+## Manual backup and verification
+
+Create a consistent online backup with SQLite's backup API:
+
+```sh
+python3 -m scripts.backup_sqlite \
+  --database /srv/civiccal/data/civiccal.sqlite \
+  --output /srv/civiccal/backups/civiccal-YYYYMMDD.sqlite
+```
+
+The command refuses to overwrite an existing backup and verifies SQLite
+integrity, foreign keys, and schema version before publishing the backup file.
+To verify an existing backup:
+
+```sh
+python3 -m scripts.backup_sqlite \
+  --database /srv/civiccal/backups/civiccal-YYYYMMDD.sqlite \
+  --verify-only
+```
+
+A restore is an operator action: verify the backup first, stop the API service,
+preserve the current database as a separate file, copy the verified backup into
+the database path, reapply the ownership and permissions above, then start the
+service only after checking the restored health and feed output. Never restore
+over the only copy of the current database.
+
+The SQLite backup does **not** include raw archived source payloads. Back up
+the capture archive directory separately and retain it with the matching
+database backup. No scheduled backup job is installed or enabled by this build.

@@ -443,8 +443,8 @@ def import_json_documents(
 def migrate_files(database_path: str | Path, registry_path: str | Path,
                   state_path: str | Path, manifest_path: str | Path) -> dict:
     db_path = Path(database_path)
-    if db_path.exists() and db_path.stat().st_size:
-        raise MigrationError("Refusing to overwrite an existing non-empty database")
+    if db_path.exists():
+        raise MigrationError("Refusing to overwrite an existing database file; choose a new path")
     registry = _load_json(registry_path, "source registry")
     state = _load_json(state_path, "identity state")
     manifest = _load_json(manifest_path, "publication manifest")

@@ -40,11 +40,11 @@ chroot "${ROOTFS}" chown -R root:root /opt/civiccal
 chroot "${ROOTFS}" chmod -R go-w /opt/civiccal
 chroot "${ROOTFS}" chown root:civiccal /etc/civiccal/civiccal-sqlite.env
 chroot "${ROOTFS}" /usr/bin/python3 -m compileall -q /opt/civiccal/app/scripts
-chroot "${ROOTFS}" /usr/bin/python3 -m scripts.serve_sqlite_api --help >/dev/null
-chroot "${ROOTFS}" /usr/bin/python3 -m scripts.migrate_json_to_sqlite --help >/dev/null
-chroot "${ROOTFS}" /usr/bin/python3 -m scripts.ingest_capture_sqlite --help >/dev/null
-chroot "${ROOTFS}" /usr/bin/python3 -m scripts.backup_sqlite --help >/dev/null
-chroot "${ROOTFS}" /usr/bin/python3 -m scripts.set_publication_approval --help >/dev/null
+chroot "${ROOTFS}" /usr/bin/env PYTHONPATH=/opt/civiccal/app /usr/bin/python3 -m scripts.serve_sqlite_api --help >/dev/null
+chroot "${ROOTFS}" /usr/bin/env PYTHONPATH=/opt/civiccal/app /usr/bin/python3 -m scripts.migrate_json_to_sqlite --help >/dev/null
+chroot "${ROOTFS}" /usr/bin/env PYTHONPATH=/opt/civiccal/app /usr/bin/python3 -m scripts.ingest_capture_sqlite --help >/dev/null
+chroot "${ROOTFS}" /usr/bin/env PYTHONPATH=/opt/civiccal/app /usr/bin/python3 -m scripts.backup_sqlite --help >/dev/null
+chroot "${ROOTFS}" /usr/bin/env PYTHONPATH=/opt/civiccal/app /usr/bin/python3 -m scripts.set_publication_approval --help >/dev/null
 chroot "${ROOTFS}" /usr/bin/systemd-analyze verify /etc/systemd/system/civiccal-sqlite-api.service
 printf 'civiccal\n' > "${ROOTFS}/etc/hostname"
 touch "${ROOTFS}/etc/machine-id"

@@ -58,15 +58,25 @@ def create_backup(database: Path, destination: Path) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--database", required=True, type=Path)
-    parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--verify-only", action="store_true",
+                        help="Verify an existing database or backup without changing it")
     args = parser.parse_args()
     try:
-        create_backup(args.database, args.output)
-        verify_database(args.output)
+        if args.verify_only:
+            if args.output is not None:
+                parser.error("--output cannot be used with --verify-only")
+            verify_database(args.database)
+            print(f"Verified CivicCal SQLite database: {args.database}")
+        else:
+            if args.output is None:
+                parser.error("--output is required unless --verify-only is used")
+            create_backup(args.database, args.output)
+            verify_database(args.output)
+            print(f"Verified CivicCal SQLite backup: {args.output}")
     except (OSError, sqlite3.Error, ValueError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
-    print(f"Verified CivicCal SQLite backup: {args.output}")
     return 0
 
 
